@@ -6,7 +6,7 @@
 <meta http-equiv="X-Content-Type-Options" content="nosniff">
 <meta http-equiv="X-Frame-Options" content="DENY">
 <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; script-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; connect-src https://api.anthropic.com; frame-ancestors 'none';">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; script-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; connect-src 'self'; frame-ancestors 'none';">
 <title>Listrolab — Listing copy. Refined.</title>
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -524,9 +524,9 @@ CRITICAL FORMATTING RULES — you must follow these exactly:
       content=prompt;
     }
 
-    const fetchPromise=fetch('https://api.anthropic.com/v1/messages',{
+    const fetchPromise=fetch('/api/generate',{
       method:'POST',headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:500,messages:[{role:'user',content}]})
+      body:JSON.stringify({max_tokens:500,messages:[{role:'user',content}]})
     });
 
     const timeoutMs=pd?45000:20000;
@@ -595,7 +595,7 @@ async function gen(){
 
 async function spotted(){
   try{
-    const res=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:120,messages:[{role:'user',content:[{type:'image',source:{type:'base64',media_type:S.photos[0]?.type||'image/jpeg',data:S.pd[0].split(',')[1]}},{type:'text',text:'List 6-8 specific visual details in this property photo. Precise materials, colors, finishes. Return ONLY a comma-separated list.'}]}]})});
+    const res=await fetch('/api/generate',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({max_tokens:120,messages:[{role:'user',content:[{type:'image',source:{type:'base64',media_type:S.photos[0]?.type||'image/jpeg',data:S.pd[0].split(',')[1]}},{type:'text',text:'List 6-8 specific visual details in this property photo. Precise materials, colors, finishes. Return ONLY a comma-separated list.'}]}]})});
     const d=await res.json();const tags=(d.content?.map(b=>b.text||'').join('')||'').split(',').map(t=>t.trim()).filter(Boolean).slice(0,8);
     if(tags.length){const el=document.getElementById('pit');el.innerHTML='';tags.forEach(t=>{const s=document.createElement('span');s.className='pitag';s.textContent=t;el.appendChild(s);});document.getElementById('pis').style.display='block';}
   }catch(e){}
@@ -645,7 +645,7 @@ async function genBuyer(){
   if(!S.last){showToast('Generate a listing first');return;}
   const btn=document.getElementById('byb');btn.textContent='Writing 3 versions...';btn.disabled=true;
   try{
-    const res=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:900,messages:[{role:'user',content:`Rewrite this listing 3 times.\nOriginal: ${S.last}\nReturn EXACTLY:\n[FAMILIES]\n(2 paragraphs — schools, space, yard, safety)\n[INVESTORS]\n(2 paragraphs — rental yield, appreciation, fundamentals)\n[DOWNSIZERS]\n(2 paragraphs — low maintenance, walkability, quality)\nEach under 110 words. No bullets.`}]})});
+    const res=await fetch('/api/generate',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({max_tokens:900,messages:[{role:'user',content:`Rewrite this listing 3 times.\nOriginal: ${S.last}\nReturn EXACTLY:\n[FAMILIES]\n(2 paragraphs — schools, space, yard, safety)\n[INVESTORS]\n(2 paragraphs — rental yield, appreciation, fundamentals)\n[DOWNSIZERS]\n(2 paragraphs — low maintenance, walkability, quality)\nEach under 110 words. No bullets.`}]})});
     const d=await res.json();const text=d.content?.map(b=>b.text||'').join('')||'';
     S.bf.f=text.match(/\[FAMILIES\]([\s\S]*?)(?=\[INVESTORS\]|$)/)?.[1]?.trim()||'';
     S.bf.i=text.match(/\[INVESTORS\]([\s\S]*?)(?=\[DOWNSIZERS\]|$)/)?.[1]?.trim()||'';
@@ -708,7 +708,7 @@ async function genHeadlines(){
   const el=document.getElementById('headlinesOut');
   el.textContent='Generating headlines...';el.className='ob e';
   try{
-    const res=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:300,messages:[{role:'user',content:`Based on this listing, write 5 punchy headline options for Zillow, email subject lines, and social media. Each headline should be under 10 words, emotionally compelling, and completely different from the others. No generic phrases like "stunning home" or "won't last long". Return ONLY a numbered list of 5 headlines, nothing else.\n\nListing:\n${S.last}`}]})});
+    const res=await fetch('/api/generate',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({max_tokens:300,messages:[{role:'user',content:`Based on this listing, write 5 punchy headline options for Zillow, email subject lines, and social media. Each headline should be under 10 words, emotionally compelling, and completely different from the others. No generic phrases like "stunning home" or "won't last long". Return ONLY a numbered list of 5 headlines, nothing else.\n\nListing:\n${S.last}`}]})});
     const d=await res.json();
     const text=d.content?.map(b=>b.text||'').join('')||'';
     el.textContent=text;el.className='ob';
@@ -723,7 +723,7 @@ async function genSocial(){
   const el=document.getElementById('socialOut');
   el.textContent='Writing captions...';el.className='ob e';
   try{
-    const res=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:600,messages:[{role:'user',content:`Based on this listing, write 3 social media captions. Return EXACTLY this format:\n[INSTAGRAM]\n(2-3 sentences max, conversational, ends with 3-5 relevant hashtags, emoji-friendly)\n[FACEBOOK]\n(3-4 sentences, slightly longer, more detail, friendly and warm, no hashtags)\n[EMAIL]\n(Subject line on first line starting with "Subject:", then blank line, then 3-4 sentence email body — personal, direct, makes reader want to see the property)\n\nListing:\n${S.last}`}]})});
+    const res=await fetch('/api/generate',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({max_tokens:600,messages:[{role:'user',content:`Based on this listing, write 3 social media captions. Return EXACTLY this format:\n[INSTAGRAM]\n(2-3 sentences max, conversational, ends with 3-5 relevant hashtags, emoji-friendly)\n[FACEBOOK]\n(3-4 sentences, slightly longer, more detail, friendly and warm, no hashtags)\n[EMAIL]\n(Subject line on first line starting with "Subject:", then blank line, then 3-4 sentence email body — personal, direct, makes reader want to see the property)\n\nListing:\n${S.last}`}]})});
     const d=await res.json();
     const text=d.content?.map(b=>b.text||'').join('')||'';
     socialContent.ig=text.match(/\[INSTAGRAM\]([\s\S]*?)(?=\[FACEBOOK\]|$)/)?.[1]?.trim()||'';
@@ -752,7 +752,7 @@ async function genEmail(){
   const el=document.getElementById('emailOut');
   el.textContent='Writing buyer email...';el.className='ob e';
   try{
-    const res=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:300,messages:[{role:'user',content:`Turn this listing into a personal email an agent sends to their buyer list. Format:\nSubject: [compelling subject line]\n\n[3-4 sentence email body — conversational, personal, like one professional writing to another, ends with a clear call to action to schedule a showing]\n\nListing:\n${S.last}`}]})});
+    const res=await fetch('/api/generate',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({max_tokens:300,messages:[{role:'user',content:`Turn this listing into a personal email an agent sends to their buyer list. Format:\nSubject: [compelling subject line]\n\n[3-4 sentence email body — conversational, personal, like one professional writing to another, ends with a clear call to action to schedule a showing]\n\nListing:\n${S.last}`}]})});
     const d=await res.json();
     const text=d.content?.map(b=>b.text||'').join('')||'';
     el.textContent=text;el.className='ob';
@@ -773,7 +773,7 @@ async function doRewrite(){
   const el=document.getElementById('rwResult');
   el.textContent='Rewriting your listing...';el.className='ob e';
   try{
-    const res=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:500,messages:[{role:'user',content:`You are the best real estate copywriter in America. Rewrite this listing to be significantly better. Keep all the same property facts but:\n- Replace the opener with something that creates a feeling instead of describing a room\n- Replace any vague adjectives (stunning, beautiful, spacious, modern) with specific details\n- Make the close more specific and urgent\n- Cut anything generic or that every listing says\n- Under 160 words\n\nOriginal listing:\n${input}\n\nReturn ONLY the rewritten listing text.`}]})});
+    const res=await fetch('/api/generate',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({max_tokens:500,messages:[{role:'user',content:`You are the best real estate copywriter in America. Rewrite this listing to be significantly better. Keep all the same property facts but:\n- Replace the opener with something that creates a feeling instead of describing a room\n- Replace any vague adjectives (stunning, beautiful, spacious, modern) with specific details\n- Make the close more specific and urgent\n- Cut anything generic or that every listing says\n- Under 160 words\n\nOriginal listing:\n${input}\n\nReturn ONLY the rewritten listing text.`}]})});
     const d=await res.json();
     const text=d.content?.map(b=>b.text||'').join('')||'';
     el.textContent=text;el.className='ob';
