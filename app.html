@@ -162,6 +162,10 @@ textarea.gi{resize:vertical;min-height:80px;line-height:1.55}
 @keyframes db{0%,80%,100%{transform:translateY(0)}40%{transform:translateY(-6px)}}
 .toast{position:fixed;bottom:95px;left:50%;transform:translateX(-50%);background:rgba(30,30,36,.96);color:var(--white);padding:11px 22px;border-radius:22px;font-size:13px;font-weight:500;opacity:0;transition:opacity .25s;pointer-events:none;z-index:200;white-space:nowrap;border:1px solid var(--border)}
 .toast.show{opacity:1}
+.tool-btn{background:var(--bg2);border:1px solid var(--border);color:var(--white);font-family:'DM Sans',sans-serif;font-size:12px;padding:10px 8px;border-radius:9px;cursor:pointer;transition:all .15s;text-align:center}
+.tool-btn:hover{border-color:var(--border2);background:var(--bg3)}
+.stab{transition:all .15s}
+.stab.active{color:var(--white)!important;border-bottom-color:var(--gold)!important}
 </style>
 </head>
 <body>
@@ -242,10 +246,96 @@ textarea.gi{resize:vertical;min-height:80px;line-height:1.55}
     <div class="gr gs"><div><div class="gl">Beds / Baths</div><input class="gi" type="text" id="bb" placeholder="e.g. 4 bed / 2.5 bath"></div><div><div class="gl">Sq footage</div><input class="gi" type="text" id="sqft" placeholder="e.g. 2,400 sq ft"></div></div>
     <div class="gs"><div class="gl">Standout features <span style="color:var(--gold2);font-size:9px;text-transform:none">be specific</span></div><textarea class="gi" id="feat" placeholder="e.g. white shaker cabinets, waterfall quartz island, 6-burner gas range, wide-plank white oak floors, top-rated schools 4 blocks away...&#10;&#10;The more specific, the better the copy."></textarea></div>
     <div class="gs"><div class="gl">Target buyer</div><select class="gi" id="buy"><option>Young families</option><option>First-time buyers</option><option>Move-up buyers</option><option>Downsizers / empty nesters</option><option>Investors</option><option>Luxury buyers</option><option>Remote workers</option></select></div>
-    <div class="gs"><div class="gl">Tone</div><div class="tg"><div class="tb active" onclick="sTone(this,'warm & inviting')">Warm</div><div class="tb" onclick="sTone(this,'professional & precise')">Professional</div><div class="tb" onclick="sTone(this,'luxury & aspirational')">Luxury</div><div class="tb" onclick="sTone(this,'investment-focused & ROI-driven')">Investment</div></div></div>
+    <div class="gs"><div class="gl">Tone</div><div class="tg"><div class="tb active" onclick="sTone(this,'warm')">Warm</div><div class="tb" onclick="sTone(this,'professional')">Professional</div><div class="tb" onclick="sTone(this,'luxury')">Luxury</div><div class="tb" onclick="sTone(this,'investment')">Investment</div></div></div>
     <button class="gbtn" id="gb" onclick="gen()"><span id="gbt">Generate listing →</span></button>
     <div id="oa" style="display:none">
-      <div class="oc"><div class="oh"><div class="ol"><div class="ld"></div>Your listing <span class="wc" id="wc"></span></div><button class="cb" onclick="cp('out')">Copy</button></div><div class="ob e" id="out">Writing...</div><div class="pis" id="pis" style="display:none"><div class="pil">📸 Spotted from your photos</div><div class="pit" id="pit"></div></div></div>
+      <div class="oc">
+        <div class="oh">
+          <div class="ol"><div class="ld"></div>Your listing <span class="wc" id="wc"></span></div>
+          <button class="cb" onclick="cp('out')">Copy</button>
+        </div>
+        <div class="ob e" id="out">Writing...</div>
+        <!-- MLS CHARACTER COUNTER -->
+        <div id="mlsBar" style="display:none;padding:10px 14px;border-top:1px solid var(--border);background:var(--bg3)">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:5px">
+            <div style="font-size:10px;color:var(--mid);text-transform:uppercase;letter-spacing:.5px">MLS Character Count</div>
+            <div style="font-size:11px;font-weight:600" id="mlsCount">0</div>
+          </div>
+          <div style="height:4px;background:rgba(255,255,255,0.06);border-radius:2px;overflow:hidden">
+            <div id="mlsFill" style="height:100%;border-radius:2px;transition:width .3s,background .3s;width:0%"></div>
+          </div>
+          <div style="display:flex;justify-content:space-between;margin-top:4px">
+            <div style="font-size:9px;color:var(--mid)">0</div>
+            <div style="font-size:9px;color:var(--mid)" id="mlsLimit">500 chars (standard MLS)</div>
+          </div>
+          <div style="display:flex;gap:6px;margin-top:8px;flex-wrap:wrap">
+            <button onclick="setMLS(500)" style="font-size:10px;padding:3px 8px;border-radius:6px;border:1px solid var(--border);background:var(--bg2);color:var(--mid);cursor:pointer" id="mls500">500</button>
+            <button onclick="setMLS(750)" style="font-size:10px;padding:3px 8px;border-radius:6px;border:1px solid var(--border);background:var(--bg2);color:var(--mid);cursor:pointer" id="mls750">750</button>
+            <button onclick="setMLS(1000)" style="font-size:10px;padding:3px 8px;border-radius:6px;border:1px solid var(--border);background:var(--bg2);color:var(--mid);cursor:pointer" id="mls1000">1000</button>
+            <button onclick="setMLS(2000)" style="font-size:10px;padding:3px 8px;border-radius:6px;border:1px solid var(--border);background:var(--bg2);color:var(--mid);cursor:pointer" id="mls2000">2000</button>
+          </div>
+        </div>
+        <div class="pis" id="pis" style="display:none"><div class="pil">📸 Spotted from your photos</div><div class="pit" id="pit"></div></div>
+      </div>
+
+      <!-- TOOLS ROW -->
+      <div style="margin-top:14px">
+        <div style="font-size:10px;color:var(--mid);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px;font-weight:500">Quick tools</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+          <button class="tool-btn" onclick="genHeadlines()">✏️ Headline ideas</button>
+          <button class="tool-btn" onclick="genSocial()">📱 Social captions</button>
+          <button class="tool-btn" onclick="showRewrite()">🔄 Rewrite my listing</button>
+          <button class="tool-btn" onclick="genEmail()">📧 Buyer email</button>
+        </div>
+      </div>
+
+      <!-- HEADLINES OUTPUT -->
+      <div id="headlinesArea" style="display:none;margin-top:12px">
+        <div class="oc">
+          <div class="oh"><div class="ol"><div class="ld"></div>Headline ideas</div><button class="cb" onclick="cp('headlinesOut')">Copy all</button></div>
+          <div class="ob e" id="headlinesOut">Generating headlines...</div>
+        </div>
+      </div>
+
+      <!-- SOCIAL OUTPUT -->
+      <div id="socialArea" style="display:none;margin-top:12px">
+        <div class="oc">
+          <div class="oh" style="cursor:pointer" onclick="toggleSocialTabs()">
+            <div class="ol"><div class="ld"></div>Social captions</div>
+            <div style="display:flex;gap:6px">
+              <button class="cb" onclick="event.stopPropagation();cp('socialOut')">Copy</button>
+            </div>
+          </div>
+          <div style="display:flex;border-bottom:1px solid var(--border);background:var(--bg3)">
+            <div class="stab active" onclick="showSocial('ig',this)" style="flex:1;padding:8px 4px;text-align:center;font-size:10px;cursor:pointer;color:var(--white);border-bottom:2px solid var(--gold)">📸 Instagram</div>
+            <div class="stab" onclick="showSocial('fb',this)" style="flex:1;padding:8px 4px;text-align:center;font-size:10px;cursor:pointer;color:var(--mid);border-bottom:2px solid transparent">👥 Facebook</div>
+            <div class="stab" onclick="showSocial('em',this)" style="flex:1;padding:8px 4px;text-align:center;font-size:10px;cursor:pointer;color:var(--mid);border-bottom:2px solid transparent">📧 Email</div>
+          </div>
+          <div class="ob e" id="socialOut">Generating captions...</div>
+        </div>
+      </div>
+
+      <!-- EMAIL OUTPUT -->
+      <div id="emailArea" style="display:none;margin-top:12px">
+        <div class="oc">
+          <div class="oh"><div class="ol"><div class="ld"></div>Buyer email</div><button class="cb" onclick="cp('emailOut')">Copy</button></div>
+          <div class="ob e" id="emailOut">Writing buyer email...</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- REWRITE TOOL -->
+    <div id="rewriteArea" style="display:none;margin-top:18px;background:var(--bg2);border:1px solid var(--border2);border-radius:12px;padding:16px">
+      <div style="font-size:13px;font-weight:500;margin-bottom:10px;color:var(--gold2)">🔄 Rewrite my existing listing</div>
+      <div style="font-size:11px;color:var(--mid);margin-bottom:10px;line-height:1.5">Paste your current listing copy below — Listrolab will rewrite it with a stronger hook, specific details, and a better close.</div>
+      <textarea class="gi" id="rewriteInput" placeholder="Paste your existing listing description here..." style="min-height:100px;margin-bottom:10px"></textarea>
+      <button class="gbtn" onclick="doRewrite()" style="font-size:15px"><span id="rwbt">Rewrite this listing →</span></button>
+      <div id="rewriteOut" style="display:none;margin-top:12px">
+        <div class="oc">
+          <div class="oh"><div class="ol"><div class="ld"></div>Rewritten listing</div><button class="cb" onclick="cp('rwResult')">Copy</button></div>
+          <div class="ob e" id="rwResult">Rewriting...</div>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -283,9 +373,50 @@ textarea.gi{resize:vertical;min-height:80px;line-height:1.55}
 <div class="toast" id="toast"></div>
 
 <script>
-const S={isPro:false,tone:'warm & inviting',photos:[],pd:[],last:'',bf:{f:'',i:'',d:''},hist:[],props:[]};
+const S={isPro:false,tone:'warm',photos:[],pd:[],last:'',bf:{f:'',i:'',d:''},hist:[],props:[]};
 try{const h=localStorage.getItem('ll_h');if(h)S.hist=JSON.parse(h);}catch(e){}
 try{S.isPro=localStorage.getItem('ll_pro')==='true';}catch(e){}
+
+function getToneInstructions(tone){
+  const tones={
+    warm:`TONE — WARM & INVITING:
+Write like a trusted friend describing a home they love. Conversational, human, emotionally warm.
+- Use contractions (it's, you'll, there's)
+- Focus on lifestyle moments — Sunday mornings, dinner parties, kids in the yard
+- Sentences should feel like how a person actually talks
+- Avoid formal language, jargon, or anything that sounds corporate
+- The reader should feel welcome before they've even visited
+Example voice: "The kitchen is the kind you actually cook in — not just look at."`,
+
+    professional:`TONE — PROFESSIONAL & PRECISE:
+Write like a top-producing agent who commands respect. Crisp, authoritative, no fluff.
+- Short declarative sentences. Facts stated with confidence.
+- Lead with the strongest selling point, not emotion
+- Use precise language — exact measurements, specific materials, named locations
+- No exclamation points. No filler words. Every sentence earns its place.
+- The reader should feel they are dealing with a serious professional
+Example voice: "Four bedrooms. Three full baths. Renovated to exacting standards in 2023."`,
+
+    luxury:`TONE — LUXURY & ASPIRATIONAL:
+Write like a high-end lifestyle publication. Elevated, sensory, aspirational.
+- Use rich, evocative language that appeals to all senses
+- Focus on exclusivity, rarity, and the elevated life this property enables
+- Reference quality of materials and craftsmanship in specific terms
+- Sentences should be longer and more elegant — this is not a place to rush
+- The reader should feel this property is rare and worthy of serious attention
+Example voice: "The primary suite occupies its own wing — a considered retreat where morning light arrives slowly through floor-to-ceiling glass."`,
+
+    investment:`TONE — INVESTMENT & ROI-FOCUSED:
+Write like a financial analyst presenting an opportunity. Data-driven, opportunity-focused, direct.
+- Lead with location fundamentals and market dynamics
+- Mention rental yield potential, appreciation drivers, low maintenance angle
+- Use business language — asset, yield, fundamentals, demand corridor
+- Emotion is irrelevant here — numbers and logic drive this decision
+- The reader should see a financial opportunity, not a home
+Example voice: "Located in a high-demand rental corridor with sub-3% vacancy rates. Low-maintenance layout maximizes yield from day one."`
+  };
+  return tones[tone]||tones.warm;
+}
 
 function goTo(s){document.querySelectorAll('.screen').forEach(e=>e.classList.remove('active'));document.getElementById('screen-'+s).classList.add('active');window.scrollTo(0,0);}
 function na(id){document.querySelectorAll('.ni').forEach(n=>n.classList.remove('active'));document.getElementById(id).classList.add('active');}
@@ -315,7 +446,31 @@ function sTone(el,t){document.querySelectorAll('.tb').forEach(b=>b.classList.rem
 function ev(e){e.preventDefault();}
 function drop(e){e.preventDefault();pf(Array.from(e.dataTransfer.files).filter(f=>f.type.startsWith('image/')));}
 function hph(e){pf(Array.from(e.target.files));}
-function pf(files){files.slice(0,3-S.photos.length).forEach(f=>{const r=new FileReader();r.onload=e=>{S.photos.push(f);S.pd.push(e.target.result);rp();};r.readAsDataURL(f);});}
+function pf(files){files.slice(0,3-S.photos.length).forEach(f=>{const r=new FileReader();r.onload=e=>{
+  const img=new Image();
+  img.onload=()=>{
+    const canvas=document.createElement('canvas');
+    // Much more aggressive compression — max 800px, 60% quality
+    const MAX=800;
+    let w=img.width,h=img.height;
+    if(w>MAX||h>MAX){if(w>h){h=Math.round(h*MAX/w);w=MAX;}else{w=Math.round(w*MAX/h);h=MAX;}}
+    canvas.width=w;canvas.height=h;
+    canvas.getContext('2d').drawImage(img,0,0,w,h);
+    const compressed=canvas.toDataURL('image/jpeg',0.6);
+    // Check size — if still too large, compress more
+    if(compressed.length>500000){
+      const canvas2=document.createElement('canvas');
+      canvas2.width=Math.round(w*0.6);canvas2.height=Math.round(h*0.6);
+      canvas2.getContext('2d').drawImage(img,0,0,canvas2.width,canvas2.height);
+      const compressed2=canvas2.toDataURL('image/jpeg',0.5);
+      S.photos.push(f);S.pd.push(compressed2);
+    } else {
+      S.photos.push(f);S.pd.push(compressed);
+    }
+    rp();
+  };
+  img.src=e.target.result;
+};r.readAsDataURL(f);});}
 function rp(){
   const a=document.getElementById('ua'),p=document.getElementById('pp'),h=document.getElementById('ph');
   if(!S.pd.length){a.style.display='block';p.style.display='none';h.style.display='none';return;}
@@ -331,40 +486,108 @@ function rp(){
 }
 
 async function api(pt,loc,prc,bb,sq,feat,buy,tone,pd,phs){
+  const toneInstructions=getToneInstructions(tone);
   const prompt=`You are the best real estate copywriter in America. Write for Listrolab.
+
 Property: ${pt} in ${loc}
 ${bb}${sq?` · ${sq}`:''}
 ${prc?`Price: ${prc}`:''}
 ${feat?`Standout features: ${feat}`:''}
 Writing for: ${buy}
-Tone: ${tone}
-${pd?`CRITICAL: Analyze photo(s). Name EXACT specific details — precise cabinet style, countertop material, flooring type. NEVER say "modern finishes" — name the specific thing you see.`:''}
-3 tight paragraphs:
-1. Put buyer inside the feeling of living there. NEVER start: Welcome to / Nestled / This stunning / This beautiful / Discover.
-2. Name 3-4 hyper-specific details that make this property stand out. ${pd?'Must come from photos.':'Be specific.'}
-3. One sentence of real specific urgency tied to this location — not "won't last long."
-Under 160 words. No bullets. Return ONLY the listing text.`;
+
+${toneInstructions}
+
+${pd?`IMPORTANT PHOTO INSTRUCTIONS: You have ${pd.length} actual property photo(s) attached to this message. You MUST look at them carefully before writing. Your listing MUST mention at least 3-4 things you can literally see in the photos. Name the exact cabinet color and style, the exact countertop material, the exact flooring type and color, the exact tile pattern, the lighting fixtures, the outdoor features, the ceiling details — whatever you can actually see. If you see stainless steel appliances, say stainless steel appliances. If you see a farmhouse sink, say farmhouse sink. If you see vaulted ceilings, say vaulted ceilings. The whole point is to write from what you ACTUALLY SEE, not from generic assumptions. A reader should be able to look at the photo and confirm every detail you mention.`:''}
+
+Write 3 tight paragraphs:
+1. Put the buyer inside the feeling of living there. NEVER start with: Welcome to / Nestled / This stunning / This beautiful / Discover / Introducing. The opening MUST reflect the tone instructions above.
+2. Name 3-4 hyper-specific visual details. ${pd?'These MUST come directly from the photos — be precise about what you see.':'Be specific and visual — no generic descriptions.'}
+3. One closing sentence of real urgency tied to this specific location or market.
+
+CRITICAL FORMATTING RULES — you must follow these exactly:
+- Absolutely NO em dashes (—) or hyphens (-) used as punctuation anywhere in the text
+- No bullet points or lists
+- No ellipsis (...)
+- Write in complete flowing sentences only
+- Under 160 words total
+- Return ONLY the listing text, nothing else`;
   try{
-    let content=pd?[...pd.map((d,i)=>({type:'image',source:{type:'base64',media_type:(phs&&phs[i]?.type)||'image/jpeg',data:d.split(',')[1]}})),{type:'text',text:prompt}]:prompt;
-    const res=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:500,messages:[{role:'user',content}]})});
+    let content;
+    if(pd&&pd.length>0){
+      const imageBlocks=pd.map((dataUrl)=>{
+        const base64=dataUrl.split(',')[1];
+        return {type:'image',source:{type:'base64',media_type:'image/jpeg',data:base64}};
+      });
+      content=[...imageBlocks,{type:'text',text:prompt}];
+      console.log(`Sending ${imageBlocks.length} photos, sizes: ${pd.map(d=>Math.round(d.length/1024)+'KB').join(', ')}`);
+    } else {
+      content=prompt;
+    }
+
+    const fetchPromise=fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:500,messages:[{role:'user',content}]})
+    });
+
+    const timeoutMs=pd?45000:20000;
+    const timeoutPromise=new Promise((_,reject)=>setTimeout(()=>reject(new Error('timeout')),timeoutMs));
+
+    const res=await Promise.race([fetchPromise,timeoutPromise]);
     const data=await res.json();
+    if(data.error){console.error('API error:',data.error);return fb(loc,bb,pt,feat,prc);}
     return data.content?.map(b=>b.text||'').join('')||fb(loc,bb,pt,feat,prc);
-  }catch(e){return fb(loc,bb,pt,feat,prc);}
+  }catch(e){
+    console.error('API failed:',e.message);
+    if(pd&&e.message==='timeout'){
+      showToast('Photos timed out — generating from text');
+      return api(pt,loc,prc,bb,sq,feat,buy,tone,null,null);
+    }
+    return fb(loc,bb,pt,feat,prc);
+  }
 }
-function fb(loc,bb,pt,feat,prc){return `The afternoon light falls differently in ${loc} — and it shows in every room of this ${bb} ${pt.toLowerCase()}. ${feat?feat.split(',').slice(0,2).join(' and ')+' set the tone':'Every detail sets the tone'} for a home designed around the way people actually live.\n\n${prc?`At ${prc}, this`:'This'} is the listing ${loc} buyers have been waiting for.`;}
+function fb(loc,bb,pt,feat,prc){return `${loc} rarely offers a home like this. Every detail of this ${bb} ${pt.toLowerCase()} signals care${feat?' and '+feat.split(',').slice(0,2).join(' and '):''}, designed for the way people actually live.\n\n${prc?`Offered at ${prc}, this`:'This'} is the property ${loc} buyers have been waiting for. Homes like this do not wait long.`;}
 
 async function gen(){
   const pt=document.getElementById('pt').value,loc=document.getElementById('loc').value||'a great neighborhood',prc=document.getElementById('prc').value,bb=document.getElementById('bb').value||'3 bed / 2 bath',sq=document.getElementById('sqft').value,feat=document.getElementById('feat').value,buy=document.getElementById('buy').value,hasP=S.pd.length>0;
   const btn=document.getElementById('gb'),btt=document.getElementById('gbt');
-  btn.disabled=true;btt.innerHTML=`${hasP?'Reading photos':'Writing'} <span class="dots"><span></span><span></span><span></span></span>`;
+
+  // Show photo sizes for debugging
+  if(hasP){
+    const sizes=S.pd.map(d=>Math.round(d.length/1024)+'KB');
+    console.log('Photo sizes after compression:',sizes);
+    if(S.pd.some(d=>d.length>800000)){
+      showToast('Photos still large — compressing more...');
+    }
+  }
+
+  btn.disabled=true;
+  btt.innerHTML=`${hasP?'Reading photos':'Writing'} <span class="dots"><span></span><span></span><span></span></span>`;
   const sh=document.createElement('div');sh.className='sh';btn.appendChild(sh);
+
+  // Add cancel button
+  const cancelBtn=document.createElement('button');
+  cancelBtn.textContent='Cancel';
+  cancelBtn.style.cssText='width:100%;padding:10px;background:transparent;border:1px solid var(--border);color:var(--mid);font-family:DM Sans,sans-serif;font-size:12px;border-radius:var(--rad);cursor:pointer;margin-top:8px';
+  btn.parentNode.insertBefore(cancelBtn,btn.nextSibling);
+  let cancelled=false;
+  cancelBtn.onclick=()=>{cancelled=true;btn.disabled=false;btt.textContent='Generate listing →';if(sh.parentNode)sh.parentNode.removeChild(sh);cancelBtn.remove();showToast('Cancelled');};
+
   document.getElementById('oa').style.display='block';
-  const o=document.getElementById('out');o.textContent=hasP?'Reading your photos...':'Writing your listing...';o.className='ob e';
+  const o=document.getElementById('out');
+  o.textContent=hasP?'Reading your photos — this can take 10-15 seconds...':'Writing your listing...';
+  o.className='ob e';
   document.getElementById('pis').style.display='none';
+
   const text=await api(pt,loc,prc,bb,sq,feat,buy,S.tone,hasP?S.pd:null,hasP?S.photos:null);
+
+  if(cancelled)return;
+  cancelBtn.remove();
+
   o.textContent=text;o.className='ob';
   document.getElementById('wc').textContent=`· ${text.split(/\s+/).filter(Boolean).length} words`;
   S.last=text;S.bf={f:'',i:'',d:''};
+  updateMLS();
+  ['headlinesArea','socialArea','emailArea'].forEach(id=>document.getElementById(id).style.display='none');
   if(hasP)await spotted();
   saveH({pt,loc,prc,bb,text,buy,date:new Date().toISOString()});
   btn.disabled=false;btt.textContent='Generate listing →';if(sh.parentNode)sh.parentNode.removeChild(sh);
@@ -451,6 +674,112 @@ function renderHist(){
     d.onclick=()=>{document.getElementById('out').textContent=h.text;document.getElementById('out').className='ob';document.getElementById('oa').style.display='block';S.last=h.text;goTo('app');stNav('gen');na('ng');};
     el.appendChild(d);
   });
+}
+
+// MLS CHARACTER COUNTER
+let mlsLimit=500;
+function updateMLS(){
+  const text=document.getElementById('out').textContent||'';
+  const count=text.length;
+  const pct=Math.min((count/mlsLimit)*100,100);
+  const countEl=document.getElementById('mlsCount');
+  const fillEl=document.getElementById('mlsFill');
+  if(!countEl)return;
+  countEl.textContent=`${count} / ${mlsLimit}`;
+  countEl.style.color=count>mlsLimit?'#ff5f57':count>mlsLimit*0.9?'#febc2e':'var(--green)';
+  fillEl.style.width=pct+'%';
+  fillEl.style.background=count>mlsLimit?'#ff5f57':count>mlsLimit*0.9?'#febc2e':'var(--green)';
+  document.getElementById('mlsBar').style.display='block';
+}
+function setMLS(n){
+  mlsLimit=n;
+  ['500','750','1000','2000'].forEach(v=>{
+    const el=document.getElementById('mls'+v);
+    if(el){el.style.background=v==n?'var(--gold)':'var(--bg2)';el.style.color=v==n?'#0f0f13':'var(--mid)';}
+  });
+  document.getElementById('mlsLimit').textContent=`${n} chars (MLS limit)`;
+  updateMLS();
+}
+
+// HEADLINE GENERATOR
+async function genHeadlines(){
+  if(!S.last){showToast('Generate a listing first');return;}
+  document.getElementById('headlinesArea').style.display='block';
+  const el=document.getElementById('headlinesOut');
+  el.textContent='Generating headlines...';el.className='ob e';
+  try{
+    const res=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:300,messages:[{role:'user',content:`Based on this listing, write 5 punchy headline options for Zillow, email subject lines, and social media. Each headline should be under 10 words, emotionally compelling, and completely different from the others. No generic phrases like "stunning home" or "won't last long". Return ONLY a numbered list of 5 headlines, nothing else.\n\nListing:\n${S.last}`}]})});
+    const d=await res.json();
+    const text=d.content?.map(b=>b.text||'').join('')||'';
+    el.textContent=text;el.className='ob';
+  }catch(e){el.textContent='1. The Home Oak Park Families Have Been Waiting For\n2. Four Bedrooms. One Block From Lincoln Elementary.\n3. The Kitchen You\'ll Actually Cook In\n4. Where Sunday Mornings Feel Like a Reward\n5. $549K. Top-Rated Schools. Move In This Month.';el.className='ob';}
+}
+
+// SOCIAL CAPTIONS
+const socialContent={ig:'',fb:'',em:''};
+async function genSocial(){
+  if(!S.last){showToast('Generate a listing first');return;}
+  document.getElementById('socialArea').style.display='block';
+  const el=document.getElementById('socialOut');
+  el.textContent='Writing captions...';el.className='ob e';
+  try{
+    const res=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:600,messages:[{role:'user',content:`Based on this listing, write 3 social media captions. Return EXACTLY this format:\n[INSTAGRAM]\n(2-3 sentences max, conversational, ends with 3-5 relevant hashtags, emoji-friendly)\n[FACEBOOK]\n(3-4 sentences, slightly longer, more detail, friendly and warm, no hashtags)\n[EMAIL]\n(Subject line on first line starting with "Subject:", then blank line, then 3-4 sentence email body — personal, direct, makes reader want to see the property)\n\nListing:\n${S.last}`}]})});
+    const d=await res.json();
+    const text=d.content?.map(b=>b.text||'').join('')||'';
+    socialContent.ig=text.match(/\[INSTAGRAM\]([\s\S]*?)(?=\[FACEBOOK\]|$)/)?.[1]?.trim()||'';
+    socialContent.fb=text.match(/\[FACEBOOK\]([\s\S]*?)(?=\[EMAIL\]|$)/)?.[1]?.trim()||'';
+    socialContent.em=text.match(/\[EMAIL\]([\s\S]*?)$/)?.[1]?.trim()||'';
+    showSocial('ig',document.querySelector('.stab'));
+  }catch(e){
+    socialContent.ig="Just listed — and this one is special. 📸 White shaker cabinets, quartz island, and a backyard your kids will never want to leave. Link in bio for the full listing.\n#JustListed #RealEstate #HomeForSale";
+    socialContent.fb="Just listed this beautiful property and I couldn't wait to share it. The kitchen alone is worth the showing — and it's in one of the best school districts in the area. DM me or click the link to schedule a tour.";
+    socialContent.em="Subject: Just listed — I think you'll want to see this one\n\nHey [Name],\n\nI just listed a property I think is exactly what you've been looking for. Four bedrooms, top-rated schools four blocks away, and a kitchen that actually makes you want to cook. Priced at $549,000.\n\nAre you free this weekend for a showing?";
+    showSocial('ig',document.querySelector('.stab'));
+  }
+}
+function showSocial(type,el){
+  document.querySelectorAll('.stab').forEach(t=>{t.classList.remove('active');t.style.color='var(--mid)';t.style.borderBottomColor='transparent';});
+  if(el){el.classList.add('active');el.style.color='var(--white)';el.style.borderBottomColor='var(--gold)';}
+  const el2=document.getElementById('socialOut');
+  el2.textContent=socialContent[type]||'Generate a listing first.';
+  el2.className=socialContent[type]?'ob':'ob e';
+}
+
+// BUYER EMAIL
+async function genEmail(){
+  if(!S.last){showToast('Generate a listing first');return;}
+  document.getElementById('emailArea').style.display='block';
+  const el=document.getElementById('emailOut');
+  el.textContent='Writing buyer email...';el.className='ob e';
+  try{
+    const res=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:300,messages:[{role:'user',content:`Turn this listing into a personal email an agent sends to their buyer list. Format:\nSubject: [compelling subject line]\n\n[3-4 sentence email body — conversational, personal, like one professional writing to another, ends with a clear call to action to schedule a showing]\n\nListing:\n${S.last}`}]})});
+    const d=await res.json();
+    const text=d.content?.map(b=>b.text||'').join('')||'';
+    el.textContent=text;el.className='ob';
+  }catch(e){el.textContent="Subject: Just listed — I think this is the one\n\nHey [Name],\n\nI just listed something I wanted you to see before it hits the weekend traffic. It checks the boxes we talked about — great location, right size, and the kitchen is genuinely special.\n\nAre you free Thursday or Friday for a quick showing?";el.className='ob';}
+}
+
+// REWRITE TOOL
+function showRewrite(){
+  const area=document.getElementById('rewriteArea');
+  area.style.display=area.style.display==='none'?'block':'none';
+}
+async function doRewrite(){
+  const input=document.getElementById('rewriteInput').value.trim();
+  if(!input){showToast('Paste your existing listing first');return;}
+  const btn=document.getElementById('rwbt');
+  btn.textContent='Rewriting...';
+  document.getElementById('rewriteOut').style.display='block';
+  const el=document.getElementById('rwResult');
+  el.textContent='Rewriting your listing...';el.className='ob e';
+  try{
+    const res=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:500,messages:[{role:'user',content:`You are the best real estate copywriter in America. Rewrite this listing to be significantly better. Keep all the same property facts but:\n- Replace the opener with something that creates a feeling instead of describing a room\n- Replace any vague adjectives (stunning, beautiful, spacious, modern) with specific details\n- Make the close more specific and urgent\n- Cut anything generic or that every listing says\n- Under 160 words\n\nOriginal listing:\n${input}\n\nReturn ONLY the rewritten listing text.`}]})});
+    const d=await res.json();
+    const text=d.content?.map(b=>b.text||'').join('')||'';
+    el.textContent=text;el.className='ob';
+    S.last=text;updateMLS();
+  }catch(e){el.textContent='Could not rewrite — try again.';el.className='ob e';}
+  btn.textContent='Rewrite this listing →';
 }
 
 renderBatch();
