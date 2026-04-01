@@ -2,374 +2,559 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<meta http-equiv="X-Content-Type-Options" content="nosniff">
-<meta http-equiv="X-Frame-Options" content="DENY">
-<meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; script-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; connect-src 'self'; frame-ancestors 'none';">
 <title>Listrolab — Listing copy. Refined.</title>
-<meta name="mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-title" content="Listrolab">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
-*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
-:root{--bg:#0f0f13;--bg2:#15151b;--bg3:#1a1a22;--gold:#c9a84c;--gold2:#e8cf87;--gold3:rgba(201,168,76,0.1);--white:#f4f3f1;--mid:#7a7a85;--border:rgba(255,255,255,0.08);--border2:rgba(201,168,76,0.22);--green:#3d9e6e;--rad:10px}
-html{height:100%;-webkit-text-size-adjust:100%}
-body{background:var(--bg);color:var(--white);font-family:'DM Sans',sans-serif;min-height:100vh;overflow-x:hidden}
-.app{max-width:480px;margin:0 auto;padding-bottom:88px}
-.screen{display:none;animation:fu .3s ease}
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0f0f13;--bg2:#15151b;--bg3:#1a1a22;
+  --gold:#c9a84c;--gold2:#e8cf87;--gold3:rgba(201,168,76,0.1);
+  --white:#f4f3f1;--mid:#7a7a85;
+  --border:rgba(255,255,255,0.08);--border2:rgba(201,168,76,0.22);
+  --green:#3d9e6e;--rad:8px;
+  --sidebar:240px;
+}
+html,body{height:100%;background:var(--bg);color:var(--white);font-family:'DM Sans',sans-serif}
+
+/* LAYOUT */
+.layout{display:flex;height:100vh;overflow:hidden}
+.sidebar{width:var(--sidebar);flex-shrink:0;background:var(--bg2);border-right:1px solid var(--border);display:flex;flex-direction:column;height:100vh;position:fixed;left:0;top:0;z-index:10}
+.main{margin-left:var(--sidebar);flex:1;overflow-y:auto;height:100vh}
+
+/* SIDEBAR */
+.sb-logo{padding:24px 20px 20px;border-bottom:1px solid var(--border)}
+.sb-logo-text{font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:600;letter-spacing:-.3px}
+.sb-logo-text span{color:var(--gold)}
+.sb-logo-tag{font-size:11px;color:var(--mid);margin-top:2px}
+.sb-nav{flex:1;padding:16px 12px;overflow-y:auto}
+.sb-section{font-size:9px;color:var(--mid);text-transform:uppercase;letter-spacing:1px;font-weight:500;padding:0 8px;margin-bottom:6px;margin-top:16px}
+.sb-section:first-child{margin-top:0}
+.sb-item{display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:var(--rad);cursor:pointer;color:var(--mid);font-size:13px;font-weight:400;transition:all .15s;margin-bottom:2px;border:1px solid transparent}
+.sb-item:hover{background:rgba(255,255,255,.04);color:var(--white)}
+.sb-item.active{background:var(--gold3);color:var(--white);border-color:var(--border2)}
+.sb-item-icon{font-size:15px;width:20px;text-align:center;flex-shrink:0}
+.sb-item-badge{font-size:8px;background:linear-gradient(135deg,var(--gold),#a07830);color:#0f0f13;padding:2px 5px;border-radius:3px;font-weight:700;margin-left:auto}
+.sb-bottom{padding:16px;border-top:1px solid var(--border)}
+.sb-pro-btn{width:100%;padding:10px;background:var(--gold);color:#0f0f13;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;border:none;border-radius:var(--rad);cursor:pointer;transition:opacity .15s}
+.sb-pro-btn:hover{opacity:.88}
+.sb-pro-btn.unlocked{background:var(--bg3);color:var(--gold);border:1px solid var(--border2)}
+
+/* TOP BAR */
+.topbar{background:var(--bg2);border-bottom:1px solid var(--border);padding:16px 32px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:5}
+.topbar-title{font-size:18px;font-weight:500}
+.topbar-sub{font-size:12px;color:var(--mid);margin-top:2px}
+.topbar-actions{display:flex;gap:10px;align-items:center}
+
+/* SCREENS */
+.screen{display:none}
 .screen.active{display:block}
-@keyframes fu{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
-.ob-hero{background:var(--bg2);padding:48px 24px 32px;position:relative;overflow:hidden;border-bottom:1px solid var(--border)}
-.ob-hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 70% 0%,rgba(201,168,76,0.08),transparent 60%)}
-.ob-logo{font-family:'Cormorant Garamond',serif;font-size:36px;font-weight:600;letter-spacing:-0.5px;margin-bottom:4px;position:relative}
-.ob-logo span{color:var(--gold)}
-.ob-tag{font-size:13px;color:var(--mid);margin-bottom:24px;position:relative}
-.ob-feats{display:flex;flex-direction:column;gap:10px;position:relative}
-.ob-feat{display:flex;align-items:flex-start;gap:12px;padding:13px;background:rgba(255,255,255,0.03);border:1px solid var(--border);border-radius:var(--rad)}
-.ob-feat-icon{font-size:20px;flex-shrink:0;margin-top:1px}
-.ob-feat-text{font-size:12px;color:rgba(244,243,241,0.7);line-height:1.55}
-.ob-feat-text b{color:var(--white);font-weight:500;display:block;margin-bottom:2px}
-.ob-body{padding:24px}
-.fl{font-size:10px;color:var(--mid);text-transform:uppercase;letter-spacing:.5px;font-weight:500;margin-bottom:6px}
-.fi{width:100%;background:var(--bg2);border:1px solid var(--border);color:var(--white);font-family:'DM Sans',sans-serif;font-size:15px;padding:13px 14px;border-radius:var(--rad);outline:none;transition:border-color .2s;margin-bottom:14px;-webkit-appearance:none}
-.fi:focus{border-color:var(--gold)}
-.btn-p{width:100%;padding:15px;background:var(--gold);color:#0f0f13;font-family:'Cormorant Garamond',serif;font-size:19px;font-weight:600;border:none;border-radius:var(--rad);cursor:pointer}
-.ob-fine{font-size:11px;color:var(--mid);text-align:center;margin-top:12px}
-.pw-top{background:var(--bg2);padding:32px 24px 24px;border-bottom:1px solid var(--border);position:relative;overflow:hidden}
-.pw-top::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 80% 50%,rgba(201,168,76,0.06),transparent 60%)}
-.pw-pre{font-size:10px;color:var(--gold);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:10px;position:relative}
-.pw-title{font-family:'Cormorant Garamond',serif;font-size:30px;font-weight:600;line-height:1.15;margin-bottom:8px;position:relative}
-.pw-sub{font-size:13px;color:var(--mid);line-height:1.6;position:relative}
-.pw-body{padding:22px 24px}
-.pw-tl{background:var(--gold3);border:1px solid var(--border2);border-radius:var(--rad);padding:16px 18px;margin-bottom:20px}
-.pw-tl-t{font-size:10px;color:var(--gold);font-weight:600;text-transform:uppercase;letter-spacing:.5px;margin-bottom:12px}
-.pw-tl-r{display:flex;align-items:center;gap:10px;margin-bottom:8px;font-size:13px;color:rgba(244,243,241,.7)}
-.pw-tl-d{width:5px;height:5px;border-radius:50%;background:var(--gold);flex-shrink:0}
-.pw-plans{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:20px}
+
+/* CONTENT AREA */
+.content{padding:32px}
+.content-2col{display:grid;grid-template-columns:1fr 1fr;gap:24px;align-items:start}
+.content-3col{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px}
+
+/* CARDS */
+.card{background:var(--bg2);border:1px solid var(--border);border-radius:12px;overflow:hidden}
+.card-hdr{padding:16px 20px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center}
+.card-hdr-title{font-size:13px;font-weight:500;display:flex;align-items:center;gap:8px}
+.card-body{padding:20px}
+.card-foot{padding:14px 20px;border-top:1px solid var(--border);background:var(--bg3)}
+
+/* FORM ELEMENTS */
+.field{margin-bottom:16px}
+.field-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px}
+.field-row-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:16px}
+.label{font-size:10px;color:var(--mid);text-transform:uppercase;letter-spacing:.5px;font-weight:500;margin-bottom:6px}
+.input{width:100%;background:var(--bg3);border:1px solid var(--border);color:var(--white);font-family:'DM Sans',sans-serif;font-size:13px;padding:10px 12px;border-radius:var(--rad);outline:none;transition:border-color .2s}
+.input:focus{border-color:var(--gold)}
+textarea.input{resize:vertical;min-height:80px;line-height:1.55}
+.tone-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+.tone-btn{padding:8px 6px;text-align:center;font-size:11px;font-weight:500;border:1px solid var(--border);border-radius:var(--rad);cursor:pointer;color:var(--mid);background:var(--bg3);transition:all .15s}
+.tone-btn.active{background:var(--gold);color:#0f0f13;border-color:var(--gold)}
+
+/* BUTTONS */
+.btn{padding:10px 20px;border-radius:var(--rad);font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;cursor:pointer;transition:all .15s;border:none}
+.btn-gold{background:var(--gold);color:#0f0f13}
+.btn-gold:hover{opacity:.88}
+.btn-ghost{background:transparent;color:var(--mid);border:1px solid var(--border)}
+.btn-ghost:hover{color:var(--white);border-color:var(--white)}
+.btn-full{width:100%;padding:12px;font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:600;letter-spacing:.2px}
+.btn-sm{padding:6px 14px;font-size:12px}
+.btn-icon{display:flex;align-items:center;gap:6px}
+
+/* GENERATE BUTTON */
+.gen-btn{width:100%;padding:13px;background:var(--gold);color:#0f0f13;font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:600;border:none;border-radius:var(--rad);cursor:pointer;position:relative;overflow:hidden;transition:opacity .15s}
+.gen-btn:hover{opacity:.88}
+.gen-btn:disabled{opacity:.5;cursor:not-allowed}
+.shimmer{position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(255,255,255,.15),transparent);animation:sh 1.5s infinite;transform:translateX(-100%)}
+@keyframes sh{to{transform:translateX(200%)}}
+
+/* OUTPUT */
+.output-card{background:var(--bg2);border:1px solid var(--border);border-radius:12px;overflow:hidden}
+.output-hdr{padding:13px 16px;background:var(--bg3);border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center}
+.output-lbl{font-size:12px;font-weight:500;display:flex;align-items:center;gap:7px}
+.live-dot{width:7px;height:7px;border-radius:50%;background:var(--green);flex-shrink:0}
+.copy-btn{font-size:11px;padding:5px 12px;border:1px solid var(--border);border-radius:6px;cursor:pointer;background:transparent;color:var(--mid);font-family:'DM Sans',sans-serif;transition:all .15s}
+.copy-btn:hover{border-color:var(--white);color:var(--white)}
+.output-body{padding:18px;font-size:13px;line-height:1.9;color:rgba(244,243,241,.88);white-space:pre-wrap}
+.output-body.empty{color:var(--mid);font-style:italic;font-size:12px}
+
+/* PHOTO UPLOAD */
+.photo-drop{border:1.5px dashed var(--border2);border-radius:var(--rad);padding:20px;text-align:center;cursor:pointer;background:var(--gold3);position:relative;transition:all .2s}
+.photo-drop:hover{border-color:var(--gold);background:rgba(201,168,76,.15)}
+.photo-drop input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
+.photo-drop-icon{font-size:24px;margin-bottom:6px}
+.photo-drop-title{font-size:13px;font-weight:500;margin-bottom:2px}
+.photo-drop-sub{font-size:11px;color:var(--mid)}
+.photo-previews{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+.photo-thumb{position:relative;width:72px;height:72px;border-radius:8px;overflow:hidden;border:1px solid var(--border2);flex-shrink:0}
+.photo-thumb img{width:100%;height:100%;object-fit:cover}
+.photo-rm{position:absolute;top:3px;right:3px;width:18px;height:18px;border-radius:50%;background:rgba(15,15,19,.88);border:none;cursor:pointer;color:var(--white);font-size:10px;display:flex;align-items:center;justify-content:center;z-index:2}
+.photo-add{width:72px;height:72px;border-radius:8px;border:1.5px dashed var(--border);display:flex;align-items:center;justify-content:center;font-size:20px;color:var(--mid);cursor:pointer;position:relative;background:var(--bg2);flex-shrink:0}
+.photo-add input{position:absolute;inset:0;opacity:0;cursor:pointer}
+.photo-hint{font-size:11px;color:var(--gold2);margin-top:8px;padding:8px 11px;background:rgba(201,168,76,.06);border-radius:6px;border:1px solid var(--border2);line-height:1.5}
+
+/* MLS BAR */
+.mls-bar{padding:12px 16px;border-top:1px solid var(--border);background:var(--bg3)}
+.mls-presets{display:flex;gap:6px;margin-top:8px}
+.mls-preset{font-size:10px;padding:3px 8px;border-radius:6px;border:1px solid var(--border);background:var(--bg2);color:var(--mid);cursor:pointer}
+.mls-preset.active{background:var(--gold);color:#0f0f13;border-color:var(--gold)}
+
+/* QUICK TOOLS */
+.quick-tools{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:16px}
+.qtool{background:var(--bg2);border:1px solid var(--border);border-radius:var(--rad);padding:10px 8px;text-align:center;font-size:11px;cursor:pointer;color:var(--mid);transition:all .15s}
+.qtool:hover{border-color:var(--border2);color:var(--white)}
+
+/* SOCIAL TABS */
+.stabs{display:flex;border-bottom:1px solid var(--border);background:var(--bg3)}
+.stab{flex:1;padding:10px 4px;text-align:center;font-size:11px;cursor:pointer;color:var(--mid);border-bottom:2px solid transparent;transition:all .15s}
+.stab.active{color:var(--white);border-bottom-color:var(--gold)}
+
+/* BATCH */
+.batch-prop{background:var(--bg2);border:1px solid var(--border);border-radius:10px;margin-bottom:10px;overflow:hidden;transition:border-color .3s}
+.batch-prop.generating{border-color:var(--gold)}
+.batch-prop.done{border-color:var(--green)}
+.batch-prop-hdr{padding:12px 16px;display:flex;justify-content:space-between;align-items:center;background:var(--bg3)}
+.batch-prop-grid{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:8px;padding:14px 16px;border-top:1px solid var(--border)}
+.batch-st{font-size:10px;padding:2px 9px;border-radius:10px;font-weight:500}
+.batch-st.pending{background:rgba(255,255,255,.05);color:var(--mid)}
+.batch-st.generating{background:var(--gold3);color:var(--gold2)}
+.batch-st.done{background:rgba(61,158,110,.15);color:var(--green)}
+.batch-rm{width:22px;height:22px;border-radius:50%;background:rgba(255,255,255,.05);border:1px solid var(--border);cursor:pointer;color:var(--mid);font-size:11px;display:flex;align-items:center;justify-content:center}
+.batch-out{padding:14px 16px;border-top:1px solid var(--border);font-size:12px;line-height:1.8;color:rgba(244,243,241,.85);white-space:pre-wrap}
+.batch-progress{background:rgba(255,255,255,.05);border-radius:4px;height:4px;margin-bottom:16px;overflow:hidden;display:none}
+.batch-fill{height:100%;background:linear-gradient(90deg,var(--gold),var(--gold2));border-radius:4px;transition:width .5s ease;width:0%}
+
+/* PRO LOCK */
+.pro-lock{background:var(--bg2);border:1.5px dashed var(--border);border-radius:12px;padding:40px;text-align:center}
+.pro-lock-icon{font-size:36px;margin-bottom:14px}
+.pro-lock-title{font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:600;margin-bottom:8px}
+.pro-lock-sub{font-size:13px;color:var(--mid);margin-bottom:20px;line-height:1.6;max-width:400px;margin-left:auto;margin-right:auto}
+
+/* BUYER TABS */
+.buyer-tabs{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:16px}
+.buyer-tab{padding:11px;text-align:center;font-size:12px;font-weight:500;border:1px solid var(--border);border-radius:var(--rad);cursor:pointer;color:var(--mid);background:var(--bg2);transition:all .15s}
+.buyer-tab.active{background:var(--gold);color:#0f0f13;border-color:var(--gold)}
+
+/* TOOL CARDS */
+.tool-card{background:var(--bg2);border:1px solid var(--border);border-radius:10px;margin-bottom:10px;overflow:hidden}
+.tool-card-hdr{padding:14px 18px;display:flex;justify-content:space-between;align-items:center;cursor:pointer;transition:background .15s}
+.tool-card-hdr:hover{background:var(--bg3)}
+.tool-card-meta{display:flex;align-items:center;gap:12px}
+.tool-card-icon{font-size:18px}
+.tool-card-title{font-size:14px;font-weight:500}
+.tool-card-sub{font-size:11px;color:var(--mid);margin-top:2px}
+.tool-chevron{font-size:18px;color:var(--mid);transition:transform .2s}
+.tool-chevron.open{transform:rotate(90deg)}
+.tool-card-body{padding:20px;border-top:1px solid var(--border)}
+
+/* HISTORY */
+.hist-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
+.hist-item{background:var(--bg2);border:1px solid var(--border);border-radius:var(--rad);padding:14px;cursor:pointer;transition:border-color .15s}
+.hist-item:hover{border-color:var(--border2)}
+.hist-prop{font-size:13px;font-weight:500;margin-bottom:3px}
+.hist-meta{font-size:10px;color:var(--mid);margin-bottom:8px;display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.hist-tag{font-size:9px;background:var(--gold3);border:1px solid var(--border2);color:var(--gold2);padding:1px 6px;border-radius:8px}
+.hist-preview{font-size:11px;color:var(--mid);line-height:1.55;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+
+/* PI TAGS */
+.pi-section{padding:12px 16px;border-top:1px solid var(--border);background:rgba(201,168,76,.05)}
+.pi-label{font-size:10px;color:var(--gold);text-transform:uppercase;letter-spacing:.5px;font-weight:500;margin-bottom:6px}
+.pi-tags{display:flex;gap:5px;flex-wrap:wrap}
+.pi-tag{font-size:10px;padding:3px 9px;border-radius:20px;background:var(--gold3);border:1px solid var(--border2);color:var(--gold2)}
+
+/* ONBOARDING / PAYWALL — centered modal style */
+.auth-wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:40px}
+.auth-card{background:var(--bg2);border:1px solid var(--border);border-radius:16px;width:100%;max-width:460px;overflow:hidden}
+.auth-hero{padding:36px 36px 28px;border-bottom:1px solid var(--border);position:relative;overflow:hidden}
+.auth-hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 70% 0%,rgba(201,168,76,.08),transparent 60%)}
+.auth-logo{font-family:'Cormorant Garamond',serif;font-size:32px;font-weight:600;letter-spacing:-.3px;margin-bottom:4px;position:relative}
+.auth-logo span{color:var(--gold)}
+.auth-tag{font-size:12px;color:var(--mid);margin-bottom:20px;position:relative}
+.auth-feats{display:flex;flex-direction:column;gap:8px;position:relative}
+.auth-feat{display:flex;align-items:flex-start;gap:10px;padding:10px 12px;background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:8px}
+.auth-feat-icon{font-size:16px;flex-shrink:0;margin-top:1px}
+.auth-feat-text{font-size:12px;color:rgba(244,243,241,.7);line-height:1.5}
+.auth-feat-text b{color:var(--white);font-weight:500;display:block;margin-bottom:1px}
+.auth-body{padding:28px 36px}
+.pw-plans{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:18px}
 .pw-plan{background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:var(--rad);padding:16px;cursor:pointer;transition:all .2s;position:relative}
 .pw-plan.sel{border-color:var(--gold);background:var(--gold3)}
 .pw-pb{position:absolute;top:-9px;left:50%;transform:translateX(-50%);background:var(--gold);color:#0f0f13;font-size:9px;padding:3px 10px;border-radius:10px;font-weight:700;white-space:nowrap}
-.pw-pn{font-size:10px;color:var(--mid);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
-.pw-pp{font-family:'Cormorant Garamond',serif;font-size:28px;font-weight:600;color:var(--white);line-height:1;margin-bottom:3px}
+.pw-pn{font-size:10px;color:var(--mid);text-transform:uppercase;margin-bottom:4px}
+.pw-pp{font-family:'Cormorant Garamond',serif;font-size:28px;font-weight:600;line-height:1;margin-bottom:2px}
 .pw-ps{font-size:10px;color:var(--mid)}
-.pw-feats{margin-bottom:20px}
 .pw-feat{display:flex;align-items:center;gap:10px;margin-bottom:10px;font-size:13px;color:rgba(244,243,241,.7)}
 .pw-chk{width:18px;height:18px;border-radius:50%;background:var(--gold3);border:.5px solid var(--border2);display:flex;align-items:center;justify-content:center;font-size:10px;color:var(--gold);flex-shrink:0}
-.btn-g{width:100%;padding:15px;background:var(--gold);color:#0f0f13;font-family:'Cormorant Garamond',serif;font-size:19px;font-weight:600;border:none;border-radius:var(--rad);cursor:pointer}
-.btn-gh{width:100%;padding:13px;background:transparent;color:var(--mid);font-family:'DM Sans',sans-serif;font-size:13px;border:none;cursor:pointer;margin-top:8px}
 .pb{background:linear-gradient(135deg,var(--gold),#a07830);color:#0f0f13;font-size:8px;padding:2px 6px;border-radius:3px;font-weight:700;vertical-align:middle;margin-left:4px}
-.main-nav{display:flex;justify-content:space-between;align-items:center;padding:16px 18px;border-bottom:1px solid var(--border);background:var(--bg2);position:sticky;top:0;z-index:10}
-.nl{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:600;letter-spacing:-.3px}
-.nl span{color:var(--gold)}
-.npb{background:var(--bg3);border:1px solid var(--border2);color:var(--gold);font-size:10px;padding:6px 13px;border-radius:20px;font-weight:500;cursor:pointer}
-.npb.on{background:var(--gold);color:#0f0f13;border-color:var(--gold)}
-.tabs{display:flex;background:var(--bg2);border-bottom:1px solid var(--border);overflow-x:auto}
-.tabs::-webkit-scrollbar{display:none}
-.tab{flex:1;min-width:70px;padding:12px 4px;text-align:center;font-size:10px;font-weight:500;cursor:pointer;color:var(--mid);border-bottom:2px solid transparent;transition:all .15s;white-space:nowrap}
-.tab.active{color:var(--white);border-bottom-color:var(--gold)}
-.gen{padding:18px}
-.gl{font-size:10px;color:var(--mid);text-transform:uppercase;letter-spacing:.5px;font-weight:500;margin-bottom:6px}
-.gs{margin-bottom:16px}
-.gi{width:100%;background:var(--bg2);border:1px solid var(--border);color:var(--white);font-family:'DM Sans',sans-serif;font-size:14px;padding:12px 13px;border-radius:var(--rad);outline:none;transition:border-color .2s;-webkit-appearance:none}
-.gi:focus{border-color:var(--gold)}
-textarea.gi{resize:vertical;min-height:80px;line-height:1.55}
-.gr{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-.tg{display:grid;grid-template-columns:repeat(4,1fr);gap:5px}
-.tb{padding:9px 4px;text-align:center;font-size:10px;font-weight:500;border:1px solid var(--border);border-radius:8px;cursor:pointer;color:var(--mid);background:var(--bg2);transition:all .15s}
-.tb.active{background:var(--gold);color:#0f0f13;border-color:var(--gold)}
-.phs{margin-bottom:16px}
-.pha{border:1.5px dashed var(--border2);border-radius:var(--rad);padding:22px 18px;text-align:center;cursor:pointer;background:var(--gold3);position:relative}
-.pha input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
-.phi{font-size:28px;margin-bottom:8px}
-.pht{font-size:14px;font-weight:500;color:var(--white);margin-bottom:3px}
-.phs2{font-size:11px;color:var(--mid);line-height:1.5}
-.php{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
-.phpv{position:relative;width:80px;height:80px;border-radius:9px;overflow:hidden;border:1px solid var(--border2)}
-.phpv img{width:100%;height:100%;object-fit:cover}
-.phr{position:absolute;top:4px;right:4px;width:20px;height:20px;border-radius:50%;background:rgba(15,15,19,.88);border:none;cursor:pointer;color:var(--white);font-size:11px;display:flex;align-items:center;justify-content:center;z-index:2}
-.pham{width:80px;height:80px;border-radius:9px;border:1.5px dashed var(--border);display:flex;align-items:center;justify-content:center;font-size:24px;color:var(--mid);cursor:pointer;position:relative;background:var(--bg2);flex-shrink:0}
-.pham input{position:absolute;inset:0;opacity:0;cursor:pointer}
-.phh{font-size:11px;color:var(--gold2);margin-top:9px;padding:8px 11px;background:rgba(201,168,76,0.06);border-radius:7px;border:1px solid var(--border2);line-height:1.5}
-.gbtn{width:100%;padding:15px;background:var(--gold);color:#0f0f13;font-family:'Cormorant Garamond',serif;font-size:19px;border:none;border-radius:var(--rad);cursor:pointer;margin-top:4px;position:relative;overflow:hidden}
-.gbtn:disabled{opacity:.5;cursor:not-allowed}
-.sh{position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(255,255,255,.15),transparent);animation:sh 1.5s infinite;transform:translateX(-100%)}
-@keyframes sh{to{transform:translateX(200%)}}
-.oc{background:var(--bg2);border:1px solid var(--border);border-radius:13px;overflow:hidden;margin-top:18px}
-.oh{padding:13px 15px;background:var(--bg3);border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center}
-.ol{font-size:11px;font-weight:500;color:var(--white);display:flex;align-items:center;gap:6px}
-.ld{width:7px;height:7px;border-radius:50%;background:var(--green)}
-.cb{font-size:12px;padding:5px 12px;border:1px solid var(--border);border-radius:6px;cursor:pointer;background:transparent;color:var(--mid);font-family:'DM Sans',sans-serif}
-.ob{padding:17px;font-size:13px;line-height:1.9;color:rgba(244,243,241,.88);white-space:pre-wrap}
-.ob.e{color:var(--mid);font-style:italic;font-size:12px}
-.pis{padding:13px 15px;border-top:1px solid var(--border);background:rgba(201,168,76,.05)}
-.pil{font-size:10px;color:var(--gold);text-transform:uppercase;letter-spacing:.5px;font-weight:500;margin-bottom:7px}
-.pit{display:flex;gap:5px;flex-wrap:wrap}
-.pitag{font-size:10px;padding:3px 9px;border-radius:20px;background:var(--gold3);border:1px solid var(--border2);color:var(--gold2)}
-.wc{font-size:10px;color:var(--mid)}
-.btip{background:var(--gold3);border:1px solid var(--border2);border-radius:10px;padding:13px 15px;margin-bottom:16px;font-size:12px;color:var(--mid);line-height:1.6}
-.btip strong{color:var(--gold2);display:block;margin-bottom:3px}
-.bprog{background:rgba(255,255,255,0.05);border-radius:4px;height:5px;margin-bottom:16px;overflow:hidden;display:none}
-.bpf{height:100%;background:linear-gradient(90deg,var(--gold),var(--gold2));border-radius:4px;transition:width .5s ease;width:0%}
-.bhdr{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}
-.btitle{font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:600}
-.badd{font-size:12px;padding:7px 14px;background:var(--gold3);border:1px solid var(--border2);color:var(--gold2);border-radius:8px;cursor:pointer;font-family:'DM Sans',sans-serif;font-weight:500}
-.badd:disabled{opacity:.4;cursor:not-allowed}
-.bp{background:var(--bg2);border:1px solid var(--border);border-radius:12px;margin-bottom:12px;overflow:hidden;transition:border-color .3s}
-.bp.generating{border-color:var(--gold)}
-.bp.done{border-color:var(--green)}
-.bph{padding:13px 15px;display:flex;justify-content:space-between;align-items:center;background:var(--bg3)}
-.bpt{font-size:13px;font-weight:500}
-.bpm{font-size:11px;color:var(--mid);margin-top:2px}
-.bst{font-size:10px;padding:2px 9px;border-radius:10px;font-weight:500;margin-right:6px}
-.bst.pending{background:rgba(255,255,255,0.05);color:var(--mid)}
-.bst.generating{background:var(--gold3);color:var(--gold2)}
-.bst.done{background:rgba(61,158,110,0.15);color:var(--green)}
-.brm{width:22px;height:22px;border-radius:50%;background:rgba(255,255,255,0.05);border:1px solid var(--border);cursor:pointer;color:var(--mid);font-size:11px;display:flex;align-items:center;justify-content:center}
-.bform{padding:14px;border-top:1px solid var(--border);display:grid;gap:8px}
-.bfr{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-.bi{width:100%;background:var(--bg);border:1px solid var(--border);color:var(--white);font-family:'DM Sans',sans-serif;font-size:13px;padding:10px 12px;border-radius:8px;outline:none;transition:border-color .2s;-webkit-appearance:none}
-.bi:focus{border-color:var(--gold)}
-.bout{padding:14px;border-top:1px solid var(--border);font-size:12px;line-height:1.8;color:rgba(244,243,241,.85);white-space:pre-wrap}
-.boh{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
-.bol{font-size:10px;color:var(--green);font-weight:600}
-.bcpy{font-size:10px;padding:3px 9px;border:1px solid var(--border);border-radius:5px;cursor:pointer;background:transparent;color:var(--mid);font-family:'DM Sans',sans-serif}
-.pl{background:var(--bg2);border:1.5px dashed var(--border);border-radius:13px;padding:28px;text-align:center}
-.pli{font-size:32px;margin-bottom:12px}
-.plt{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:600;margin-bottom:8px}
-.pls{font-size:13px;color:var(--mid);margin-bottom:18px;line-height:1.6}
-.pu{padding:12px 26px;background:var(--gold);color:#0f0f13;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:600;border:none;border-radius:var(--rad);cursor:pointer}
-.btr{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-bottom:14px}
-.bt{padding:11px 4px;text-align:center;font-size:11px;font-weight:500;border:1px solid var(--border);border-radius:9px;cursor:pointer;color:var(--mid);background:var(--bg2);transition:all .15s}
-.bt.active{background:var(--gold);color:#0f0f13;border-color:var(--gold)}
-.hi{background:var(--bg2);border:1px solid var(--border);border-radius:var(--rad);padding:13px 15px;margin-bottom:9px;cursor:pointer}
-.hip{font-size:13px;font-weight:500;margin-bottom:3px}
-.him{font-size:10px;color:var(--mid);display:flex;gap:8px;margin-bottom:7px;flex-wrap:wrap;align-items:center}
-.hitag{font-size:9px;background:var(--gold3);border:1px solid var(--border2);color:var(--gold2);padding:1px 7px;border-radius:8px}
-.hiv{font-size:11px;color:var(--mid);line-height:1.55;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
-.es{text-align:center;padding:52px 20px;color:var(--mid)}
-.ei{font-size:40px;margin-bottom:12px;opacity:.3}
-.et{font-size:14px}
-.bottom-nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:480px;background:rgba(15,15,19,.97);border-top:1px solid var(--border);display:flex;padding:10px 0 18px;backdrop-filter:blur(20px)}
-.ni{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;cursor:pointer;color:var(--mid);font-size:9px;text-transform:uppercase;letter-spacing:.5px;transition:color .15s}
-.ni.active{color:var(--gold)}
-.nic{font-size:20px}
+
+/* EMPTY STATE */
+.empty-state{text-align:center;padding:60px 20px;color:var(--mid)}
+.empty-icon{font-size:40px;margin-bottom:12px;opacity:.3}
+
+/* MISC */
 .dots{display:inline-flex;gap:4px;align-items:center;vertical-align:middle}
 .dots span{width:5px;height:5px;border-radius:50%;background:currentColor;animation:db 1.2s infinite}
 .dots span:nth-child(2){animation-delay:.2s}.dots span:nth-child(3){animation-delay:.4s}
-@keyframes db{0%,80%,100%{transform:translateY(0)}40%{transform:translateY(-6px)}}
-.toast{position:fixed;bottom:95px;left:50%;transform:translateX(-50%);background:rgba(30,30,36,.96);color:var(--white);padding:11px 22px;border-radius:22px;font-size:13px;font-weight:500;opacity:0;transition:opacity .25s;pointer-events:none;z-index:200;white-space:nowrap;border:1px solid var(--border)}
+@keyframes db{0%,80%,100%{transform:translateY(0)}40%{transform:translateY(-5px)}}
+.toast{position:fixed;bottom:24px;right:24px;background:rgba(21,21,27,.97);color:var(--white);padding:12px 20px;border-radius:10px;font-size:13px;font-weight:500;opacity:0;transition:opacity .25s;pointer-events:none;z-index:200;border:1px solid var(--border)}
 .toast.show{opacity:1}
-.tool-btn{background:var(--bg2);border:1px solid var(--border);color:var(--white);font-family:'DM Sans',sans-serif;font-size:12px;padding:10px 8px;border-radius:9px;cursor:pointer;transition:all .15s;text-align:center}
-.tool-btn:hover{border-color:var(--border2);background:var(--bg3)}
-.stab{transition:all .15s}
-.stab.active{color:var(--white)!important;border-bottom-color:var(--gold)!important}
+.wc{font-size:11px;color:var(--mid)}
+.section-label{font-size:10px;color:var(--mid);text-transform:uppercase;letter-spacing:.5px;font-weight:500;margin-bottom:12px}
+.divider{height:1px;background:var(--border);margin:20px 0}
 </style>
 </head>
 <body>
-<div class="app">
 
+<!-- ONBOARDING -->
 <div class="screen active" id="screen-ob">
-  <div class="ob-hero">
-    <div class="ob-logo">Listro<span>lab</span></div>
-    <div class="ob-tag">Listing copy. Refined.</div>
-    <div class="ob-feats">
-      <div class="ob-feat"><div class="ob-feat-icon">📸</div><div class="ob-feat-text"><b>Upload property photos</b>Listrolab reads your photos and writes specific copy from what it actually sees — not a template.</div></div>
-      <div class="ob-feat"><div class="ob-feat-icon">⚡</div><div class="ob-feat-text"><b>Batch mode (Pro) — 5 at once</b>Add up to 5 properties, generate all listings simultaneously. A week of writing in 2 minutes.</div></div>
-      <div class="ob-feat"><div class="ob-feat-icon">🎯</div><div class="ob-feat-text"><b>Buyer framing (Pro)</b>One listing rewritten for families, investors, and downsizers automatically.</div></div>
+  <div class="auth-wrap">
+    <div class="auth-card">
+      <div class="auth-hero">
+        <div class="auth-logo">Listro<span>lab</span></div>
+        <div class="auth-tag">Listing copy. Refined.</div>
+        <div class="auth-feats">
+          <div class="auth-feat"><div class="auth-feat-icon">📸</div><div class="auth-feat-text"><b>Upload property photos</b>Reads your photos and writes specific copy from what it actually sees.</div></div>
+          <div class="auth-feat"><div class="auth-feat-icon">⚡</div><div class="auth-feat-text"><b>Batch mode — 5 listings at once</b>A week of writing done in under 2 minutes.</div></div>
+          <div class="auth-feat"><div class="auth-feat-icon">🛠️</div><div class="auth-feat-text"><b>Full agent toolkit</b>Just sold, open house, price reduction, seller updates and more.</div></div>
+        </div>
+      </div>
+      <div class="auth-body">
+        <div class="field"><div class="label">Your name</div><input class="input" type="text" id="ob-name" placeholder="e.g. Sarah Mitchell" autocomplete="name"></div>
+        <div class="field"><div class="label">Brokerage (optional)</div><input class="input" type="text" id="ob-brokerage" placeholder="e.g. Keller Williams" autocomplete="organization"></div>
+        <button class="btn btn-gold btn-full" onclick="goPaywall()" style="margin-top:4px">Start free 7-day trial →</button>
+        <div style="font-size:11px;color:var(--mid);text-align:center;margin-top:10px">No credit card required · Cancel anytime</div>
+      </div>
     </div>
-  </div>
-  <div class="ob-body">
-    <div class="fl">Your name</div>
-    <input class="fi" type="text" id="obn" placeholder="e.g. Sarah Mitchell" autocomplete="name">
-    <div class="fl">Brokerage (optional)</div>
-    <input class="fi" type="text" id="obb" placeholder="e.g. Keller Williams" autocomplete="organization">
-    <button class="btn-p" onclick="goPaywall()">Start free 7-day trial →</button>
-    <div class="ob-fine">No credit card · Cancel anytime · listrolab.com</div>
   </div>
 </div>
 
+<!-- PAYWALL -->
 <div class="screen" id="screen-pw">
-  <div class="pw-top">
-    <div class="pw-pre">✦ Founder Pricing — 31 spots left</div>
-    <div class="pw-title">Lock in your rate<br>before prices go up.</div>
-    <div class="pw-sub">First 50 agents get founding member pricing — locked forever after your trial.</div>
-  </div>
-  <div class="pw-body">
-    <div class="pw-tl">
-      <div class="pw-tl-t">Your 7-day trial</div>
-      <div class="pw-tl-r"><div class="pw-tl-d"></div>Today — full access including photo writing</div>
-      <div class="pw-tl-r"><div class="pw-tl-d"></div>Day 3 — Pro batch mode + buyer framing</div>
-      <div class="pw-tl-r"><div class="pw-tl-d"></div>Day 5 — reminder before trial ends</div>
-      <div class="pw-tl-r"><div class="pw-tl-d"></div>Day 7 — choose your plan</div>
+  <div class="auth-wrap">
+    <div class="auth-card">
+      <div class="auth-hero" style="padding:28px 36px 24px">
+        <div style="font-size:10px;color:var(--gold);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:8px;position:relative">✦ Founder Pricing — 31 spots left</div>
+        <div class="auth-logo" style="font-size:26px;margin-bottom:6px">Lock in your rate before prices go up.</div>
+        <div style="font-size:12px;color:var(--mid);line-height:1.6;position:relative">First 50 agents get founding member pricing — locked forever after your trial.</div>
+      </div>
+      <div class="auth-body">
+        <div class="pw-plans">
+          <div class="pw-plan" id="pm" onclick="selPlan('monthly')"><div class="pw-pn">Monthly</div><div class="pw-pp">$49</div><div class="pw-ps">per month · no commitment</div></div>
+          <div class="pw-plan sel" id="pa" onclick="selPlan('annual')"><div class="pw-pb">BEST VALUE</div><div class="pw-pn">Annual Pro</div><div class="pw-pp">$29</div><div class="pw-ps">per month · billed $348/yr</div></div>
+        </div>
+        <div style="margin-bottom:18px">
+          <div class="pw-feat"><div class="pw-chk">✓</div>Unlimited listing generation + photo writing</div>
+          <div class="pw-feat"><div class="pw-chk">✓</div>Full agent toolkit — just sold, open house, bio and more</div>
+          <div class="pw-feat"><div class="pw-chk" style="color:var(--gold)">✓</div><span>Batch mode — 5 listings at once <span class="pb">PRO</span></span></div>
+          <div class="pw-feat"><div class="pw-chk" style="color:var(--gold)">✓</div><span>Buyer framing — 3 versions per listing <span class="pb">PRO</span></span></div>
+        </div>
+        <button class="btn btn-gold btn-full" onclick="startApp()">Start free trial — no card needed</button>
+        <button style="width:100%;padding:11px;background:transparent;color:var(--mid);font-family:'DM Sans',sans-serif;font-size:12px;border:none;cursor:pointer;margin-top:6px" onclick="startApp()">Maybe later</button>
+      </div>
     </div>
-    <div class="pw-plans">
-      <div class="pw-plan" id="pm" onclick="selPlan('monthly')"><div class="pw-pn">Monthly</div><div class="pw-pp">$49</div><div class="pw-ps">per month · no commitment</div></div>
-      <div class="pw-plan sel" id="pa" onclick="selPlan('annual')"><div class="pw-pb">BEST VALUE</div><div class="pw-pn">Annual Pro</div><div class="pw-pp">$29</div><div class="pw-ps">per month · billed $348/yr</div></div>
-    </div>
-    <div class="pw-feats">
-      <div class="pw-feat"><div class="pw-chk">✓</div>Unlimited listing generation</div>
-      <div class="pw-feat"><div class="pw-chk">✓</div>Photo writing — up to 3 photos per listing</div>
-      <div class="pw-feat"><div class="pw-chk">✓</div>4 tone options · full listing history</div>
-      <div class="pw-feat"><div class="pw-chk" style="color:var(--gold)">✓</div><span>Batch mode — 5 listings at once <span class="pb">PRO</span></span></div>
-      <div class="pw-feat"><div class="pw-chk" style="color:var(--gold)">✓</div><span>Buyer framing — 3 versions per listing <span class="pb">PRO</span></span></div>
-    </div>
-    <button class="btn-g" onclick="startApp()">Start free trial — no card needed</button>
-    <button class="btn-gh" onclick="startApp()">Maybe later</button>
   </div>
 </div>
 
+<!-- MAIN APP -->
 <div class="screen" id="screen-app">
-  <div class="main-nav"><div class="nl">Listro<span>lab</span></div><div class="npb" id="proBtn" onclick="togglePro()">⭐ Upgrade to Pro</div></div>
-  <div class="tabs">
-    <div class="tab active" onclick="switchTab('gen',this)">Generate</div>
-    <div class="tab" onclick="switchTab('batch',this)">Batch ⚡<span class="pb">PRO</span></div>
-    <div class="tab" onclick="switchTab('buyer',this)">Framing <span class="pb">PRO</span></div>
-    <div class="tab" onclick="switchTab('hist',this)">History</div>
-  </div>
+  <div class="layout">
 
-  <div id="tab-gen" class="gen">
-    <div class="phs">
-      <div class="gl">Property photos <span style="color:var(--gold2);font-size:9px;text-transform:none;letter-spacing:0">✨ optional but powerful</span></div>
-      <div class="pha" id="ua" ondragover="ev(event)" ondrop="drop(event)">
-        <input type="file" accept="image/jpeg,image/png,image/webp" multiple onchange="hph(event)">
-        <div class="phi">📸</div><div class="pht">Drop photos or tap to upload</div>
-        <div class="phs2">Up to 3 photos · Listrolab writes from what it sees</div>
+    <!-- SIDEBAR -->
+    <div class="sidebar">
+      <div class="sb-logo">
+        <div class="sb-logo-text">Listro<span>lab</span></div>
+        <div class="sb-logo-tag">Listing copy. Refined.</div>
       </div>
-      <div class="php" id="pp" style="display:none"></div>
-      <div class="phh" id="ph" style="display:none">📸 Photo writing active — copy will name specific finishes from your photos</div>
+      <div class="sb-nav">
+        <div class="sb-section">Generate</div>
+        <div class="sb-item active" id="nav-gen" onclick="showView('gen',this)"><div class="sb-item-icon">✍️</div>New listing</div>
+        <div class="sb-item" id="nav-batch" onclick="showView('batch',this)"><div class="sb-item-icon">⚡</div>Batch mode <div class="sb-item-badge">PRO</div></div>
+        <div class="sb-item" id="nav-buyer" onclick="showView('buyer',this)"><div class="sb-item-icon">🎯</div>Buyer framing <div class="sb-item-badge">PRO</div></div>
+
+        <div class="sb-section">Agent tools</div>
+        <div class="sb-item" id="nav-sold" onclick="showView('sold',this)"><div class="sb-item-icon">🏡</div>Just sold</div>
+        <div class="sb-item" id="nav-openhouse" onclick="showView('openhouse',this)"><div class="sb-item-icon">🚪</div>Open house kit</div>
+        <div class="sb-item" id="nav-pricereduction" onclick="showView('pricereduction',this)"><div class="sb-item-icon">📉</div>Price reduction</div>
+        <div class="sb-item" id="nav-sellerupdate" onclick="showView('sellerupdate',this)"><div class="sb-item-icon">📊</div>Seller update</div>
+        <div class="sb-item" id="nav-bio" onclick="showView('bio',this)"><div class="sb-item-icon">👤</div>Agent bio</div>
+
+        <div class="sb-section">Account</div>
+        <div class="sb-item" id="nav-hist" onclick="showView('hist',this)"><div class="sb-item-icon">📋</div>History</div>
+      </div>
+      <div class="sb-bottom">
+        <button class="sb-pro-btn" id="proBtn" onclick="togglePro()">⭐ Upgrade to Pro</button>
+      </div>
     </div>
-    <div class="gs"><div class="gl">Property type</div><select class="gi" id="pt"><option>Single family home</option><option>Condominium / apartment</option><option>Townhouse</option><option>Luxury estate</option><option>Investment property</option><option>Fixer-upper</option><option>New construction</option></select></div>
-    <div class="gr gs"><div><div class="gl">Location</div><input class="gi" type="text" id="loc" placeholder="e.g. Oak Park, Chicago"></div><div><div class="gl">Price</div><input class="gi" type="text" id="prc" placeholder="e.g. $549,000"></div></div>
-    <div class="gr gs"><div><div class="gl">Beds / Baths</div><input class="gi" type="text" id="bb" placeholder="e.g. 4 bed / 2.5 bath"></div><div><div class="gl">Sq footage</div><input class="gi" type="text" id="sqft" placeholder="e.g. 2,400 sq ft"></div></div>
-    <div class="gs"><div class="gl">Standout features <span style="color:var(--gold2);font-size:9px;text-transform:none">be specific</span></div><textarea class="gi" id="feat" placeholder="e.g. white shaker cabinets, waterfall quartz island, 6-burner gas range, wide-plank white oak floors, top-rated schools 4 blocks away...&#10;&#10;The more specific, the better the copy."></textarea></div>
-    <div class="gs"><div class="gl">Target buyer</div><select class="gi" id="buy"><option>Young families</option><option>First-time buyers</option><option>Move-up buyers</option><option>Downsizers / empty nesters</option><option>Investors</option><option>Luxury buyers</option><option>Remote workers</option></select></div>
-    <div class="gs"><div class="gl">Tone</div><div class="tg"><div class="tb active" onclick="sTone(this,'warm')">Warm</div><div class="tb" onclick="sTone(this,'professional')">Professional</div><div class="tb" onclick="sTone(this,'luxury')">Luxury</div><div class="tb" onclick="sTone(this,'investment')">Investment</div></div></div>
-    <button class="gbtn" id="gb" onclick="gen()"><span id="gbt">Generate listing →</span></button>
-    <div id="oa" style="display:none">
-      <div class="oc">
-        <div class="oh">
-          <div class="ol"><div class="ld"></div>Your listing <span class="wc" id="wc"></span></div>
-          <button class="cb" onclick="cp('out')">Copy</button>
-        </div>
-        <div class="ob e" id="out">Writing...</div>
-        <!-- MLS CHARACTER COUNTER -->
-        <div id="mlsBar" style="display:none;padding:10px 14px;border-top:1px solid var(--border);background:var(--bg3)">
-          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:5px">
-            <div style="font-size:10px;color:var(--mid);text-transform:uppercase;letter-spacing:.5px">MLS Character Count</div>
-            <div style="font-size:11px;font-weight:600" id="mlsCount">0</div>
-          </div>
-          <div style="height:4px;background:rgba(255,255,255,0.06);border-radius:2px;overflow:hidden">
-            <div id="mlsFill" style="height:100%;border-radius:2px;transition:width .3s,background .3s;width:0%"></div>
-          </div>
-          <div style="display:flex;justify-content:space-between;margin-top:4px">
-            <div style="font-size:9px;color:var(--mid)">0</div>
-            <div style="font-size:9px;color:var(--mid)" id="mlsLimit">500 chars (standard MLS)</div>
-          </div>
-          <div style="display:flex;gap:6px;margin-top:8px;flex-wrap:wrap">
-            <button onclick="setMLS(500)" style="font-size:10px;padding:3px 8px;border-radius:6px;border:1px solid var(--border);background:var(--bg2);color:var(--mid);cursor:pointer" id="mls500">500</button>
-            <button onclick="setMLS(750)" style="font-size:10px;padding:3px 8px;border-radius:6px;border:1px solid var(--border);background:var(--bg2);color:var(--mid);cursor:pointer" id="mls750">750</button>
-            <button onclick="setMLS(1000)" style="font-size:10px;padding:3px 8px;border-radius:6px;border:1px solid var(--border);background:var(--bg2);color:var(--mid);cursor:pointer" id="mls1000">1000</button>
-            <button onclick="setMLS(2000)" style="font-size:10px;padding:3px 8px;border-radius:6px;border:1px solid var(--border);background:var(--bg2);color:var(--mid);cursor:pointer" id="mls2000">2000</button>
-          </div>
-        </div>
-        <div class="pis" id="pis" style="display:none"><div class="pil">📸 Spotted from your photos</div><div class="pit" id="pit"></div></div>
-      </div>
 
-      <!-- TOOLS ROW -->
-      <div style="margin-top:14px">
-        <div style="font-size:10px;color:var(--mid);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px;font-weight:500">Quick tools</div>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
-          <button class="tool-btn" onclick="genHeadlines()">✏️ Headline ideas</button>
-          <button class="tool-btn" onclick="genSocial()">📱 Social captions</button>
-          <button class="tool-btn" onclick="showRewrite()">🔄 Rewrite my listing</button>
-          <button class="tool-btn" onclick="genEmail()">📧 Buyer email</button>
-        </div>
-      </div>
+    <!-- MAIN CONTENT -->
+    <div class="main">
 
-      <!-- HEADLINES OUTPUT -->
-      <div id="headlinesArea" style="display:none;margin-top:12px">
-        <div class="oc">
-          <div class="oh"><div class="ol"><div class="ld"></div>Headline ideas</div><button class="cb" onclick="cp('headlinesOut')">Copy all</button></div>
-          <div class="ob e" id="headlinesOut">Generating headlines...</div>
+      <!-- GENERATE VIEW -->
+      <div id="view-gen">
+        <div class="topbar">
+          <div><div class="topbar-title">New listing</div><div class="topbar-sub">Generate MLS-ready copy from property details and photos</div></div>
         </div>
-      </div>
+        <div class="content">
+          <div class="content-2col">
 
-      <!-- SOCIAL OUTPUT -->
-      <div id="socialArea" style="display:none;margin-top:12px">
-        <div class="oc">
-          <div class="oh" style="cursor:pointer" onclick="toggleSocialTabs()">
-            <div class="ol"><div class="ld"></div>Social captions</div>
-            <div style="display:flex;gap:6px">
-              <button class="cb" onclick="event.stopPropagation();cp('socialOut')">Copy</button>
+            <!-- LEFT: FORM -->
+            <div>
+              <div class="card" style="margin-bottom:16px">
+                <div class="card-body">
+                  <div class="section-label">Property photos <span style="color:var(--gold2);font-size:9px;text-transform:none;letter-spacing:0">✨ optional but powerful</span></div>
+                  <div class="photo-drop" id="ua" ondragover="ev(event)" ondrop="drop(event)">
+                    <input type="file" accept="image/jpeg,image/png,image/webp" multiple onchange="hph(event)">
+                    <div class="photo-drop-icon">📸</div>
+                    <div class="photo-drop-title">Drop photos here or click to upload</div>
+                    <div class="photo-drop-sub">Up to 3 photos · Listrolab writes from what it sees</div>
+                  </div>
+                  <div class="photo-previews" id="pp" style="display:none"></div>
+                  <div class="photo-hint" id="ph" style="display:none">📸 Photo writing active — listing will name specific finishes from your photos</div>
+                </div>
+              </div>
+
+              <div class="card">
+                <div class="card-body">
+                  <div class="section-label">Property details</div>
+                  <div class="field"><div class="label">Property type</div><select class="input" id="pt"><option>Single family home</option><option>Condominium / apartment</option><option>Townhouse</option><option>Luxury estate</option><option>Investment property</option><option>Fixer-upper</option><option>New construction</option></select></div>
+                  <div class="field-row">
+                    <div><div class="label">Location</div><input class="input" type="text" id="loc" placeholder="e.g. Oak Park, Chicago"></div>
+                    <div><div class="label">Price</div><input class="input" type="text" id="prc" placeholder="e.g. $549,000"></div>
+                  </div>
+                  <div class="field-row">
+                    <div><div class="label">Beds / Baths</div><input class="input" type="text" id="bb" placeholder="e.g. 4 bed / 2.5 bath"></div>
+                    <div><div class="label">Sq footage</div><input class="input" type="text" id="sqft" placeholder="e.g. 2,400 sq ft"></div>
+                  </div>
+                  <div class="field"><div class="label">Standout features <span style="color:var(--gold2);font-size:9px;text-transform:none">be specific</span></div><textarea class="input" id="feat" placeholder="e.g. white shaker cabinets, waterfall quartz island, 6-burner gas range, wide-plank white oak floors, top-rated schools 4 blocks away..."></textarea></div>
+                  <div class="field-row">
+                    <div><div class="label">Target buyer</div><select class="input" id="buy"><option>Young families</option><option>First-time buyers</option><option>Move-up buyers</option><option>Downsizers / empty nesters</option><option>Investors</option><option>Luxury buyers</option><option>Remote workers</option></select></div>
+                  </div>
+                  <div class="field"><div class="label">Tone</div><div class="tone-grid"><div class="tone-btn active" onclick="sTone(this,'warm')">Warm</div><div class="tone-btn" onclick="sTone(this,'professional')">Professional</div><div class="tone-btn" onclick="sTone(this,'luxury')">Luxury</div><div class="tone-btn" onclick="sTone(this,'investment')">Investment</div></div></div>
+                </div>
+                <div class="card-foot">
+                  <button class="gen-btn" id="gb" onclick="gen()"><span id="gbt">Generate listing →</span></button>
+                </div>
+              </div>
+            </div>
+
+            <!-- RIGHT: OUTPUT -->
+            <div>
+              <div id="outputArea" style="display:none">
+                <div class="output-card" style="margin-bottom:16px">
+                  <div class="output-hdr">
+                    <div class="output-lbl"><div class="live-dot"></div>Your listing <span class="wc" id="wc"></span></div>
+                    <button class="copy-btn" onclick="cp('out')">Copy</button>
+                  </div>
+                  <div class="output-body empty" id="out">Writing...</div>
+                  <div id="mlsBar" style="display:none">
+                    <div class="mls-bar">
+                      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:5px">
+                        <div style="font-size:10px;color:var(--mid);text-transform:uppercase;letter-spacing:.5px">MLS character count</div>
+                        <div style="font-size:11px;font-weight:600" id="mlsCount">0</div>
+                      </div>
+                      <div style="height:4px;background:rgba(255,255,255,.06);border-radius:2px;overflow:hidden">
+                        <div id="mlsFill" style="height:100%;border-radius:2px;transition:width .3s,background .3s;width:0%"></div>
+                      </div>
+                      <div class="mls-presets">
+                        <div class="mls-preset active" onclick="setMLS(500)" id="mls500">500</div>
+                        <div class="mls-preset" onclick="setMLS(750)" id="mls750">750</div>
+                        <div class="mls-preset" onclick="setMLS(1000)" id="mls1000">1000</div>
+                        <div class="mls-preset" onclick="setMLS(2000)" id="mls2000">2000</div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="pi-section" id="pis" style="display:none"><div class="pi-label">📸 Spotted from your photos</div><div class="pi-tags" id="pit"></div></div>
+                </div>
+
+                <div class="section-label">Quick tools</div>
+                <div class="quick-tools">
+                  <div class="qtool" onclick="genHeadlines()">✏️ Headlines</div>
+                  <div class="qtool" onclick="genSocial()">📱 Social captions</div>
+                  <div class="qtool" onclick="toggleRW()">🔄 Rewrite</div>
+                  <div class="qtool" onclick="genEmail()">📧 Buyer email</div>
+                </div>
+
+                <div id="headlinesArea" style="display:none;margin-top:12px">
+                  <div class="output-card"><div class="output-hdr"><div class="output-lbl"><div class="live-dot"></div>Headline ideas</div><button class="copy-btn" onclick="cp('headlinesOut')">Copy all</button></div><div class="output-body empty" id="headlinesOut"></div></div>
+                </div>
+                <div id="socialArea" style="display:none;margin-top:12px">
+                  <div class="output-card">
+                    <div class="output-hdr"><div class="output-lbl"><div class="live-dot"></div>Social captions</div><button class="copy-btn" onclick="cp('socialOut')">Copy</button></div>
+                    <div class="stabs"><div class="stab active" onclick="showSocial('ig',this)">📸 Instagram</div><div class="stab" onclick="showSocial('fb',this)">👥 Facebook</div><div class="stab" onclick="showSocial('em',this)">📧 Email</div></div>
+                    <div class="output-body empty" id="socialOut"></div>
+                  </div>
+                </div>
+                <div id="emailArea" style="display:none;margin-top:12px">
+                  <div class="output-card"><div class="output-hdr"><div class="output-lbl"><div class="live-dot"></div>Buyer email</div><button class="copy-btn" onclick="cp('emailOut')">Copy</button></div><div class="output-body empty" id="emailOut"></div></div>
+                </div>
+                <div id="rewriteArea" style="display:none;margin-top:12px">
+                  <div class="card"><div class="card-body"><div class="section-label">🔄 Rewrite my existing listing</div><textarea class="input" id="rewriteInput" placeholder="Paste your existing listing description here..." style="min-height:100px;margin-bottom:10px"></textarea><button class="gen-btn" onclick="doRewrite()" style="font-size:15px"><span id="rwbt">Rewrite this listing →</span></button></div>
+                  <div id="rewriteOut" style="display:none"><div class="output-hdr"><div class="output-lbl"><div class="live-dot"></div>Rewritten listing</div><button class="copy-btn" onclick="cp('rwResult')">Copy</button></div><div class="output-body empty" id="rwResult"></div></div></div>
+                </div>
+              </div>
+
+              <div id="outputPlaceholder" style="padding-top:20px">
+                <div style="background:var(--bg2);border:1.5px dashed var(--border);border-radius:12px;padding:48px 32px;text-align:center">
+                  <div style="font-size:36px;margin-bottom:12px;opacity:.3">✍️</div>
+                  <div style="font-size:14px;color:var(--mid)">Fill in the form and hit generate</div>
+                  <div style="font-size:12px;color:var(--mid);margin-top:4px;opacity:.6">Your listing will appear here</div>
+                </div>
+              </div>
             </div>
           </div>
-          <div style="display:flex;border-bottom:1px solid var(--border);background:var(--bg3)">
-            <div class="stab active" onclick="showSocial('ig',this)" style="flex:1;padding:8px 4px;text-align:center;font-size:10px;cursor:pointer;color:var(--white);border-bottom:2px solid var(--gold)">📸 Instagram</div>
-            <div class="stab" onclick="showSocial('fb',this)" style="flex:1;padding:8px 4px;text-align:center;font-size:10px;cursor:pointer;color:var(--mid);border-bottom:2px solid transparent">👥 Facebook</div>
-            <div class="stab" onclick="showSocial('em',this)" style="flex:1;padding:8px 4px;text-align:center;font-size:10px;cursor:pointer;color:var(--mid);border-bottom:2px solid transparent">📧 Email</div>
+        </div>
+      </div>
+
+      <!-- BATCH VIEW -->
+      <div id="view-batch" style="display:none">
+        <div class="topbar"><div><div class="topbar-title">Batch mode</div><div class="topbar-sub">Generate up to 5 listings simultaneously</div></div></div>
+        <div class="content">
+          <div id="batch-locked"><div class="pro-lock"><div class="pro-lock-icon">⚡</div><div class="pro-lock-title">Batch Mode</div><div class="pro-lock-sub">Add up to 5 properties and generate all listings at once. Done in under 2 minutes.</div><button class="btn btn-gold" onclick="unlockPro()">Upgrade to Pro — $29/mo</button></div></div>
+          <div id="batch-unlocked" style="display:none">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
+              <div style="font-size:14px;font-weight:500">Properties</div>
+              <div style="display:flex;gap:8px">
+                <button class="btn btn-ghost btn-sm" id="badd" onclick="addProp()">+ Add property</button>
+                <button class="gen-btn" id="bgb" onclick="genAll()" style="font-size:14px;padding:8px 20px;width:auto"><span id="bgt">Generate all →</span></button>
+              </div>
+            </div>
+            <div class="batch-progress" id="bprog"><div class="batch-fill" id="bfill"></div></div>
+            <div id="blist"></div>
           </div>
-          <div class="ob e" id="socialOut">Generating captions...</div>
         </div>
       </div>
 
-      <!-- EMAIL OUTPUT -->
-      <div id="emailArea" style="display:none;margin-top:12px">
-        <div class="oc">
-          <div class="oh"><div class="ol"><div class="ld"></div>Buyer email</div><button class="cb" onclick="cp('emailOut')">Copy</button></div>
-          <div class="ob e" id="emailOut">Writing buyer email...</div>
+      <!-- BUYER FRAMING VIEW -->
+      <div id="view-buyer" style="display:none">
+        <div class="topbar"><div><div class="topbar-title">Buyer framing</div><div class="topbar-sub">One listing rewritten for families, investors, and downsizers</div></div></div>
+        <div class="content">
+          <div id="buyer-locked"><div class="pro-lock"><div class="pro-lock-icon">🎯</div><div class="pro-lock-title">Buyer Framing</div><div class="pro-lock-sub">Three versions of any listing — rewritten for different buyer types. One click, three audiences.</div><button class="btn btn-gold" onclick="unlockPro()">Upgrade to Pro — $29/mo</button></div></div>
+          <div id="buyer-unlocked" style="display:none">
+            <button class="gen-btn" id="byb" onclick="genBuyer()" style="margin-bottom:16px;font-size:16px">Generate all 3 buyer versions →</button>
+            <div class="buyer-tabs"><div class="buyer-tab active" onclick="showBuyer('families',this)">👨‍👩‍👧 Families</div><div class="buyer-tab" onclick="showBuyer('investors',this)">📈 Investors</div><div class="buyer-tab" onclick="showBuyer('downsizers',this)">🏡 Downsizers</div></div>
+            <div class="output-card"><div class="output-hdr"><div class="output-lbl"><div class="live-dot"></div><span id="byl2">For young families</span></div><button class="copy-btn" onclick="cp('bout')">Copy</button></div><div class="output-body empty" id="bout">Generate a listing first, then click above.</div></div>
+          </div>
         </div>
       </div>
-    </div>
 
-    <!-- REWRITE TOOL -->
-    <div id="rewriteArea" style="display:none;margin-top:18px;background:var(--bg2);border:1px solid var(--border2);border-radius:12px;padding:16px">
-      <div style="font-size:13px;font-weight:500;margin-bottom:10px;color:var(--gold2)">🔄 Rewrite my existing listing</div>
-      <div style="font-size:11px;color:var(--mid);margin-bottom:10px;line-height:1.5">Paste your current listing copy below — Listrolab will rewrite it with a stronger hook, specific details, and a better close.</div>
-      <textarea class="gi" id="rewriteInput" placeholder="Paste your existing listing description here..." style="min-height:100px;margin-bottom:10px"></textarea>
-      <button class="gbtn" onclick="doRewrite()" style="font-size:15px"><span id="rwbt">Rewrite this listing →</span></button>
-      <div id="rewriteOut" style="display:none;margin-top:12px">
-        <div class="oc">
-          <div class="oh"><div class="ol"><div class="ld"></div>Rewritten listing</div><button class="cb" onclick="cp('rwResult')">Copy</button></div>
-          <div class="ob e" id="rwResult">Rewriting...</div>
-        </div>
+      <!-- TOOL VIEWS — Just Sold, Open House, Price Reduction, Seller Update, Bio -->
+      <div id="view-sold" style="display:none">
+        <div class="topbar"><div><div class="topbar-title">Just sold announcement</div><div class="topbar-sub">Social post, email blast, and seller thank you — all at once</div></div></div>
+        <div class="content"><div class="content-2col">
+          <div class="card"><div class="card-body">
+            <div class="field"><div class="label">Property address</div><input class="input" type="text" id="sold-addr" placeholder="e.g. 123 Oak Street, Oak Park"></div>
+            <div class="field-row"><div><div class="label">Sale price</div><input class="input" type="text" id="sold-price" placeholder="e.g. $549,000"></div><div><div class="label">Days on market</div><input class="input" type="text" id="sold-dom" placeholder="e.g. 12"></div></div>
+            <div class="field"><div class="label">What made this sale special</div><input class="input" type="text" id="sold-note" placeholder="e.g. 4 offers in 48 hours, sold over asking"></div>
+          </div><div class="card-foot"><button class="gen-btn" onclick="genJustSold()"><span id="sold-bt">Generate just sold content →</span></button></div></div>
+          <div id="sold-out" style="display:none">
+            <div class="output-card"><div class="output-hdr"><div class="output-lbl"><div class="live-dot"></div><span id="sold-lbl">Instagram post</span></div><button class="copy-btn" onclick="cp('sold-result')">Copy</button></div>
+            <div class="stabs"><div class="stab active" onclick="showSoldTab('ig',this)">📸 Instagram</div><div class="stab" onclick="showSoldTab('fb',this)">👥 Facebook</div><div class="stab" onclick="showSoldTab('em',this)">📧 Email</div><div class="stab" onclick="showSoldTab('ty',this)">💛 Thank you</div></div>
+            <div class="output-body empty" id="sold-result"></div></div>
+          </div>
+        </div></div>
       </div>
+
+      <div id="view-openhouse" style="display:none">
+        <div class="topbar"><div><div class="topbar-title">Open house promo kit</div><div class="topbar-sub">Instagram, Facebook, email invite, and text blast in one click</div></div></div>
+        <div class="content"><div class="content-2col">
+          <div class="card"><div class="card-body">
+            <div class="field"><div class="label">Property address</div><input class="input" type="text" id="oh-addr" placeholder="e.g. 789 Pine Rd, Wilmette"></div>
+            <div class="field-row"><div><div class="label">Date</div><input class="input" type="text" id="oh-date" placeholder="e.g. Saturday April 12"></div><div><div class="label">Time</div><input class="input" type="text" id="oh-time" placeholder="e.g. 12pm to 3pm"></div></div>
+            <div class="field-row"><div><div class="label">Price</div><input class="input" type="text" id="oh-price" placeholder="e.g. $549,000"></div><div><div class="label">Beds / Baths</div><input class="input" type="text" id="oh-bb" placeholder="e.g. 4bd / 2ba"></div></div>
+            <div class="field"><div class="label">One hook that makes this worth attending</div><input class="input" type="text" id="oh-hook" placeholder="e.g. huge backyard, top school district, renovated kitchen"></div>
+          </div><div class="card-foot"><button class="gen-btn" onclick="genOpenHouse()"><span id="oh-bt">Generate open house kit →</span></button></div></div>
+          <div id="oh-out" style="display:none">
+            <div class="output-card"><div class="output-hdr"><div class="output-lbl"><div class="live-dot"></div><span id="oh-lbl">Instagram caption</span></div><button class="copy-btn" onclick="cp('oh-result')">Copy</button></div>
+            <div class="stabs"><div class="stab active" onclick="showOhTab('ig',this)">📸 Instagram</div><div class="stab" onclick="showOhTab('fb',this)">👥 Facebook</div><div class="stab" onclick="showOhTab('em',this)">📧 Email</div><div class="stab" onclick="showOhTab('tx',this)">💬 Text</div></div>
+            <div class="output-body empty" id="oh-result"></div></div>
+          </div>
+        </div></div>
+      </div>
+
+      <div id="view-pricereduction" style="display:none">
+        <div class="topbar"><div><div class="topbar-title">Price reduction announcement</div><div class="topbar-sub">Frames the reduction as an opportunity, not a failure</div></div></div>
+        <div class="content"><div class="content-2col">
+          <div class="card"><div class="card-body">
+            <div class="field"><div class="label">Property address</div><input class="input" type="text" id="pr-addr" placeholder="e.g. 456 Maple Ave, Evanston"></div>
+            <div class="field-row"><div><div class="label">Old price</div><input class="input" type="text" id="pr-old" placeholder="e.g. $575,000"></div><div><div class="label">New price</div><input class="input" type="text" id="pr-new" placeholder="e.g. $549,000"></div></div>
+            <div class="field"><div class="label">Beds / Baths</div><input class="input" type="text" id="pr-bb" placeholder="e.g. 4 bed / 2.5 bath"></div>
+            <div class="field"><div class="label">Why now is a great time to buy</div><input class="input" type="text" id="pr-why" placeholder="e.g. motivated seller, quick close, summer before school starts"></div>
+          </div><div class="card-foot"><button class="gen-btn" onclick="genPriceReduction()"><span id="pr-bt">Generate price reduction content →</span></button></div></div>
+          <div id="pr-out" style="display:none">
+            <div class="output-card"><div class="output-hdr"><div class="output-lbl"><div class="live-dot"></div><span id="pr-lbl">Social post</span></div><button class="copy-btn" onclick="cp('pr-result')">Copy</button></div>
+            <div class="stabs"><div class="stab active" onclick="showPrTab('social',this)">📱 Social</div><div class="stab" onclick="showPrTab('email',this)">📧 Email</div><div class="stab" onclick="showPrTab('text',this)">💬 Text</div></div>
+            <div class="output-body empty" id="pr-result"></div></div>
+          </div>
+        </div></div>
+      </div>
+
+      <div id="view-sellerupdate" style="display:none">
+        <div class="topbar"><div><div class="topbar-title">Seller update email</div><div class="topbar-sub">Professional weekly update when a listing is sitting</div></div></div>
+        <div class="content"><div class="content-2col">
+          <div class="card"><div class="card-body">
+            <div class="field"><div class="label">Property address</div><input class="input" type="text" id="su-addr" placeholder="e.g. 123 Oak Street, Oak Park"></div>
+            <div class="field-row"><div><div class="label">Days on market</div><input class="input" type="text" id="su-dom" placeholder="e.g. 21"></div><div><div class="label">Number of showings</div><input class="input" type="text" id="su-show" placeholder="e.g. 7"></div></div>
+            <div class="field"><div class="label">Buyer feedback received</div><textarea class="input" id="su-feed" placeholder="e.g. Most buyers loved the kitchen but felt the price was slightly high for the lot size..."></textarea></div>
+            <div class="field"><div class="label">Recommended next step</div><input class="input" type="text" id="su-next" placeholder="e.g. consider a $15k price adjustment, add staging to master bedroom"></div>
+          </div><div class="card-foot"><button class="gen-btn" onclick="genSellerUpdate()"><span id="su-bt">Generate seller update →</span></button></div></div>
+          <div id="su-out" style="display:none">
+            <div class="output-card"><div class="output-hdr"><div class="output-lbl"><div class="live-dot"></div>Seller update email</div><button class="copy-btn" onclick="cp('su-result')">Copy</button></div><div class="output-body empty" id="su-result"></div></div>
+          </div>
+        </div></div>
+      </div>
+
+      <div id="view-bio" style="display:none">
+        <div class="topbar"><div><div class="topbar-title">Agent bio generator</div><div class="topbar-sub">Short, medium, and full length — ready to paste anywhere</div></div></div>
+        <div class="content"><div class="content-2col">
+          <div class="card"><div class="card-body">
+            <div class="field-row"><div><div class="label">Your name</div><input class="input" type="text" id="bio-name" placeholder="e.g. Sarah Mitchell"></div><div><div class="label">Brokerage</div><input class="input" type="text" id="bio-brok" placeholder="e.g. Keller Williams"></div></div>
+            <div class="field-row"><div><div class="label">Years of experience</div><input class="input" type="text" id="bio-yrs" placeholder="e.g. 8"></div><div><div class="label">Market area</div><input class="input" type="text" id="bio-mkt" placeholder="e.g. Oak Park, Chicago west suburbs"></div></div>
+            <div class="field"><div class="label">Specialty or niche</div><input class="input" type="text" id="bio-spec" placeholder="e.g. first-time buyers, luxury homes, investment properties"></div>
+            <div class="field"><div class="label">One personal detail</div><input class="input" type="text" id="bio-pers" placeholder="e.g. mom of two, lifelong Chicago resident, former teacher"></div>
+          </div><div class="card-foot"><button class="gen-btn" onclick="genBio()"><span id="bio-bt">Generate my bio →</span></button></div></div>
+          <div id="bio-out" style="display:none">
+            <div class="output-card"><div class="output-hdr"><div class="output-lbl"><div class="live-dot"></div><span id="bio-lbl">Short bio</span></div><button class="copy-btn" onclick="cp('bio-result')">Copy</button></div>
+            <div class="stabs"><div class="stab active" onclick="showBioTab('short',this)">Short</div><div class="stab" onclick="showBioTab('medium',this)">Medium</div><div class="stab" onclick="showBioTab('full',this)">Full</div></div>
+            <div class="output-body empty" id="bio-result"></div></div>
+          </div>
+        </div></div>
+      </div>
+
+      <!-- HISTORY VIEW -->
+      <div id="view-hist" style="display:none">
+        <div class="topbar"><div><div class="topbar-title">History</div><div class="topbar-sub">All your generated listings saved automatically</div></div></div>
+        <div class="content"><div class="hist-grid" id="hl"></div></div>
+      </div>
+
     </div>
   </div>
-
-  <div id="tab-batch" class="gen" style="display:none">
-    <div id="bl"><div class="pl"><div class="pli">⚡</div><div class="plt">Batch Mode</div><div class="pls">Add up to 5 properties and generate all listings simultaneously. A week of writing in under 2 minutes.</div><button class="pu" onclick="unlockPro()">Upgrade to Pro — $29/mo</button></div></div>
-    <div id="bu" style="display:none">
-      <div class="btip"><strong>⚡ Batch Mode — up to 5 listings at once</strong>Add properties below then hit Generate All. All listings write simultaneously.</div>
-      <div class="bprog" id="bp"><div class="bpf" id="bpf"></div></div>
-      <button class="gbtn" id="bgb" onclick="genAll()" style="margin-bottom:16px"><span id="bgt">Generate all listings →</span></button>
-      <div class="bhdr"><div class="btitle">Properties</div><button class="badd" id="badd" onclick="addProp()">+ Add property</button></div>
-      <div id="blist"></div>
-    </div>
-  </div>
-
-  <div id="tab-buyer" class="gen" style="display:none">
-    <div id="byl"><div class="pl"><div class="pli">🎯</div><div class="plt">Buyer Framing</div><div class="pls">Three versions of any listing — rewritten for families, investors, and downsizers. One click, three audiences.</div><button class="pu" onclick="unlockPro()">Upgrade to Pro — $29/mo</button></div></div>
-    <div id="byu" style="display:none">
-      <button class="btn-p" style="font-size:16px;margin-bottom:14px" id="byb" onclick="genBuyer()">Generate all 3 buyer versions →</button>
-      <div class="btr"><div class="bt active" onclick="showBuyer('families',this)">👨‍👩‍👧 Families</div><div class="bt" onclick="showBuyer('investors',this)">📈 Investors</div><div class="bt" onclick="showBuyer('downsizers',this)">🏡 Downsizers</div></div>
-      <div class="oc"><div class="oh"><div class="ol"><div class="ld"></div><span id="byl2">For young families</span></div><button class="cb" onclick="cp('bout')">Copy</button></div><div class="ob" id="bout">Generate a listing first, then click above.</div></div>
-    </div>
-  </div>
-
-  <div id="tab-hist" class="gen" style="display:none"><div id="hl"></div></div>
 </div>
 
-</div>
-
-<div class="bottom-nav">
-  <div class="ni active" id="nh" onclick="goTo('app');na('nh')"><div class="nic">🏠</div>Home</div>
-  <div class="ni" id="ng" onclick="goTo('app');stNav('gen');na('ng')"><div class="nic">✍️</div>Generate</div>
-  <div class="ni" id="nbatch" onclick="goTo('app');stNav('batch');na('nbatch')"><div class="nic">⚡</div>Batch</div>
-  <div class="ni" id="nhist" onclick="goTo('app');stNav('hist');na('nhist')"><div class="nic">📋</div>History</div>
-</div>
 <div class="toast" id="toast"></div>
 
 <script>
@@ -379,47 +564,15 @@ try{S.isPro=localStorage.getItem('ll_pro')==='true';}catch(e){}
 
 function getToneInstructions(tone){
   const tones={
-    warm:`TONE — WARM & INVITING:
-Write like a trusted friend describing a home they love. Conversational, human, emotionally warm.
-- Use contractions (it's, you'll, there's)
-- Focus on lifestyle moments — Sunday mornings, dinner parties, kids in the yard
-- Sentences should feel like how a person actually talks
-- Avoid formal language, jargon, or anything that sounds corporate
-- The reader should feel welcome before they've even visited
-Example voice: "The kitchen is the kind you actually cook in — not just look at."`,
-
-    professional:`TONE — PROFESSIONAL & PRECISE:
-Write like a top-producing agent who commands respect. Crisp, authoritative, no fluff.
-- Short declarative sentences. Facts stated with confidence.
-- Lead with the strongest selling point, not emotion
-- Use precise language — exact measurements, specific materials, named locations
-- No exclamation points. No filler words. Every sentence earns its place.
-- The reader should feel they are dealing with a serious professional
-Example voice: "Four bedrooms. Three full baths. Renovated to exacting standards in 2023."`,
-
-    luxury:`TONE — LUXURY & ASPIRATIONAL:
-Write like a high-end lifestyle publication. Elevated, sensory, aspirational.
-- Use rich, evocative language that appeals to all senses
-- Focus on exclusivity, rarity, and the elevated life this property enables
-- Reference quality of materials and craftsmanship in specific terms
-- Sentences should be longer and more elegant — this is not a place to rush
-- The reader should feel this property is rare and worthy of serious attention
-Example voice: "The primary suite occupies its own wing — a considered retreat where morning light arrives slowly through floor-to-ceiling glass."`,
-
-    investment:`TONE — INVESTMENT & ROI-FOCUSED:
-Write like a financial analyst presenting an opportunity. Data-driven, opportunity-focused, direct.
-- Lead with location fundamentals and market dynamics
-- Mention rental yield potential, appreciation drivers, low maintenance angle
-- Use business language — asset, yield, fundamentals, demand corridor
-- Emotion is irrelevant here — numbers and logic drive this decision
-- The reader should see a financial opportunity, not a home
-Example voice: "Located in a high-demand rental corridor with sub-3% vacancy rates. Low-maintenance layout maximizes yield from day one."`
+    warm:`TONE — WARM & INVITING: Write like a trusted friend. Conversational, human, emotionally warm. Use contractions. Focus on lifestyle moments. Sentences feel like how a person actually talks.`,
+    professional:`TONE — PROFESSIONAL & PRECISE: Crisp, authoritative, no fluff. Short declarative sentences. Facts stated with confidence. No exclamation points. No filler words.`,
+    luxury:`TONE — LUXURY & ASPIRATIONAL: Elevated, sensory, aspirational. Rich evocative language. Focus on exclusivity and rarity. Longer elegant sentences.`,
+    investment:`TONE — INVESTMENT & ROI-FOCUSED: Data-driven, opportunity-focused. Lead with location fundamentals and market dynamics. Business language — asset, yield, fundamentals. Emotion is irrelevant.`
   };
   return tones[tone]||tones.warm;
 }
 
-function goTo(s){document.querySelectorAll('.screen').forEach(e=>e.classList.remove('active'));document.getElementById('screen-'+s).classList.add('active');window.scrollTo(0,0);}
-function na(id){document.querySelectorAll('.ni').forEach(n=>n.classList.remove('active'));document.getElementById(id).classList.add('active');}
+function goTo(s){document.querySelectorAll('.screen').forEach(e=>e.classList.remove('active'));document.getElementById('screen-'+s).classList.add('active');}
 function goPaywall(){goTo('pw');}
 function startApp(){
   goTo('app');
@@ -428,197 +581,120 @@ function startApp(){
 function selPlan(p){document.getElementById('pm').classList.toggle('sel',p==='monthly');document.getElementById('pa').classList.toggle('sel',p==='annual');}
 function togglePro(){if(!S.isPro)unlockPro();}
 function applyPro(){
-  const b=document.getElementById('proBtn');b.textContent='⭐ Pro';b.classList.add('on');
-  ['bl','byl'].forEach(id=>document.getElementById(id).style.display='none');
-  ['bu','byu'].forEach(id=>document.getElementById(id).style.display='block');
+  const b=document.getElementById('proBtn');b.textContent='⭐ Pro active';b.classList.add('unlocked');
+  ['batch-locked','buyer-locked'].forEach(id=>document.getElementById(id).style.display='none');
+  ['batch-unlocked','buyer-unlocked'].forEach(id=>document.getElementById(id).style.display='block');
 }
 function unlockPro(){
   S.isPro=true;try{localStorage.setItem('ll_pro','true');}catch(e){}
-  applyPro();if(!S.props.length)addProp();showToast('Pro unlocked! 🎉');
+  applyPro();if(!S.props.length)addProp();showToast('Pro unlocked! Batch + buyer framing active');
 }
-function switchTab(name,el){
-  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));el.classList.add('active');
-  ['gen','batch','buyer','hist'].forEach(n=>document.getElementById('tab-'+n).style.display=n===name?'block':'none');
+function showView(name,el){
+  document.querySelectorAll('.sb-item').forEach(i=>i.classList.remove('active'));
+  if(el)el.classList.add('active');
+  document.querySelectorAll('[id^="view-"]').forEach(v=>v.style.display='none');
+  const v=document.getElementById('view-'+name);
+  if(v)v.style.display='block';
   if(name==='hist')renderHist();
 }
-function stNav(name){switchTab(name,document.querySelectorAll('.tab')[{gen:0,batch:1,buyer:2,hist:3}[name]||0]);}
-function sTone(el,t){document.querySelectorAll('.tb').forEach(b=>b.classList.remove('active'));el.classList.add('active');S.tone=t;}
+function sTone(el,t){document.querySelectorAll('.tone-btn').forEach(b=>b.classList.remove('active'));el.classList.add('active');S.tone=t;}
+
+// PHOTOS
 function ev(e){e.preventDefault();}
 function drop(e){e.preventDefault();pf(Array.from(e.dataTransfer.files).filter(f=>f.type.startsWith('image/')));}
 function hph(e){pf(Array.from(e.target.files));}
-function pf(files){files.slice(0,3-S.photos.length).forEach(f=>{const r=new FileReader();r.onload=e=>{
-  const img=new Image();
-  img.onload=()=>{
-    const canvas=document.createElement('canvas');
-    // Much more aggressive compression — max 800px, 60% quality
-    const MAX=800;
-    let w=img.width,h=img.height;
-    if(w>MAX||h>MAX){if(w>h){h=Math.round(h*MAX/w);w=MAX;}else{w=Math.round(w*MAX/h);h=MAX;}}
-    canvas.width=w;canvas.height=h;
-    canvas.getContext('2d').drawImage(img,0,0,w,h);
-    const compressed=canvas.toDataURL('image/jpeg',0.6);
-    // Check size — if still too large, compress more
-    if(compressed.length>500000){
-      const canvas2=document.createElement('canvas');
-      canvas2.width=Math.round(w*0.6);canvas2.height=Math.round(h*0.6);
-      canvas2.getContext('2d').drawImage(img,0,0,canvas2.width,canvas2.height);
-      const compressed2=canvas2.toDataURL('image/jpeg',0.5);
-      S.photos.push(f);S.pd.push(compressed2);
-    } else {
-      S.photos.push(f);S.pd.push(compressed);
-    }
-    rp();
-  };
-  img.src=e.target.result;
-};r.readAsDataURL(f);});}
+function pf(files){files.slice(0,3-S.photos.length).forEach(f=>{const r=new FileReader();r.onload=e=>{const img=new Image();img.onload=()=>{const c=document.createElement('canvas');const M=800;let w=img.width,h=img.height;if(w>M||h>M){if(w>h){h=Math.round(h*M/w);w=M;}else{w=Math.round(w*M/h);h=M;}}c.width=w;c.height=h;c.getContext('2d').drawImage(img,0,0,w,h);const comp=c.toDataURL('image/jpeg',0.6);if(comp.length>500000){const c2=document.createElement('canvas');c2.width=Math.round(w*.6);c2.height=Math.round(h*.6);c2.getContext('2d').drawImage(img,0,0,c2.width,c2.height);S.photos.push(f);S.pd.push(c2.toDataURL('image/jpeg',.5));}else{S.photos.push(f);S.pd.push(comp);}rp();};img.src=e.target.result;};r.readAsDataURL(f);});}
 function rp(){
   const a=document.getElementById('ua'),p=document.getElementById('pp'),h=document.getElementById('ph');
   if(!S.pd.length){a.style.display='block';p.style.display='none';h.style.display='none';return;}
   a.style.display='none';p.style.display='flex';h.style.display='block';p.innerHTML='';
-  S.pd.forEach((src,i)=>{
-    const w=document.createElement('div');w.className='phpv';
-    const img=document.createElement('img');img.src=src;
-    const btn=document.createElement('button');btn.className='phr';btn.textContent='✕';
-    btn.onclick=()=>{S.photos.splice(i,1);S.pd.splice(i,1);rp();if(!S.pd.length)document.getElementById('ua').style.display='block';};
-    w.appendChild(img);w.appendChild(btn);p.appendChild(w);
-  });
-  if(S.pd.length<3){const a2=document.createElement('div');a2.className='pham';a2.innerHTML='+<input type="file" accept="image/jpeg,image/png,image/webp" multiple onchange="hph(event)">';p.appendChild(a2);}
+  S.pd.forEach((src,i)=>{const w=document.createElement('div');w.className='photo-thumb';const img=document.createElement('img');img.src=src;const btn=document.createElement('button');btn.className='photo-rm';btn.textContent='✕';btn.onclick=()=>{S.photos.splice(i,1);S.pd.splice(i,1);rp();if(!S.pd.length)document.getElementById('ua').style.display='block';};w.appendChild(img);w.appendChild(btn);p.appendChild(w);});
+  if(S.pd.length<3){const a2=document.createElement('div');a2.className='photo-add';a2.innerHTML='+<input type="file" accept="image/jpeg,image/png,image/webp" multiple onchange="hph(event)">';p.appendChild(a2);}
 }
 
-async function api(pt,loc,prc,bb,sq,feat,buy,tone,pd,phs){
-  const toneInstructions=getToneInstructions(tone);
-  const prompt=`You are the best real estate copywriter in America. Write for Listrolab.
+// API
+async function callAPI(messages,max_tokens=500){
+  const fp=fetch('/api/generate',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({max_tokens,messages})});
+  const tp=new Promise((_,rej)=>setTimeout(()=>rej(new Error('timeout')),45000));
+  const res=await Promise.race([fp,tp]);
+  const data=await res.json();
+  if(data.error)throw new Error(JSON.stringify(data.error));
+  return data.content?.map(b=>b.text||'').join('')||'';
+}
 
+// GENERATE
+async function gen(){
+  const pt=document.getElementById('pt').value,loc=document.getElementById('loc').value||'a desirable neighborhood',prc=document.getElementById('prc').value,bb=document.getElementById('bb').value||'3 bed / 2 bath',sq=document.getElementById('sqft').value,feat=document.getElementById('feat').value,buy=document.getElementById('buy').value,hasP=S.pd.length>0;
+  const btn=document.getElementById('gb'),btt=document.getElementById('gbt');
+  btn.disabled=true;btt.innerHTML=`${hasP?'Reading photos':'Writing listing'} <span class="dots"><span></span><span></span><span></span></span>`;
+  const sh=document.createElement('div');sh.className='shimmer';btn.appendChild(sh);
+  document.getElementById('outputArea').style.display='block';
+  document.getElementById('outputPlaceholder').style.display='none';
+  const o=document.getElementById('out');o.textContent=hasP?'Reading your photos...':'Writing your listing...';o.className='output-body empty';
+  document.getElementById('pis').style.display='none';
+  ['headlinesArea','socialArea','emailArea'].forEach(id=>document.getElementById(id).style.display='none');
+  const prompt=`You are the best real estate copywriter in America. Write for Listrolab.
 Property: ${pt} in ${loc}
 ${bb}${sq?` · ${sq}`:''}
 ${prc?`Price: ${prc}`:''}
 ${feat?`Standout features: ${feat}`:''}
 Writing for: ${buy}
-
-${toneInstructions}
-
-${pd?`IMPORTANT PHOTO INSTRUCTIONS: You have ${pd.length} actual property photo(s) attached to this message. You MUST look at them carefully before writing. Your listing MUST mention at least 3-4 things you can literally see in the photos. Name the exact cabinet color and style, the exact countertop material, the exact flooring type and color, the exact tile pattern, the lighting fixtures, the outdoor features, the ceiling details — whatever you can actually see. If you see stainless steel appliances, say stainless steel appliances. If you see a farmhouse sink, say farmhouse sink. If you see vaulted ceilings, say vaulted ceilings. The whole point is to write from what you ACTUALLY SEE, not from generic assumptions. A reader should be able to look at the photo and confirm every detail you mention.`:''}
-
+${getToneInstructions(S.tone)}
+${hasP?`IMPORTANT: You have ${S.pd.length} actual property photo(s). Look carefully. Mention at least 3-4 specific things you can literally see — exact cabinet style, countertop material, flooring type, fixtures. Never say "modern finishes" — name the specific thing.`:''}
 Write 3 tight paragraphs:
-1. Put the buyer inside the feeling of living there. NEVER start with: Welcome to / Nestled / This stunning / This beautiful / Discover / Introducing. The opening MUST reflect the tone instructions above.
-2. Name 3-4 hyper-specific visual details. ${pd?'These MUST come directly from the photos — be precise about what you see.':'Be specific and visual — no generic descriptions.'}
-3. One closing sentence of real urgency tied to this specific location or market.
-
-CRITICAL FORMATTING RULES — you must follow these exactly:
-- Absolutely NO em dashes (—) or hyphens (-) used as punctuation anywhere in the text
-- No bullet points or lists
-- No ellipsis (...)
-- Write in complete flowing sentences only
-- Under 160 words total
-- Return ONLY the listing text, nothing else`;
+1. Put buyer inside the feeling of living there. NEVER start: Welcome to / Nestled / This stunning / This beautiful / Discover.
+2. Name 3-4 hyper-specific details. ${hasP?'Must come from photos.':'Be visual and specific.'}
+3. One sentence of real urgency tied to this location.
+CRITICAL: Absolutely NO dashes (- or —) or ellipsis anywhere. Flowing sentences only. Under 160 words. Return ONLY the listing text.`;
   try{
-    let content;
-    if(pd&&pd.length>0){
-      const imageBlocks=pd.map((dataUrl)=>{
-        const base64=dataUrl.split(',')[1];
-        return {type:'image',source:{type:'base64',media_type:'image/jpeg',data:base64}};
-      });
-      content=[...imageBlocks,{type:'text',text:prompt}];
-      console.log(`Sending ${imageBlocks.length} photos, sizes: ${pd.map(d=>Math.round(d.length/1024)+'KB').join(', ')}`);
-    } else {
-      content=prompt;
-    }
-
-    const fetchPromise=fetch('/api/generate',{
-      method:'POST',headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({max_tokens:500,messages:[{role:'user',content}]})
-    });
-
-    const timeoutMs=pd?45000:20000;
-    const timeoutPromise=new Promise((_,reject)=>setTimeout(()=>reject(new Error('timeout')),timeoutMs));
-
-    const res=await Promise.race([fetchPromise,timeoutPromise]);
-    const data=await res.json();
-    if(data.error){console.error('API error:',data.error);return fb(loc,bb,pt,feat,prc);}
-    return data.content?.map(b=>b.text||'').join('')||fb(loc,bb,pt,feat,prc);
+    let messages;
+    if(hasP){const imgs=S.pd.map(d=>({type:'image',source:{type:'base64',media_type:'image/jpeg',data:d.split(',')[1]}}));messages=[{role:'user',content:[...imgs,{type:'text',text:prompt}]}];}
+    else{messages=[{role:'user',content:prompt}];}
+    const text=await callAPI(messages,500);
+    o.textContent=text;o.className='output-body';
+    document.getElementById('wc').textContent=`· ${text.split(/\s+/).filter(Boolean).length} words`;
+    S.last=text;S.bf={f:'',i:'',d:''};
+    updateMLS();
+    if(hasP)await spotted();
+    saveH({pt,loc,prc,bb,text,buy,date:new Date().toISOString()});
   }catch(e){
-    console.error('API failed:',e.message);
-    if(pd&&e.message==='timeout'){
-      showToast('Photos timed out — generating from text');
-      return api(pt,loc,prc,bb,sq,feat,buy,tone,null,null);
-    }
-    return fb(loc,bb,pt,feat,prc);
+    if(hasP&&e.message==='timeout'){showToast('Photos timed out — generating from text');const text=await callAPI([{role:'user',content:prompt.replace(/IMPORTANT.*$/s,'')}],500);o.textContent=text;o.className='output-body';S.last=text;updateMLS();saveH({pt,loc,prc,bb,text,buy,date:new Date().toISOString()});}
+    else{o.textContent=`${loc} rarely offers a property like this. Every detail of this ${bb} ${pt.toLowerCase()} signals genuine care${feat?' — '+feat.split(',').slice(0,2).join(' and '):''}, designed for the way people actually live.\n\n${prc?`Offered at ${prc}, this`:'This'} is the listing ${loc} buyers have been waiting for.`;o.className='output-body';S.last=o.textContent;updateMLS();}
   }
-}
-function fb(loc,bb,pt,feat,prc){return `${loc} rarely offers a home like this. Every detail of this ${bb} ${pt.toLowerCase()} signals care${feat?' and '+feat.split(',').slice(0,2).join(' and '):''}, designed for the way people actually live.\n\n${prc?`Offered at ${prc}, this`:'This'} is the property ${loc} buyers have been waiting for. Homes like this do not wait long.`;}
-
-async function gen(){
-  const pt=document.getElementById('pt').value,loc=document.getElementById('loc').value||'a great neighborhood',prc=document.getElementById('prc').value,bb=document.getElementById('bb').value||'3 bed / 2 bath',sq=document.getElementById('sqft').value,feat=document.getElementById('feat').value,buy=document.getElementById('buy').value,hasP=S.pd.length>0;
-  const btn=document.getElementById('gb'),btt=document.getElementById('gbt');
-
-  // Show photo sizes for debugging
-  if(hasP){
-    const sizes=S.pd.map(d=>Math.round(d.length/1024)+'KB');
-    console.log('Photo sizes after compression:',sizes);
-    if(S.pd.some(d=>d.length>800000)){
-      showToast('Photos still large — compressing more...');
-    }
-  }
-
-  btn.disabled=true;
-  btt.innerHTML=`${hasP?'Reading photos':'Writing'} <span class="dots"><span></span><span></span><span></span></span>`;
-  const sh=document.createElement('div');sh.className='sh';btn.appendChild(sh);
-
-  // Add cancel button
-  const cancelBtn=document.createElement('button');
-  cancelBtn.textContent='Cancel';
-  cancelBtn.style.cssText='width:100%;padding:10px;background:transparent;border:1px solid var(--border);color:var(--mid);font-family:DM Sans,sans-serif;font-size:12px;border-radius:var(--rad);cursor:pointer;margin-top:8px';
-  btn.parentNode.insertBefore(cancelBtn,btn.nextSibling);
-  let cancelled=false;
-  cancelBtn.onclick=()=>{cancelled=true;btn.disabled=false;btt.textContent='Generate listing →';if(sh.parentNode)sh.parentNode.removeChild(sh);cancelBtn.remove();showToast('Cancelled');};
-
-  document.getElementById('oa').style.display='block';
-  const o=document.getElementById('out');
-  o.textContent=hasP?'Reading your photos — this can take 10-15 seconds...':'Writing your listing...';
-  o.className='ob e';
-  document.getElementById('pis').style.display='none';
-
-  const text=await api(pt,loc,prc,bb,sq,feat,buy,S.tone,hasP?S.pd:null,hasP?S.photos:null);
-
-  if(cancelled)return;
-  cancelBtn.remove();
-
-  o.textContent=text;o.className='ob';
-  document.getElementById('wc').textContent=`· ${text.split(/\s+/).filter(Boolean).length} words`;
-  S.last=text;S.bf={f:'',i:'',d:''};
-  updateMLS();
-  ['headlinesArea','socialArea','emailArea'].forEach(id=>document.getElementById(id).style.display='none');
-  if(hasP)await spotted();
-  saveH({pt,loc,prc,bb,text,buy,date:new Date().toISOString()});
   btn.disabled=false;btt.textContent='Generate listing →';if(sh.parentNode)sh.parentNode.removeChild(sh);
 }
 
 async function spotted(){
-  try{
-    const res=await fetch('/api/generate',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({max_tokens:120,messages:[{role:'user',content:[{type:'image',source:{type:'base64',media_type:S.photos[0]?.type||'image/jpeg',data:S.pd[0].split(',')[1]}},{type:'text',text:'List 6-8 specific visual details in this property photo. Precise materials, colors, finishes. Return ONLY a comma-separated list.'}]}]})});
-    const d=await res.json();const tags=(d.content?.map(b=>b.text||'').join('')||'').split(',').map(t=>t.trim()).filter(Boolean).slice(0,8);
-    if(tags.length){const el=document.getElementById('pit');el.innerHTML='';tags.forEach(t=>{const s=document.createElement('span');s.className='pitag';s.textContent=t;el.appendChild(s);});document.getElementById('pis').style.display='block';}
-  }catch(e){}
+  try{const text=await callAPI([{role:'user',content:[{type:'image',source:{type:'base64',media_type:'image/jpeg',data:S.pd[0].split(',')[1]}},{type:'text',text:'List 6-8 specific visual details in this property photo. Precise materials, colors, finishes. Return ONLY a comma-separated list.'}]}],120);const tags=text.split(',').map(t=>t.trim()).filter(Boolean).slice(0,8);if(tags.length){const el=document.getElementById('pit');el.innerHTML='';tags.forEach(t=>{const s=document.createElement('span');s.className='pi-tag';s.textContent=t;el.appendChild(s);});document.getElementById('pis').style.display='block';}}catch(e){}
 }
 
-function addProp(){
-  if(S.props.length>=5){showToast('Max 5 properties');return;}
-  S.props.push({id:Date.now(),address:'',price:'',bb:'',feat:'',tone:'',output:'',status:'pending'});
-  document.getElementById('badd').disabled=S.props.length>=5;
-  renderBatch();
-}
+// MLS
+let mlsLimit=500;
+function updateMLS(){const text=document.getElementById('out').textContent||'';const count=text.length;const pct=Math.min((count/mlsLimit)*100,100);const ce=document.getElementById('mlsCount');const fe=document.getElementById('mlsFill');if(!ce)return;ce.textContent=`${count} / ${mlsLimit}`;ce.style.color=count>mlsLimit?'#ff5f57':count>mlsLimit*.9?'#febc2e':'var(--green)';fe.style.width=pct+'%';fe.style.background=count>mlsLimit?'#ff5f57':count>mlsLimit*.9?'#febc2e':'var(--green)';document.getElementById('mlsBar').style.display='block';}
+function setMLS(n){mlsLimit=n;['500','750','1000','2000'].forEach(v=>{const el=document.getElementById('mls'+v);if(el){el.classList.toggle('active',v==n);}});updateMLS();}
+
+// QUICK TOOLS
+async function genHeadlines(){if(!S.last){showToast('Generate a listing first');return;}document.getElementById('headlinesArea').style.display='block';const el=document.getElementById('headlinesOut');el.textContent='Generating...';el.className='output-body empty';try{const text=await callAPI([{role:'user',content:`Based on this listing, write 5 punchy headline options. Each under 10 words, emotionally compelling, completely different from each other. No dashes. Return ONLY a numbered list.\n\nListing:\n${S.last}`}],300);el.textContent=text;el.className='output-body';}catch(e){el.textContent='Error — try again.';}}
+const socialContent={ig:'',fb:'',em:''};
+async function genSocial(){if(!S.last){showToast('Generate a listing first');return;}document.getElementById('socialArea').style.display='block';const el=document.getElementById('socialOut');el.textContent='Writing...';el.className='output-body empty';try{const text=await callAPI([{role:'user',content:`Write 3 social captions. No dashes anywhere.\n[INSTAGRAM]\n(2-3 sentences, 3-5 hashtags)\n[FACEBOOK]\n(3-4 sentences, warm, no hashtags)\n[EMAIL]\nSubject: [subject]\n\n[3-4 sentence email body]\n\nListing:\n${S.last}`}],600);socialContent.ig=text.match(/\[INSTAGRAM\]([\s\S]*?)(?=\[FACEBOOK\]|$)/)?.[1]?.trim()||'';socialContent.fb=text.match(/\[FACEBOOK\]([\s\S]*?)(?=\[EMAIL\]|$)/)?.[1]?.trim()||'';socialContent.em=text.match(/\[EMAIL\]([\s\S]*?)$/)?.[1]?.trim()||'';showSocial('ig',document.querySelector('#socialArea .stab'));}catch(e){el.textContent='Error — try again.';}}
+function showSocial(type,el){document.querySelectorAll('#socialArea .stab').forEach(t=>{t.classList.remove('active');});if(el)el.classList.add('active');const map={ig:socialContent.ig,fb:socialContent.fb,em:socialContent.em};const r=document.getElementById('socialOut');r.textContent=map[type]||'Generate first.';r.className=map[type]?'output-body':'output-body empty';}
+async function genEmail(){if(!S.last){showToast('Generate a listing first');return;}document.getElementById('emailArea').style.display='block';const el=document.getElementById('emailOut');el.textContent='Writing...';el.className='output-body empty';try{const text=await callAPI([{role:'user',content:`Turn this listing into a personal email an agent sends to their buyer list. No dashes.\nSubject: [subject]\n\n[3-4 sentence body, conversational, ends with CTA]\n\nListing:\n${S.last}`}],300);el.textContent=text;el.className='output-body';}catch(e){el.textContent='Error — try again.';}}
+function toggleRW(){const a=document.getElementById('rewriteArea');a.style.display=a.style.display==='none'?'block':'none';}
+async function doRewrite(){const input=document.getElementById('rewriteInput').value.trim();if(!input){showToast('Paste your listing first');return;}const btn=document.getElementById('rwbt');btn.textContent='Rewriting...';document.getElementById('rewriteOut').style.display='block';const el=document.getElementById('rwResult');el.textContent='Rewriting...';el.className='output-body empty';try{const text=await callAPI([{role:'user',content:`Rewrite this listing significantly better. No dashes. Stronger hook, specific details, better close. Under 160 words. Return ONLY the rewritten text.\n\n${input}`}],500);el.textContent=text;el.className='output-body';S.last=text;updateMLS();}catch(e){el.textContent='Error — try again.';}btn.textContent='Rewrite this listing →';}
+
+// BATCH
+function addProp(){if(S.props.length>=5){showToast('Max 5 properties');return;}S.props.push({id:Date.now(),address:'',price:'',bb:'',feat:'',tone:'',output:'',status:'pending'});document.getElementById('badd').disabled=S.props.length>=5;renderBatch();}
 function rmProp(id){S.props=S.props.filter(p=>p.id!==id);document.getElementById('badd').disabled=S.props.length>=5;renderBatch();}
 function upd(id,f,v){const p=S.props.find(p=>p.id===id);if(p)p[f]=v;}
 function renderBatch(){
-  const el=document.getElementById('blist');
-  if(!S.props.length){el.innerHTML=`<div class="es"><div class="ei">⚡</div><div class="et">Click "+ Add property" to start</div></div>`;return;}
-  el.innerHTML='';
-  const sl={pending:'Ready',generating:'Writing...',done:'Done ✓'};
+  const el=document.getElementById('blist');if(!S.props.length){el.innerHTML=`<div class="empty-state"><div class="empty-icon">⚡</div><div>Click "+ Add property" to start</div></div>`;return;}
+  el.innerHTML='';const sl={pending:'Ready',generating:'Writing...',done:'Done ✓'};
   S.props.forEach((p,i)=>{
-    const d=document.createElement('div');d.className=`bp ${p.status}`;
-    d.innerHTML=`<div class="bph"><div><div class="bpt">Property ${i+1}${p.address?' — '+p.address:''}</div><div class="bpm">${p.bb||'—'}${p.price?' · '+p.price:''}</div></div><div style="display:flex;align-items:center;gap:6px"><span class="bst ${p.status}">${sl[p.status]}</span><button class="brm" onclick="rmProp(${p.id})">✕</button></div></div>
-    <div class="bform"><div class="bfr"><input class="bi" placeholder="Address / Location" value="${p.address}" oninput="upd(${p.id},'address',this.value)"><input class="bi" placeholder="Price e.g. $549k" value="${p.price}" oninput="upd(${p.id},'price',this.value)"></div><div class="bfr"><input class="bi" placeholder="Beds/Baths e.g. 4bd/2ba" value="${p.bb}" oninput="upd(${p.id},'bb',this.value)"><input class="bi" placeholder="Tone: Warm/Luxury/Pro" value="${p.tone}" oninput="upd(${p.id},'tone',this.value)"></div><input class="bi" placeholder="Key features — white shaker cabinets, quartz island..." value="${p.feat}" oninput="upd(${p.id},'feat',this.value)"></div>
-    ${p.output?`<div class="bout"><div class="boh"><div class="bol">✓ Generated</div><button class="bcpy" onclick="cpB(${p.id})">Copy</button></div>${p.output}</div>`:''}`;
+    const d=document.createElement('div');d.className=`batch-prop ${p.status}`;
+    d.innerHTML=`<div class="batch-prop-hdr"><div><div style="font-size:13px;font-weight:500">Property ${i+1}${p.address?' — '+p.address:''}</div><div style="font-size:11px;color:var(--mid);margin-top:2px">${p.bb||'—'}${p.price?' · '+p.price:''}</div></div><div style="display:flex;align-items:center;gap:8px"><span class="batch-st ${p.status}">${sl[p.status]}</span><button class="batch-rm" onclick="rmProp(${p.id})">✕</button></div></div>
+    <div class="batch-prop-grid"><div><div class="label">Address</div><input class="input" placeholder="e.g. 123 Oak St" value="${p.address}" oninput="upd(${p.id},'address',this.value)"></div><div><div class="label">Price</div><input class="input" placeholder="e.g. $549k" value="${p.price}" oninput="upd(${p.id},'price',this.value)"></div><div><div class="label">Beds/Baths</div><input class="input" placeholder="e.g. 4bd/2ba" value="${p.bb}" oninput="upd(${p.id},'bb',this.value)"></div><div><div class="label">Tone</div><input class="input" placeholder="Warm/Luxury/Pro" value="${p.tone}" oninput="upd(${p.id},'tone',this.value)"></div></div>
+    <div style="padding:0 16px 14px"><div class="label">Key features</div><input class="input" placeholder="white shaker cabinets, quartz island..." value="${p.feat}" oninput="upd(${p.id},'feat',this.value)"></div>
+    ${p.output?`<div class="batch-out"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px"><div style="font-size:11px;color:var(--green);font-weight:600">✓ Generated</div><button class="copy-btn" onclick="navigator.clipboard.writeText(document.querySelectorAll('.batch-out')[${i}].querySelector('div+div').textContent).then(()=>showToast('Copied!'))">Copy</button></div><div>${p.output}</div></div>`:''}`;
     el.appendChild(d);
   });
 }
@@ -626,163 +702,60 @@ async function genAll(){
   if(!S.props.length){showToast('Add at least one property');return;}
   const btn=document.getElementById('bgb'),btt=document.getElementById('bgt');
   btn.disabled=true;btt.innerHTML=`Writing ${S.props.length} listing${S.props.length>1?'s':''} <span class="dots"><span></span><span></span><span></span></span>`;
-  const prog=document.getElementById('bp'),fill=document.getElementById('bpf');
+  const prog=document.getElementById('bprog'),fill=document.getElementById('bfill');
   prog.style.display='block';fill.style.width='0%';
   S.props.forEach(p=>{p.status='generating';p.output='';});renderBatch();
   let done=0;
   await Promise.all(S.props.map(async p=>{
-    p.output=await api('Property',p.address||'a great location',p.price,p.bb||'3 bed / 2 bath','',p.feat,'buyers',p.tone||S.tone,null,null);
+    try{
+      const prompt=`Best real estate copywriter. Write a listing for Listrolab. No dashes anywhere.\nProperty at ${p.address||'a great location'}\n${p.bb||'3 bed / 2 bath'}${p.price?' · '+p.price:''}\n${p.feat?'Features: '+p.feat:''}\nTone: ${p.tone||S.tone}\n3 tight paragraphs. Hook, specific details, urgency close. Under 160 words. Return ONLY the listing.`;
+      p.output=await callAPI([{role:'user',content:prompt}],500);
+    }catch(e){p.output=`${p.address||'This property'} offers exceptional value at ${p.price||'this price point'}. Every detail has been considered for the way people actually live.`;}
     p.status='done';done++;fill.style.width=`${(done/S.props.length)*100}%`;renderBatch();
     saveH({pt:'Batch',loc:p.address,prc:p.price,bb:p.bb,text:p.output,buy:'',batch:true,date:new Date().toISOString()});
   }));
-  btn.disabled=false;btt.textContent='Generate all listings →';
-  showToast(`✓ ${S.props.length} listing${S.props.length>1?'s':''} done!`);
-  setTimeout(()=>prog.style.display='none',2000);
-}
-function cpB(id){const p=S.props.find(p=>p.id===id);if(p?.output)navigator.clipboard.writeText(p.output).then(()=>showToast('✓ Copied!'));}
-
-async function genBuyer(){
-  if(!S.last){showToast('Generate a listing first');return;}
-  const btn=document.getElementById('byb');btn.textContent='Writing 3 versions...';btn.disabled=true;
-  try{
-    const res=await fetch('/api/generate',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({max_tokens:900,messages:[{role:'user',content:`Rewrite this listing 3 times.\nOriginal: ${S.last}\nReturn EXACTLY:\n[FAMILIES]\n(2 paragraphs — schools, space, yard, safety)\n[INVESTORS]\n(2 paragraphs — rental yield, appreciation, fundamentals)\n[DOWNSIZERS]\n(2 paragraphs — low maintenance, walkability, quality)\nEach under 110 words. No bullets.`}]})});
-    const d=await res.json();const text=d.content?.map(b=>b.text||'').join('')||'';
-    S.bf.f=text.match(/\[FAMILIES\]([\s\S]*?)(?=\[INVESTORS\]|$)/)?.[1]?.trim()||'';
-    S.bf.i=text.match(/\[INVESTORS\]([\s\S]*?)(?=\[DOWNSIZERS\]|$)/)?.[1]?.trim()||'';
-    S.bf.d=text.match(/\[DOWNSIZERS\]([\s\S]*?)$/)?.[1]?.trim()||'';
-    showBuyer('families',document.querySelector('.bt'));showToast('3 versions ready!');
-  }catch(e){S.bf={f:"Top-rated schools minutes away, spacious yard, safe neighborhood.",i:"Strong rental fundamentals, solid appreciation, low maintenance.",d:"Low maintenance, quality finishes, walkable neighborhood."};showBuyer('families',document.querySelector('.bt'));}
-  btn.textContent='Generate all 3 buyer versions →';btn.disabled=false;
-}
-function showBuyer(type,el){
-  document.querySelectorAll('.bt').forEach(b=>b.classList.remove('active'));if(el)el.classList.add('active');
-  document.getElementById('byl2').textContent={families:'For young families',investors:'For investors',downsizers:'For downsizers'}[type];
-  const map={families:S.bf.f,investors:S.bf.i,downsizers:S.bf.d};
-  const el2=document.getElementById('bout');el2.textContent=map[type]||'Generate a listing first.';el2.className=map[type]?'ob':'ob e';
+  btn.disabled=false;btt.textContent='Generate all →';showToast(`${S.props.length} listing${S.props.length>1?'s':''} done!`);setTimeout(()=>prog.style.display='none',2000);
 }
 
-function cp(id){navigator.clipboard.writeText(document.getElementById(id).textContent).then(()=>showToast('✓ Copied!'));}
+// BUYER FRAMING
+async function genBuyer(){if(!S.last){showToast('Generate a listing first');return;}const btn=document.getElementById('byb');btn.textContent='Writing 3 versions...';btn.disabled=true;try{const text=await callAPI([{role:'user',content:`Rewrite this listing 3 times. No dashes anywhere.\nOriginal: ${S.last}\n[FAMILIES]\n(2 paragraphs — schools, space, yard)\n[INVESTORS]\n(2 paragraphs — yield, appreciation, fundamentals)\n[DOWNSIZERS]\n(2 paragraphs — low maintenance, walkability, quality)\nEach under 110 words. No bullets.`}],900);S.bf.f=text.match(/\[FAMILIES\]([\s\S]*?)(?=\[INVESTORS\]|$)/)?.[1]?.trim()||'';S.bf.i=text.match(/\[INVESTORS\]([\s\S]*?)(?=\[DOWNSIZERS\]|$)/)?.[1]?.trim()||'';S.bf.d=text.match(/\[DOWNSIZERS\]([\s\S]*?)$/)?.[1]?.trim()||'';showBuyer('families',document.querySelector('.buyer-tab'));showToast('3 versions ready!');}catch(e){}btn.textContent='Generate all 3 buyer versions →';btn.disabled=false;}
+function showBuyer(type,el){document.querySelectorAll('.buyer-tab').forEach(b=>b.classList.remove('active'));if(el)el.classList.add('active');document.getElementById('byl2').textContent={families:'For young families',investors:'For investors',downsizers:'For downsizers'}[type];const map={families:S.bf.f,investors:S.bf.i,downsizers:S.bf.d};const r=document.getElementById('bout');r.textContent=map[type]||'Generate a listing first.';r.className=map[type]?'output-body':'output-body empty';}
+
+// TOOLS
+const soldContent={ig:'',fb:'',em:'',ty:''};
+async function genJustSold(){const addr=document.getElementById('sold-addr').value||'the property',price=document.getElementById('sold-price').value,dom=document.getElementById('sold-dom').value,note=document.getElementById('sold-note').value;const btn=document.getElementById('sold-bt');btn.textContent='Generating...';document.getElementById('sold-out').style.display='block';const r=document.getElementById('sold-result');r.textContent='Writing...';r.className='output-body empty';try{const text=await callAPI([{role:'user',content:`Real estate marketing. Write just sold content. No dashes.\nProperty: ${addr}\n${price?'Sale price: '+price:''}\n${dom?'Days on market: '+dom:''}\n${note?'Special: '+note:''}\n[INSTAGRAM]\n(2-3 sentences, celebratory, 3-5 hashtags)\n[FACEBOOK]\n(3-4 sentences, warm)\n[EMAIL]\nSubject: [subject]\n\n[3-4 sentence email, FOMO, CTA]\n[THANKYOU]\n(3-4 sentence thank you to sellers)`}],800);soldContent.ig=text.match(/\[INSTAGRAM\]([\s\S]*?)(?=\[FACEBOOK\]|$)/)?.[1]?.trim()||'';soldContent.fb=text.match(/\[FACEBOOK\]([\s\S]*?)(?=\[EMAIL\]|$)/)?.[1]?.trim()||'';soldContent.em=text.match(/\[EMAIL\]([\s\S]*?)(?=\[THANKYOU\]|$)/)?.[1]?.trim()||'';soldContent.ty=text.match(/\[THANKYOU\]([\s\S]*?)$/)?.[1]?.trim()||'';showSoldTab('ig',document.querySelector('#sold-out .stab'));showToast('Just sold content ready!');}catch(e){r.textContent='Error — try again.';}btn.textContent='Generate just sold content →';}
+function showSoldTab(type,el){document.querySelectorAll('#sold-out .stab').forEach(t=>t.classList.remove('active'));if(el)el.classList.add('active');const labels={ig:'Instagram post',fb:'Facebook post',em:'Email blast',ty:'Thank you note'};document.getElementById('sold-lbl').textContent=labels[type]||'';const r=document.getElementById('sold-result');r.textContent=soldContent[type]||'Generate first.';r.className=soldContent[type]?'output-body':'output-body empty';}
+
+const ohContent={ig:'',fb:'',em:'',tx:''};
+async function genOpenHouse(){const addr=document.getElementById('oh-addr').value||'the property',date=document.getElementById('oh-date').value,time=document.getElementById('oh-time').value,price=document.getElementById('oh-price').value,bb=document.getElementById('oh-bb').value,hook=document.getElementById('oh-hook').value;const btn=document.getElementById('oh-bt');btn.textContent='Generating...';document.getElementById('oh-out').style.display='block';const r=document.getElementById('oh-result');r.textContent='Writing...';r.className='output-body empty';try{const text=await callAPI([{role:'user',content:`Open house promo kit. No dashes.\nProperty: ${addr}\n${date?'Date: '+date:''}\n${time?'Time: '+time:''}\n${price?'Price: '+price:''}\n${bb?'Beds: '+bb:''}\n${hook?'Hook: '+hook:''}\n[INSTAGRAM]\n(2-3 sentences, FOMO, 4-5 hashtags)\n[FACEBOOK]\n(3-4 sentences, warm invitation, includes date/time)\n[EMAIL]\nSubject: [subject]\n\n[3-4 sentence invite, personal]\n[TEXT]\n(1-2 sentences, under 160 chars, includes date time address)`}],800);ohContent.ig=text.match(/\[INSTAGRAM\]([\s\S]*?)(?=\[FACEBOOK\]|$)/)?.[1]?.trim()||'';ohContent.fb=text.match(/\[FACEBOOK\]([\s\S]*?)(?=\[EMAIL\]|$)/)?.[1]?.trim()||'';ohContent.em=text.match(/\[EMAIL\]([\s\S]*?)(?=\[TEXT\]|$)/)?.[1]?.trim()||'';ohContent.tx=text.match(/\[TEXT\]([\s\S]*?)$/)?.[1]?.trim()||'';showOhTab('ig',document.querySelector('#oh-out .stab'));showToast('Open house kit ready!');}catch(e){r.textContent='Error — try again.';}btn.textContent='Generate open house kit →';}
+function showOhTab(type,el){document.querySelectorAll('#oh-out .stab').forEach(t=>t.classList.remove('active'));if(el)el.classList.add('active');const labels={ig:'Instagram caption',fb:'Facebook post',em:'Email invite',tx:'Text blast'};document.getElementById('oh-lbl').textContent=labels[type]||'';const r=document.getElementById('oh-result');r.textContent=ohContent[type]||'Generate first.';r.className=ohContent[type]?'output-body':'output-body empty';}
+
+const prContent={social:'',email:'',text:''};
+async function genPriceReduction(){const addr=document.getElementById('pr-addr').value||'the property',oldP=document.getElementById('pr-old').value,newP=document.getElementById('pr-new').value,bb=document.getElementById('pr-bb').value,why=document.getElementById('pr-why').value;const btn=document.getElementById('pr-bt');btn.textContent='Generating...';document.getElementById('pr-out').style.display='block';const r=document.getElementById('pr-result');r.textContent='Writing...';r.className='output-body empty';try{const text=await callAPI([{role:'user',content:`Price reduction announcement. Frames as opportunity not desperation. No dashes.\nProperty: ${addr}\n${bb?'Beds: '+bb:''}\n${oldP?'Old price: '+oldP:''}\n${newP?'New price: '+newP:''}\n${why?'Why now: '+why:''}\n[SOCIAL]\n(2-3 sentences, buyer opportunity, 3 hashtags)\n[EMAIL]\nSubject: [curiosity not alarm]\n\n[3-4 sentence email, great news for buyers, CTA]\n[TEXT]\n(1-2 sentences, under 160 chars, casual)`}],700);prContent.social=text.match(/\[SOCIAL\]([\s\S]*?)(?=\[EMAIL\]|$)/)?.[1]?.trim()||'';prContent.email=text.match(/\[EMAIL\]([\s\S]*?)(?=\[TEXT\]|$)/)?.[1]?.trim()||'';prContent.text=text.match(/\[TEXT\]([\s\S]*?)$/)?.[1]?.trim()||'';showPrTab('social',document.querySelector('#pr-out .stab'));showToast('Price reduction content ready!');}catch(e){r.textContent='Error — try again.';}btn.textContent='Generate price reduction content →';}
+function showPrTab(type,el){document.querySelectorAll('#pr-out .stab').forEach(t=>t.classList.remove('active'));if(el)el.classList.add('active');const labels={social:'Social post',email:'Email blast',text:'Text blast'};document.getElementById('pr-lbl').textContent=labels[type]||'';const r=document.getElementById('pr-result');r.textContent=prContent[type]||'Generate first.';r.className=prContent[type]?'output-body':'output-body empty';}
+
+async function genSellerUpdate(){const addr=document.getElementById('su-addr').value||'your property',dom=document.getElementById('su-dom').value,show=document.getElementById('su-show').value,feed=document.getElementById('su-feed').value,next=document.getElementById('su-next').value;const btn=document.getElementById('su-bt');btn.textContent='Generating...';document.getElementById('su-out').style.display='block';const r=document.getElementById('su-result');r.textContent='Writing...';r.className='output-body empty';try{const text=await callAPI([{role:'user',content:`Professional seller update email. Honest, reassuring. No dashes.\nProperty: ${addr}\n${dom?'Days on market: '+dom:''}\n${show?'Showings: '+show:''}\n${feed?'Feedback: '+feed:''}\n${next?'Next step: '+next:''}\nSubject: [subject]\n\n[4-5 sentences: positive update, showing data, honest feedback, clear next step, confident close. No bullets. No dashes.]`}],400);r.textContent=text;r.className='output-body';showToast('Seller update ready!');}catch(e){r.textContent='Error — try again.';}btn.textContent='Generate seller update →';}
+
+const bioContent={short:'',medium:'',full:''};
+async function genBio(){const name=document.getElementById('bio-name').value||'the agent',brok=document.getElementById('bio-brok').value,yrs=document.getElementById('bio-yrs').value,mkt=document.getElementById('bio-mkt').value,spec=document.getElementById('bio-spec').value,pers=document.getElementById('bio-pers').value;const btn=document.getElementById('bio-bt');btn.textContent='Generating...';document.getElementById('bio-out').style.display='block';const r=document.getElementById('bio-result');r.textContent='Writing...';r.className='output-body empty';try{const text=await callAPI([{role:'user',content:`Real estate agent bio in 3 lengths. Human and specific. No cliches. No dashes.\nAgent: ${name}\n${brok?'Brokerage: '+brok:''}\n${yrs?'Years: '+yrs:''}\n${mkt?'Market: '+mkt:''}\n${spec?'Specialty: '+spec:''}\n${pers?'Personal: '+pers:''}\n[SHORT]\n(1-2 sentences, under 50 words)\n[MEDIUM]\n(3-4 sentences, under 100 words)\n[FULL]\n(5-7 sentences, under 200 words, tells a story)`}],700);bioContent.short=text.match(/\[SHORT\]([\s\S]*?)(?=\[MEDIUM\]|$)/)?.[1]?.trim()||'';bioContent.medium=text.match(/\[MEDIUM\]([\s\S]*?)(?=\[FULL\]|$)/)?.[1]?.trim()||'';bioContent.full=text.match(/\[FULL\]([\s\S]*?)$/)?.[1]?.trim()||'';showBioTab('short',document.querySelector('#bio-out .stab'));showToast('Bio ready in 3 lengths!');}catch(e){r.textContent='Error — try again.';}btn.textContent='Generate my bio →';}
+function showBioTab(type,el){document.querySelectorAll('#bio-out .stab').forEach(t=>t.classList.remove('active'));if(el)el.classList.add('active');const labels={short:'Short bio',medium:'Medium bio',full:'Full bio'};document.getElementById('bio-lbl').textContent=labels[type]||'';const r=document.getElementById('bio-result');r.textContent=bioContent[type]||'Generate bio first.';r.className=bioContent[type]?'output-body':'output-body empty';}
+
+// UTILS
+function cp(id){navigator.clipboard.writeText(document.getElementById(id).textContent).then(()=>showToast('Copied!'));}
 function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2500);}
-function saveH(item){S.hist.unshift(item);if(S.hist.length>30)S.hist.pop();try{localStorage.setItem('ll_h',JSON.stringify(S.hist));}catch(e){}}
+function saveH(item){S.hist.unshift(item);if(S.hist.length>50)S.hist.pop();try{localStorage.setItem('ll_h',JSON.stringify(S.hist));}catch(e){}}
 function renderHist(){
   const el=document.getElementById('hl');
-  if(!S.hist.length){el.innerHTML=`<div class="es"><div class="ei">📋</div><div class="et">No listings yet</div></div>`;return;}
+  if(!S.hist.length){el.innerHTML=`<div class="empty-state" style="grid-column:1/-1"><div class="empty-icon">📋</div><div>No listings yet</div></div>`;return;}
   el.innerHTML='';
   S.hist.forEach(h=>{
-    const d=document.createElement('div');d.className='hi';
-    d.innerHTML=`<div class="hip">${h.pt||'Property'} · ${h.loc||'—'}</div><div class="him"><span>${h.bb||''}</span>${h.prc?`<span>${h.prc}</span>`:''} ${h.batch?'<span class="hitag">⚡ Batch</span>':''}<span>${new Date(h.date).toLocaleDateString()}</span></div><div class="hiv">${h.text||''}</div>`;
-    d.onclick=()=>{document.getElementById('out').textContent=h.text;document.getElementById('out').className='ob';document.getElementById('oa').style.display='block';S.last=h.text;goTo('app');stNav('gen');na('ng');};
+    const d=document.createElement('div');d.className='hist-item';
+    d.innerHTML=`<div class="hist-prop">${h.pt||'Property'} · ${h.loc||'—'}</div><div class="hist-meta"><span>${h.bb||''}</span>${h.prc?`<span>${h.prc}</span>`:''} ${h.batch?'<span class="hist-tag">⚡ Batch</span>':''}<span>${new Date(h.date).toLocaleDateString()}</span></div><div class="hist-preview">${h.text||''}</div>`;
+    d.onclick=()=>{document.getElementById('out').textContent=h.text;document.getElementById('out').className='output-body';document.getElementById('outputArea').style.display='block';document.getElementById('outputPlaceholder').style.display='none';S.last=h.text;showView('gen',document.getElementById('nav-gen'));updateMLS();};
     el.appendChild(d);
   });
 }
 
-// MLS CHARACTER COUNTER
-let mlsLimit=500;
-function updateMLS(){
-  const text=document.getElementById('out').textContent||'';
-  const count=text.length;
-  const pct=Math.min((count/mlsLimit)*100,100);
-  const countEl=document.getElementById('mlsCount');
-  const fillEl=document.getElementById('mlsFill');
-  if(!countEl)return;
-  countEl.textContent=`${count} / ${mlsLimit}`;
-  countEl.style.color=count>mlsLimit?'#ff5f57':count>mlsLimit*0.9?'#febc2e':'var(--green)';
-  fillEl.style.width=pct+'%';
-  fillEl.style.background=count>mlsLimit?'#ff5f57':count>mlsLimit*0.9?'#febc2e':'var(--green)';
-  document.getElementById('mlsBar').style.display='block';
-}
-function setMLS(n){
-  mlsLimit=n;
-  ['500','750','1000','2000'].forEach(v=>{
-    const el=document.getElementById('mls'+v);
-    if(el){el.style.background=v==n?'var(--gold)':'var(--bg2)';el.style.color=v==n?'#0f0f13':'var(--mid)';}
-  });
-  document.getElementById('mlsLimit').textContent=`${n} chars (MLS limit)`;
-  updateMLS();
-}
-
-// HEADLINE GENERATOR
-async function genHeadlines(){
-  if(!S.last){showToast('Generate a listing first');return;}
-  document.getElementById('headlinesArea').style.display='block';
-  const el=document.getElementById('headlinesOut');
-  el.textContent='Generating headlines...';el.className='ob e';
-  try{
-    const res=await fetch('/api/generate',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({max_tokens:300,messages:[{role:'user',content:`Based on this listing, write 5 punchy headline options for Zillow, email subject lines, and social media. Each headline should be under 10 words, emotionally compelling, and completely different from the others. No generic phrases like "stunning home" or "won't last long". Return ONLY a numbered list of 5 headlines, nothing else.\n\nListing:\n${S.last}`}]})});
-    const d=await res.json();
-    const text=d.content?.map(b=>b.text||'').join('')||'';
-    el.textContent=text;el.className='ob';
-  }catch(e){el.textContent='1. The Home Oak Park Families Have Been Waiting For\n2. Four Bedrooms. One Block From Lincoln Elementary.\n3. The Kitchen You\'ll Actually Cook In\n4. Where Sunday Mornings Feel Like a Reward\n5. $549K. Top-Rated Schools. Move In This Month.';el.className='ob';}
-}
-
-// SOCIAL CAPTIONS
-const socialContent={ig:'',fb:'',em:''};
-async function genSocial(){
-  if(!S.last){showToast('Generate a listing first');return;}
-  document.getElementById('socialArea').style.display='block';
-  const el=document.getElementById('socialOut');
-  el.textContent='Writing captions...';el.className='ob e';
-  try{
-    const res=await fetch('/api/generate',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({max_tokens:600,messages:[{role:'user',content:`Based on this listing, write 3 social media captions. Return EXACTLY this format:\n[INSTAGRAM]\n(2-3 sentences max, conversational, ends with 3-5 relevant hashtags, emoji-friendly)\n[FACEBOOK]\n(3-4 sentences, slightly longer, more detail, friendly and warm, no hashtags)\n[EMAIL]\n(Subject line on first line starting with "Subject:", then blank line, then 3-4 sentence email body — personal, direct, makes reader want to see the property)\n\nListing:\n${S.last}`}]})});
-    const d=await res.json();
-    const text=d.content?.map(b=>b.text||'').join('')||'';
-    socialContent.ig=text.match(/\[INSTAGRAM\]([\s\S]*?)(?=\[FACEBOOK\]|$)/)?.[1]?.trim()||'';
-    socialContent.fb=text.match(/\[FACEBOOK\]([\s\S]*?)(?=\[EMAIL\]|$)/)?.[1]?.trim()||'';
-    socialContent.em=text.match(/\[EMAIL\]([\s\S]*?)$/)?.[1]?.trim()||'';
-    showSocial('ig',document.querySelector('.stab'));
-  }catch(e){
-    socialContent.ig="Just listed — and this one is special. 📸 White shaker cabinets, quartz island, and a backyard your kids will never want to leave. Link in bio for the full listing.\n#JustListed #RealEstate #HomeForSale";
-    socialContent.fb="Just listed this beautiful property and I couldn't wait to share it. The kitchen alone is worth the showing — and it's in one of the best school districts in the area. DM me or click the link to schedule a tour.";
-    socialContent.em="Subject: Just listed — I think you'll want to see this one\n\nHey [Name],\n\nI just listed a property I think is exactly what you've been looking for. Four bedrooms, top-rated schools four blocks away, and a kitchen that actually makes you want to cook. Priced at $549,000.\n\nAre you free this weekend for a showing?";
-    showSocial('ig',document.querySelector('.stab'));
-  }
-}
-function showSocial(type,el){
-  document.querySelectorAll('.stab').forEach(t=>{t.classList.remove('active');t.style.color='var(--mid)';t.style.borderBottomColor='transparent';});
-  if(el){el.classList.add('active');el.style.color='var(--white)';el.style.borderBottomColor='var(--gold)';}
-  const el2=document.getElementById('socialOut');
-  el2.textContent=socialContent[type]||'Generate a listing first.';
-  el2.className=socialContent[type]?'ob':'ob e';
-}
-
-// BUYER EMAIL
-async function genEmail(){
-  if(!S.last){showToast('Generate a listing first');return;}
-  document.getElementById('emailArea').style.display='block';
-  const el=document.getElementById('emailOut');
-  el.textContent='Writing buyer email...';el.className='ob e';
-  try{
-    const res=await fetch('/api/generate',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({max_tokens:300,messages:[{role:'user',content:`Turn this listing into a personal email an agent sends to their buyer list. Format:\nSubject: [compelling subject line]\n\n[3-4 sentence email body — conversational, personal, like one professional writing to another, ends with a clear call to action to schedule a showing]\n\nListing:\n${S.last}`}]})});
-    const d=await res.json();
-    const text=d.content?.map(b=>b.text||'').join('')||'';
-    el.textContent=text;el.className='ob';
-  }catch(e){el.textContent="Subject: Just listed — I think this is the one\n\nHey [Name],\n\nI just listed something I wanted you to see before it hits the weekend traffic. It checks the boxes we talked about — great location, right size, and the kitchen is genuinely special.\n\nAre you free Thursday or Friday for a quick showing?";el.className='ob';}
-}
-
-// REWRITE TOOL
-function showRewrite(){
-  const area=document.getElementById('rewriteArea');
-  area.style.display=area.style.display==='none'?'block':'none';
-}
-async function doRewrite(){
-  const input=document.getElementById('rewriteInput').value.trim();
-  if(!input){showToast('Paste your existing listing first');return;}
-  const btn=document.getElementById('rwbt');
-  btn.textContent='Rewriting...';
-  document.getElementById('rewriteOut').style.display='block';
-  const el=document.getElementById('rwResult');
-  el.textContent='Rewriting your listing...';el.className='ob e';
-  try{
-    const res=await fetch('/api/generate',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({max_tokens:500,messages:[{role:'user',content:`You are the best real estate copywriter in America. Rewrite this listing to be significantly better. Keep all the same property facts but:\n- Replace the opener with something that creates a feeling instead of describing a room\n- Replace any vague adjectives (stunning, beautiful, spacious, modern) with specific details\n- Make the close more specific and urgent\n- Cut anything generic or that every listing says\n- Under 160 words\n\nOriginal listing:\n${input}\n\nReturn ONLY the rewritten listing text.`}]})});
-    const d=await res.json();
-    const text=d.content?.map(b=>b.text||'').join('')||'';
-    el.textContent=text;el.className='ob';
-    S.last=text;updateMLS();
-  }catch(e){el.textContent='Could not rewrite — try again.';el.className='ob e';}
-  btn.textContent='Rewrite this listing →';
-}
-
-renderBatch();
 if(S.hist.length)renderHist();
 </script>
 </body>
