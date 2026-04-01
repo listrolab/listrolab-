@@ -53,8 +53,8 @@ html,body{height:100%;background:var(--bg);color:var(--white);font-family:'DM Sa
 .screen.active{display:block}
 
 /* CONTENT AREA */
-.content{padding:32px}
-.content-2col{display:grid;grid-template-columns:420px 1fr;gap:24px;align-items:start}
+.content{padding:24px 28px;min-height:calc(100vh - 73px)}
+.content-2col{display:grid;grid-template-columns:38% 1fr;gap:24px;align-items:start;height:calc(100vh - 73px - 48px)}
 .content-3col{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px}
 
 /* CARDS */
@@ -213,7 +213,7 @@ textarea.input{resize:vertical;min-height:80px;line-height:1.55}
 .pb{background:linear-gradient(135deg,var(--gold),#a07830);color:#0f0f13;font-size:8px;padding:2px 6px;border-radius:3px;font-weight:700;vertical-align:middle;margin-left:4px}
 
 /* EMPTY STATE */
-.empty-state{text-align:center;padding:60px 20px;color:var(--mid)}
+.tool-placeholder{background:var(--bg2);border:1px solid var(--border);border-radius:12px;height:100%;min-height:500px;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:40px;text-align:center;position:relative;overflow:hidden}.tool-placeholder-icon{font-size:40px;margin-bottom:14px;opacity:.15}.tool-placeholder-title{font-family:"Cormorant Garamond",serif;font-size:20px;font-weight:600;color:rgba(244,243,241,.3);margin-bottom:6px}.tool-placeholder-sub{font-size:12px;color:var(--mid);opacity:.6}.empty-state{text-align:center;padding:60px 20px;color:var(--mid)}
 .empty-icon{font-size:40px;margin-bottom:12px;opacity:.3}
 
 /* MISC */
@@ -323,7 +323,7 @@ textarea.input{resize:vertical;min-height:80px;line-height:1.55}
           <div class="content-2col">
 
             <!-- LEFT: FORM -->
-            <div>
+            <div style="overflow-y:auto;height:100%;padding-right:4px">
               <div class="card" style="margin-bottom:16px">
                 <div class="card-body">
                   <div class="section-label">Property photos <span style="color:var(--gold2);font-size:9px;text-transform:none;letter-spacing:0">✨ optional but powerful</span></div>
@@ -363,9 +363,9 @@ textarea.input{resize:vertical;min-height:80px;line-height:1.55}
             </div>
 
             <!-- RIGHT: OUTPUT -->
-            <div>
+            <div style="display:flex;flex-direction:column;height:100%;overflow-y:auto">
               <div id="outputArea" style="display:none">
-                <div class="output-card" style="margin-bottom:16px;min-height:520px;display:flex;flex-direction:column">
+                <div class="output-card" style="margin-bottom:16px;height:100%;display:flex;flex-direction:column">
                   <div class="output-hdr">
                     <div class="output-lbl"><div class="live-dot"></div>Your listing <span class="wc" id="wc"></span></div>
                     <button class="copy-btn" onclick="cp('out')">Copy</button>
@@ -418,8 +418,8 @@ textarea.input{resize:vertical;min-height:80px;line-height:1.55}
                 </div>
               </div>
 
-              <div id="outputPlaceholder">
-                <div style="background:var(--bg2);border:1px solid var(--border);border-radius:12px;min-height:520px;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:48px 32px;text-align:center;position:relative;overflow:hidden">
+              <div id="outputPlaceholder" style="flex:1">
+                <div style="background:var(--bg2);border:1px solid var(--border);border-radius:12px;height:100%;min-height:500px;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:48px 32px;text-align:center;position:relative;overflow:hidden">
                   <div style="position:absolute;inset:0;background:radial-gradient(ellipse at 50% 30%,rgba(201,168,76,0.04),transparent 60%)"></div>
                   <div style="font-size:48px;margin-bottom:20px;opacity:.15;position:relative">✍️</div>
                   <div style="font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:600;margin-bottom:8px;position:relative;color:rgba(244,243,241,.4)">Your listing appears here</div>
@@ -485,10 +485,13 @@ textarea.input{resize:vertical;min-height:80px;line-height:1.55}
             <div class="field-row"><div><div class="label">Sale price</div><input class="input" type="text" id="sold-price" placeholder="e.g. $549,000"></div><div><div class="label">Days on market</div><input class="input" type="text" id="sold-dom" placeholder="e.g. 12"></div></div>
             <div class="field"><div class="label">What made this sale special</div><input class="input" type="text" id="sold-note" placeholder="e.g. 4 offers in 48 hours, sold over asking"></div>
           </div><div class="card-foot"><button class="gen-btn" onclick="genJustSold()"><span id="sold-bt">Generate just sold content →</span></button></div></div>
-          <div id="sold-out" style="display:none">
-            <div class="output-card"><div class="output-hdr"><div class="output-lbl"><div class="live-dot"></div><span id="sold-lbl">Instagram post</span></div><button class="copy-btn" onclick="cp('sold-result')">Copy</button></div>
-            <div class="stabs"><div class="stab active" onclick="showSoldTab('ig',this)">📸 Instagram</div><div class="stab" onclick="showSoldTab('fb',this)">👥 Facebook</div><div class="stab" onclick="showSoldTab('em',this)">📧 Email</div><div class="stab" onclick="showSoldTab('ty',this)">💛 Thank you</div></div>
-            <div class="output-body empty" id="sold-result"></div></div>
+          <div style="height:100%">
+            <div id="sold-placeholder" class="tool-placeholder"><div class="tool-placeholder-icon">🏡</div><div class="tool-placeholder-title">Just sold content</div><div class="tool-placeholder-sub">Fill in the details and generate</div></div>
+            <div id="sold-out" style="display:none;height:100%">
+              <div class="output-card" style="height:100%;display:flex;flex-direction:column"><div class="output-hdr"><div class="output-lbl"><div class="live-dot"></div><span id="sold-lbl">Instagram post</span></div><button class="copy-btn" onclick="cp('sold-result')">Copy</button></div>
+              <div class="stabs"><div class="stab active" onclick="showSoldTab('ig',this)">📸 Instagram</div><div class="stab" onclick="showSoldTab('fb',this)">👥 Facebook</div><div class="stab" onclick="showSoldTab('em',this)">📧 Email</div><div class="stab" onclick="showSoldTab('ty',this)">💛 Thank you</div></div>
+              <div class="output-body empty" id="sold-result" style="flex:1"></div></div>
+            </div>
           </div>
         </div></div>
       </div>
@@ -502,10 +505,13 @@ textarea.input{resize:vertical;min-height:80px;line-height:1.55}
             <div class="field-row"><div><div class="label">Price</div><input class="input" type="text" id="oh-price" placeholder="e.g. $549,000"></div><div><div class="label">Beds / Baths</div><input class="input" type="text" id="oh-bb" placeholder="e.g. 4bd / 2ba"></div></div>
             <div class="field"><div class="label">One hook that makes this worth attending</div><input class="input" type="text" id="oh-hook" placeholder="e.g. huge backyard, top school district, renovated kitchen"></div>
           </div><div class="card-foot"><button class="gen-btn" onclick="genOpenHouse()"><span id="oh-bt">Generate open house kit →</span></button></div></div>
-          <div id="oh-out" style="display:none">
-            <div class="output-card"><div class="output-hdr"><div class="output-lbl"><div class="live-dot"></div><span id="oh-lbl">Instagram caption</span></div><button class="copy-btn" onclick="cp('oh-result')">Copy</button></div>
-            <div class="stabs"><div class="stab active" onclick="showOhTab('ig',this)">📸 Instagram</div><div class="stab" onclick="showOhTab('fb',this)">👥 Facebook</div><div class="stab" onclick="showOhTab('em',this)">📧 Email</div><div class="stab" onclick="showOhTab('tx',this)">💬 Text</div></div>
-            <div class="output-body empty" id="oh-result"></div></div>
+          <div style="height:100%">
+            <div id="oh-placeholder" class="tool-placeholder"><div class="tool-placeholder-icon">🚪</div><div class="tool-placeholder-title">Open house kit</div><div class="tool-placeholder-sub">Fill in the details and generate</div></div>
+            <div id="oh-out" style="display:none;height:100%">
+              <div class="output-card" style="height:100%;display:flex;flex-direction:column"><div class="output-hdr"><div class="output-lbl"><div class="live-dot"></div><span id="oh-lbl">Instagram caption</span></div><button class="copy-btn" onclick="cp('oh-result')">Copy</button></div>
+              <div class="stabs"><div class="stab active" onclick="showOhTab('ig',this)">📸 Instagram</div><div class="stab" onclick="showOhTab('fb',this)">👥 Facebook</div><div class="stab" onclick="showOhTab('em',this)">📧 Email</div><div class="stab" onclick="showOhTab('tx',this)">💬 Text</div></div>
+              <div class="output-body empty" id="oh-result" style="flex:1"></div></div>
+            </div>
           </div>
         </div></div>
       </div>
@@ -519,10 +525,13 @@ textarea.input{resize:vertical;min-height:80px;line-height:1.55}
             <div class="field"><div class="label">Beds / Baths</div><input class="input" type="text" id="pr-bb" placeholder="e.g. 4 bed / 2.5 bath"></div>
             <div class="field"><div class="label">Why now is a great time to buy</div><input class="input" type="text" id="pr-why" placeholder="e.g. motivated seller, quick close, summer before school starts"></div>
           </div><div class="card-foot"><button class="gen-btn" onclick="genPriceReduction()"><span id="pr-bt">Generate price reduction content →</span></button></div></div>
-          <div id="pr-out" style="display:none">
-            <div class="output-card"><div class="output-hdr"><div class="output-lbl"><div class="live-dot"></div><span id="pr-lbl">Social post</span></div><button class="copy-btn" onclick="cp('pr-result')">Copy</button></div>
-            <div class="stabs"><div class="stab active" onclick="showPrTab('social',this)">📱 Social</div><div class="stab" onclick="showPrTab('email',this)">📧 Email</div><div class="stab" onclick="showPrTab('text',this)">💬 Text</div></div>
-            <div class="output-body empty" id="pr-result"></div></div>
+          <div style="height:100%">
+            <div id="pr-placeholder" class="tool-placeholder"><div class="tool-placeholder-icon">📉</div><div class="tool-placeholder-title">Price reduction content</div><div class="tool-placeholder-sub">Fill in the details and generate</div></div>
+            <div id="pr-out" style="display:none;height:100%">
+              <div class="output-card" style="height:100%;display:flex;flex-direction:column"><div class="output-hdr"><div class="output-lbl"><div class="live-dot"></div><span id="pr-lbl">Social post</span></div><button class="copy-btn" onclick="cp('pr-result')">Copy</button></div>
+              <div class="stabs"><div class="stab active" onclick="showPrTab('social',this)">📱 Social</div><div class="stab" onclick="showPrTab('email',this)">📧 Email</div><div class="stab" onclick="showPrTab('text',this)">💬 Text</div></div>
+              <div class="output-body empty" id="pr-result" style="flex:1"></div></div>
+            </div>
           </div>
         </div></div>
       </div>
@@ -536,8 +545,11 @@ textarea.input{resize:vertical;min-height:80px;line-height:1.55}
             <div class="field"><div class="label">Buyer feedback received</div><textarea class="input" id="su-feed" placeholder="e.g. Most buyers loved the kitchen but felt the price was slightly high for the lot size..."></textarea></div>
             <div class="field"><div class="label">Recommended next step</div><input class="input" type="text" id="su-next" placeholder="e.g. consider a $15k price adjustment, add staging to master bedroom"></div>
           </div><div class="card-foot"><button class="gen-btn" onclick="genSellerUpdate()"><span id="su-bt">Generate seller update →</span></button></div></div>
-          <div id="su-out" style="display:none">
-            <div class="output-card"><div class="output-hdr"><div class="output-lbl"><div class="live-dot"></div>Seller update email</div><button class="copy-btn" onclick="cp('su-result')">Copy</button></div><div class="output-body empty" id="su-result"></div></div>
+          <div style="height:100%">
+            <div id="su-placeholder" class="tool-placeholder"><div class="tool-placeholder-icon">📊</div><div class="tool-placeholder-title">Seller update email</div><div class="tool-placeholder-sub">Fill in the details and generate</div></div>
+            <div id="su-out" style="display:none;height:100%">
+              <div class="output-card" style="height:100%;display:flex;flex-direction:column"><div class="output-hdr"><div class="output-lbl"><div class="live-dot"></div>Seller update email</div><button class="copy-btn" onclick="cp('su-result')">Copy</button></div><div class="output-body empty" id="su-result" style="flex:1"></div></div>
+            </div>
           </div>
         </div></div>
       </div>
@@ -551,10 +563,13 @@ textarea.input{resize:vertical;min-height:80px;line-height:1.55}
             <div class="field"><div class="label">Specialty or niche</div><input class="input" type="text" id="bio-spec" placeholder="e.g. first-time buyers, luxury homes, investment properties"></div>
             <div class="field"><div class="label">One personal detail</div><input class="input" type="text" id="bio-pers" placeholder="e.g. mom of two, lifelong Chicago resident, former teacher"></div>
           </div><div class="card-foot"><button class="gen-btn" onclick="genBio()"><span id="bio-bt">Generate my bio →</span></button></div></div>
-          <div id="bio-out" style="display:none">
-            <div class="output-card"><div class="output-hdr"><div class="output-lbl"><div class="live-dot"></div><span id="bio-lbl">Short bio</span></div><button class="copy-btn" onclick="cp('bio-result')">Copy</button></div>
-            <div class="stabs"><div class="stab active" onclick="showBioTab('short',this)">Short</div><div class="stab" onclick="showBioTab('medium',this)">Medium</div><div class="stab" onclick="showBioTab('full',this)">Full</div></div>
-            <div class="output-body empty" id="bio-result"></div></div>
+          <div style="height:100%">
+            <div id="bio-placeholder" class="tool-placeholder"><div class="tool-placeholder-icon">👤</div><div class="tool-placeholder-title">Your agent bio</div><div class="tool-placeholder-sub">Fill in your details and generate</div></div>
+            <div id="bio-out" style="display:none;height:100%">
+              <div class="output-card" style="height:100%;display:flex;flex-direction:column"><div class="output-hdr"><div class="output-lbl"><div class="live-dot"></div><span id="bio-lbl">Short bio</span></div><button class="copy-btn" onclick="cp('bio-result')">Copy</button></div>
+              <div class="stabs"><div class="stab active" onclick="showBioTab('short',this)">Short</div><div class="stab" onclick="showBioTab('medium',this)">Medium</div><div class="stab" onclick="showBioTab('full',this)">Full</div></div>
+              <div class="output-body empty" id="bio-result" style="flex:1"></div></div>
+            </div>
           </div>
         </div></div>
       </div>
@@ -737,21 +752,21 @@ function showBuyer(type,el){document.querySelectorAll('.buyer-tab').forEach(b=>b
 
 // TOOLS
 const soldContent={ig:'',fb:'',em:'',ty:''};
-async function genJustSold(){const addr=document.getElementById('sold-addr').value||'the property',price=document.getElementById('sold-price').value,dom=document.getElementById('sold-dom').value,note=document.getElementById('sold-note').value;const btn=document.getElementById('sold-bt');btn.textContent='Generating...';document.getElementById('sold-out').style.display='block';const r=document.getElementById('sold-result');r.textContent='Writing...';r.className='output-body empty';try{const text=await callAPI([{role:'user',content:`Real estate marketing. Write just sold content. No dashes.\nProperty: ${addr}\n${price?'Sale price: '+price:''}\n${dom?'Days on market: '+dom:''}\n${note?'Special: '+note:''}\n[INSTAGRAM]\n(2-3 sentences, celebratory, 3-5 hashtags)\n[FACEBOOK]\n(3-4 sentences, warm)\n[EMAIL]\nSubject: [subject]\n\n[3-4 sentence email, FOMO, CTA]\n[THANKYOU]\n(3-4 sentence thank you to sellers)`}],800);soldContent.ig=text.match(/\[INSTAGRAM\]([\s\S]*?)(?=\[FACEBOOK\]|$)/)?.[1]?.trim()||'';soldContent.fb=text.match(/\[FACEBOOK\]([\s\S]*?)(?=\[EMAIL\]|$)/)?.[1]?.trim()||'';soldContent.em=text.match(/\[EMAIL\]([\s\S]*?)(?=\[THANKYOU\]|$)/)?.[1]?.trim()||'';soldContent.ty=text.match(/\[THANKYOU\]([\s\S]*?)$/)?.[1]?.trim()||'';showSoldTab('ig',document.querySelector('#sold-out .stab'));showToast('Just sold content ready!');}catch(e){r.textContent='Error — try again.';}btn.textContent='Generate just sold content →';}
+async function genJustSold(){const addr=document.getElementById('sold-addr').value||'the property',price=document.getElementById('sold-price').value,dom=document.getElementById('sold-dom').value,note=document.getElementById('sold-note').value;const btn=document.getElementById('sold-bt');btn.textContent='Generating...';document.getElementById('sold-placeholder').style.display='none';document.getElementById('sold-out').style.display='block';const r=document.getElementById('sold-result');r.textContent='Writing...';r.className='output-body empty';try{const text=await callAPI([{role:'user',content:`Real estate marketing. Write just sold content. No dashes.\nProperty: ${addr}\n${price?'Sale price: '+price:''}\n${dom?'Days on market: '+dom:''}\n${note?'Special: '+note:''}\n[INSTAGRAM]\n(2-3 sentences, celebratory, 3-5 hashtags)\n[FACEBOOK]\n(3-4 sentences, warm)\n[EMAIL]\nSubject: [subject]\n\n[3-4 sentence email, FOMO, CTA]\n[THANKYOU]\n(3-4 sentence thank you to sellers)`}],800);soldContent.ig=text.match(/\[INSTAGRAM\]([\s\S]*?)(?=\[FACEBOOK\]|$)/)?.[1]?.trim()||'';soldContent.fb=text.match(/\[FACEBOOK\]([\s\S]*?)(?=\[EMAIL\]|$)/)?.[1]?.trim()||'';soldContent.em=text.match(/\[EMAIL\]([\s\S]*?)(?=\[THANKYOU\]|$)/)?.[1]?.trim()||'';soldContent.ty=text.match(/\[THANKYOU\]([\s\S]*?)$/)?.[1]?.trim()||'';showSoldTab('ig',document.querySelector('#sold-out .stab'));showToast('Just sold content ready!');}catch(e){r.textContent='Error — try again.';}btn.textContent='Generate just sold content →';}
 function showSoldTab(type,el){document.querySelectorAll('#sold-out .stab').forEach(t=>t.classList.remove('active'));if(el)el.classList.add('active');const labels={ig:'Instagram post',fb:'Facebook post',em:'Email blast',ty:'Thank you note'};document.getElementById('sold-lbl').textContent=labels[type]||'';const r=document.getElementById('sold-result');r.textContent=soldContent[type]||'Generate first.';r.className=soldContent[type]?'output-body':'output-body empty';}
 
 const ohContent={ig:'',fb:'',em:'',tx:''};
-async function genOpenHouse(){const addr=document.getElementById('oh-addr').value||'the property',date=document.getElementById('oh-date').value,time=document.getElementById('oh-time').value,price=document.getElementById('oh-price').value,bb=document.getElementById('oh-bb').value,hook=document.getElementById('oh-hook').value;const btn=document.getElementById('oh-bt');btn.textContent='Generating...';document.getElementById('oh-out').style.display='block';const r=document.getElementById('oh-result');r.textContent='Writing...';r.className='output-body empty';try{const text=await callAPI([{role:'user',content:`Open house promo kit. No dashes.\nProperty: ${addr}\n${date?'Date: '+date:''}\n${time?'Time: '+time:''}\n${price?'Price: '+price:''}\n${bb?'Beds: '+bb:''}\n${hook?'Hook: '+hook:''}\n[INSTAGRAM]\n(2-3 sentences, FOMO, 4-5 hashtags)\n[FACEBOOK]\n(3-4 sentences, warm invitation, includes date/time)\n[EMAIL]\nSubject: [subject]\n\n[3-4 sentence invite, personal]\n[TEXT]\n(1-2 sentences, under 160 chars, includes date time address)`}],800);ohContent.ig=text.match(/\[INSTAGRAM\]([\s\S]*?)(?=\[FACEBOOK\]|$)/)?.[1]?.trim()||'';ohContent.fb=text.match(/\[FACEBOOK\]([\s\S]*?)(?=\[EMAIL\]|$)/)?.[1]?.trim()||'';ohContent.em=text.match(/\[EMAIL\]([\s\S]*?)(?=\[TEXT\]|$)/)?.[1]?.trim()||'';ohContent.tx=text.match(/\[TEXT\]([\s\S]*?)$/)?.[1]?.trim()||'';showOhTab('ig',document.querySelector('#oh-out .stab'));showToast('Open house kit ready!');}catch(e){r.textContent='Error — try again.';}btn.textContent='Generate open house kit →';}
+async function genOpenHouse(){const addr=document.getElementById('oh-addr').value||'the property',date=document.getElementById('oh-date').value,time=document.getElementById('oh-time').value,price=document.getElementById('oh-price').value,bb=document.getElementById('oh-bb').value,hook=document.getElementById('oh-hook').value;const btn=document.getElementById('oh-bt');btn.textContent='Generating...';document.getElementById('oh-placeholder').style.display='none';document.getElementById('oh-out').style.display='block';const r=document.getElementById('oh-result');r.textContent='Writing...';r.className='output-body empty';try{const text=await callAPI([{role:'user',content:`Open house promo kit. No dashes.\nProperty: ${addr}\n${date?'Date: '+date:''}\n${time?'Time: '+time:''}\n${price?'Price: '+price:''}\n${bb?'Beds: '+bb:''}\n${hook?'Hook: '+hook:''}\n[INSTAGRAM]\n(2-3 sentences, FOMO, 4-5 hashtags)\n[FACEBOOK]\n(3-4 sentences, warm invitation, includes date/time)\n[EMAIL]\nSubject: [subject]\n\n[3-4 sentence invite, personal]\n[TEXT]\n(1-2 sentences, under 160 chars, includes date time address)`}],800);ohContent.ig=text.match(/\[INSTAGRAM\]([\s\S]*?)(?=\[FACEBOOK\]|$)/)?.[1]?.trim()||'';ohContent.fb=text.match(/\[FACEBOOK\]([\s\S]*?)(?=\[EMAIL\]|$)/)?.[1]?.trim()||'';ohContent.em=text.match(/\[EMAIL\]([\s\S]*?)(?=\[TEXT\]|$)/)?.[1]?.trim()||'';ohContent.tx=text.match(/\[TEXT\]([\s\S]*?)$/)?.[1]?.trim()||'';showOhTab('ig',document.querySelector('#oh-out .stab'));showToast('Open house kit ready!');}catch(e){r.textContent='Error — try again.';}btn.textContent='Generate open house kit →';}
 function showOhTab(type,el){document.querySelectorAll('#oh-out .stab').forEach(t=>t.classList.remove('active'));if(el)el.classList.add('active');const labels={ig:'Instagram caption',fb:'Facebook post',em:'Email invite',tx:'Text blast'};document.getElementById('oh-lbl').textContent=labels[type]||'';const r=document.getElementById('oh-result');r.textContent=ohContent[type]||'Generate first.';r.className=ohContent[type]?'output-body':'output-body empty';}
 
 const prContent={social:'',email:'',text:''};
-async function genPriceReduction(){const addr=document.getElementById('pr-addr').value||'the property',oldP=document.getElementById('pr-old').value,newP=document.getElementById('pr-new').value,bb=document.getElementById('pr-bb').value,why=document.getElementById('pr-why').value;const btn=document.getElementById('pr-bt');btn.textContent='Generating...';document.getElementById('pr-out').style.display='block';const r=document.getElementById('pr-result');r.textContent='Writing...';r.className='output-body empty';try{const text=await callAPI([{role:'user',content:`Price reduction announcement. Frames as opportunity not desperation. No dashes.\nProperty: ${addr}\n${bb?'Beds: '+bb:''}\n${oldP?'Old price: '+oldP:''}\n${newP?'New price: '+newP:''}\n${why?'Why now: '+why:''}\n[SOCIAL]\n(2-3 sentences, buyer opportunity, 3 hashtags)\n[EMAIL]\nSubject: [curiosity not alarm]\n\n[3-4 sentence email, great news for buyers, CTA]\n[TEXT]\n(1-2 sentences, under 160 chars, casual)`}],700);prContent.social=text.match(/\[SOCIAL\]([\s\S]*?)(?=\[EMAIL\]|$)/)?.[1]?.trim()||'';prContent.email=text.match(/\[EMAIL\]([\s\S]*?)(?=\[TEXT\]|$)/)?.[1]?.trim()||'';prContent.text=text.match(/\[TEXT\]([\s\S]*?)$/)?.[1]?.trim()||'';showPrTab('social',document.querySelector('#pr-out .stab'));showToast('Price reduction content ready!');}catch(e){r.textContent='Error — try again.';}btn.textContent='Generate price reduction content →';}
+async function genPriceReduction(){const addr=document.getElementById('pr-addr').value||'the property',oldP=document.getElementById('pr-old').value,newP=document.getElementById('pr-new').value,bb=document.getElementById('pr-bb').value,why=document.getElementById('pr-why').value;const btn=document.getElementById('pr-bt');btn.textContent='Generating...';document.getElementById('pr-placeholder').style.display='none';document.getElementById('pr-out').style.display='block';const r=document.getElementById('pr-result');r.textContent='Writing...';r.className='output-body empty';try{const text=await callAPI([{role:'user',content:`Price reduction announcement. Frames as opportunity not desperation. No dashes.\nProperty: ${addr}\n${bb?'Beds: '+bb:''}\n${oldP?'Old price: '+oldP:''}\n${newP?'New price: '+newP:''}\n${why?'Why now: '+why:''}\n[SOCIAL]\n(2-3 sentences, buyer opportunity, 3 hashtags)\n[EMAIL]\nSubject: [curiosity not alarm]\n\n[3-4 sentence email, great news for buyers, CTA]\n[TEXT]\n(1-2 sentences, under 160 chars, casual)`}],700);prContent.social=text.match(/\[SOCIAL\]([\s\S]*?)(?=\[EMAIL\]|$)/)?.[1]?.trim()||'';prContent.email=text.match(/\[EMAIL\]([\s\S]*?)(?=\[TEXT\]|$)/)?.[1]?.trim()||'';prContent.text=text.match(/\[TEXT\]([\s\S]*?)$/)?.[1]?.trim()||'';showPrTab('social',document.querySelector('#pr-out .stab'));showToast('Price reduction content ready!');}catch(e){r.textContent='Error — try again.';}btn.textContent='Generate price reduction content →';}
 function showPrTab(type,el){document.querySelectorAll('#pr-out .stab').forEach(t=>t.classList.remove('active'));if(el)el.classList.add('active');const labels={social:'Social post',email:'Email blast',text:'Text blast'};document.getElementById('pr-lbl').textContent=labels[type]||'';const r=document.getElementById('pr-result');r.textContent=prContent[type]||'Generate first.';r.className=prContent[type]?'output-body':'output-body empty';}
 
-async function genSellerUpdate(){const addr=document.getElementById('su-addr').value||'your property',dom=document.getElementById('su-dom').value,show=document.getElementById('su-show').value,feed=document.getElementById('su-feed').value,next=document.getElementById('su-next').value;const btn=document.getElementById('su-bt');btn.textContent='Generating...';document.getElementById('su-out').style.display='block';const r=document.getElementById('su-result');r.textContent='Writing...';r.className='output-body empty';try{const text=await callAPI([{role:'user',content:`Professional seller update email. Honest, reassuring. No dashes.\nProperty: ${addr}\n${dom?'Days on market: '+dom:''}\n${show?'Showings: '+show:''}\n${feed?'Feedback: '+feed:''}\n${next?'Next step: '+next:''}\nSubject: [subject]\n\n[4-5 sentences: positive update, showing data, honest feedback, clear next step, confident close. No bullets. No dashes.]`}],400);r.textContent=text;r.className='output-body';showToast('Seller update ready!');}catch(e){r.textContent='Error — try again.';}btn.textContent='Generate seller update →';}
+async function genSellerUpdate(){const addr=document.getElementById('su-addr').value||'your property',dom=document.getElementById('su-dom').value,show=document.getElementById('su-show').value,feed=document.getElementById('su-feed').value,next=document.getElementById('su-next').value;const btn=document.getElementById('su-bt');btn.textContent='Generating...';document.getElementById('su-placeholder').style.display='none';document.getElementById('su-out').style.display='block';const r=document.getElementById('su-result');r.textContent='Writing...';r.className='output-body empty';try{const text=await callAPI([{role:'user',content:`Professional seller update email. Honest, reassuring. No dashes.\nProperty: ${addr}\n${dom?'Days on market: '+dom:''}\n${show?'Showings: '+show:''}\n${feed?'Feedback: '+feed:''}\n${next?'Next step: '+next:''}\nSubject: [subject]\n\n[4-5 sentences: positive update, showing data, honest feedback, clear next step, confident close. No bullets. No dashes.]`}],400);r.textContent=text;r.className='output-body';showToast('Seller update ready!');}catch(e){r.textContent='Error — try again.';}btn.textContent='Generate seller update →';}
 
 const bioContent={short:'',medium:'',full:''};
-async function genBio(){const name=document.getElementById('bio-name').value||'the agent',brok=document.getElementById('bio-brok').value,yrs=document.getElementById('bio-yrs').value,mkt=document.getElementById('bio-mkt').value,spec=document.getElementById('bio-spec').value,pers=document.getElementById('bio-pers').value;const btn=document.getElementById('bio-bt');btn.textContent='Generating...';document.getElementById('bio-out').style.display='block';const r=document.getElementById('bio-result');r.textContent='Writing...';r.className='output-body empty';try{const text=await callAPI([{role:'user',content:`Real estate agent bio in 3 lengths. Human and specific. No cliches. No dashes.\nAgent: ${name}\n${brok?'Brokerage: '+brok:''}\n${yrs?'Years: '+yrs:''}\n${mkt?'Market: '+mkt:''}\n${spec?'Specialty: '+spec:''}\n${pers?'Personal: '+pers:''}\n[SHORT]\n(1-2 sentences, under 50 words)\n[MEDIUM]\n(3-4 sentences, under 100 words)\n[FULL]\n(5-7 sentences, under 200 words, tells a story)`}],700);bioContent.short=text.match(/\[SHORT\]([\s\S]*?)(?=\[MEDIUM\]|$)/)?.[1]?.trim()||'';bioContent.medium=text.match(/\[MEDIUM\]([\s\S]*?)(?=\[FULL\]|$)/)?.[1]?.trim()||'';bioContent.full=text.match(/\[FULL\]([\s\S]*?)$/)?.[1]?.trim()||'';showBioTab('short',document.querySelector('#bio-out .stab'));showToast('Bio ready in 3 lengths!');}catch(e){r.textContent='Error — try again.';}btn.textContent='Generate my bio →';}
+async function genBio(){const name=document.getElementById('bio-name').value||'the agent',brok=document.getElementById('bio-brok').value,yrs=document.getElementById('bio-yrs').value,mkt=document.getElementById('bio-mkt').value,spec=document.getElementById('bio-spec').value,pers=document.getElementById('bio-pers').value;const btn=document.getElementById('bio-bt');btn.textContent='Generating...';document.getElementById('bio-placeholder').style.display='none';document.getElementById('bio-out').style.display='block';const r=document.getElementById('bio-result');r.textContent='Writing...';r.className='output-body empty';try{const text=await callAPI([{role:'user',content:`Real estate agent bio in 3 lengths. Human and specific. No cliches. No dashes.\nAgent: ${name}\n${brok?'Brokerage: '+brok:''}\n${yrs?'Years: '+yrs:''}\n${mkt?'Market: '+mkt:''}\n${spec?'Specialty: '+spec:''}\n${pers?'Personal: '+pers:''}\n[SHORT]\n(1-2 sentences, under 50 words)\n[MEDIUM]\n(3-4 sentences, under 100 words)\n[FULL]\n(5-7 sentences, under 200 words, tells a story)`}],700);bioContent.short=text.match(/\[SHORT\]([\s\S]*?)(?=\[MEDIUM\]|$)/)?.[1]?.trim()||'';bioContent.medium=text.match(/\[MEDIUM\]([\s\S]*?)(?=\[FULL\]|$)/)?.[1]?.trim()||'';bioContent.full=text.match(/\[FULL\]([\s\S]*?)$/)?.[1]?.trim()||'';showBioTab('short',document.querySelector('#bio-out .stab'));showToast('Bio ready in 3 lengths!');}catch(e){r.textContent='Error — try again.';}btn.textContent='Generate my bio →';}
 function showBioTab(type,el){document.querySelectorAll('#bio-out .stab').forEach(t=>t.classList.remove('active'));if(el)el.classList.add('active');const labels={short:'Short bio',medium:'Medium bio',full:'Full bio'};document.getElementById('bio-lbl').textContent=labels[type]||'';const r=document.getElementById('bio-result');r.textContent=bioContent[type]||'Generate bio first.';r.className=bioContent[type]?'output-body':'output-body empty';}
 
 // UTILS
