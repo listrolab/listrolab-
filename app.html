@@ -73,6 +73,7 @@ html,body{height:100%;background:var(--bg);color:var(--white);font-family:'DM Sa
 .sb-item:hover{background:rgba(255,255,255,.04);color:var(--white)}
 .sb-item.active{background:var(--gold3);color:var(--white);border-color:var(--border2)}
 .sb-item-icon{font-size:15px;width:20px;text-align:center;flex-shrink:0}
+.sb-icon{width:15px;height:15px;flex-shrink:0;fill:currentColor;opacity:.7}
 .sb-item-badge{font-size:8px;background:linear-gradient(135deg,var(--gold),#a07830);color:#0f0f13;padding:2px 5px;border-radius:3px;font-weight:700;margin-left:auto}
 .sb-bottom{padding:16px;border-top:1px solid var(--border)}
 .sb-pro-btn{width:100%;padding:10px;background:var(--gold);color:#0f0f13;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;border:none;border-radius:var(--rad);cursor:pointer;transition:opacity .15s}
@@ -281,9 +282,9 @@ textarea.input{resize:vertical;min-height:80px;line-height:1.55}
         <div class="auth-logo">Listro<span>lab</span></div>
         <div class="auth-tag">Listing copy. Refined.</div>
         <div class="auth-feats">
-          <div class="auth-feat"><div class="auth-feat-icon">📸</div><div class="auth-feat-text"><b>Upload photos — Listrolab writes from what it sees</b>Specific finishes, exact materials, real details. Not a template.</div></div>
-          <div class="auth-feat"><div class="auth-feat-icon">🛠️</div><div class="auth-feat-text"><b>Full agent toolkit included</b>Just sold, open house, price reduction, seller update, fair housing check, Spanish translation and more.</div></div>
-          <div class="auth-feat"><div class="auth-feat-icon">⚡</div><div class="auth-feat-text"><b>Batch mode — 5 listings at once</b>A full week of writing in under 2 minutes.</div></div>
+          <div class="auth-feat"><div class="auth-feat-text"><b>Upload photos — Listrolab writes from what it sees</b>Specific finishes, exact materials, real details. Not a template.</div></div>
+          <div class="auth-feat"><div class="auth-feat-text"><b>Full agent toolkit included</b>Just sold, open house, price reduction, seller update, fair housing check, Spanish translation and more.</div></div>
+          <div class="auth-feat"><div class="auth-feat-text"><b>Batch mode — 5 listings at once</b>A full week of writing in under 2 minutes.</div></div>
         </div>
       </div>
       <div class="auth-body">
@@ -408,7 +409,7 @@ textarea.input{resize:vertical;min-height:80px;line-height:1.55}
             <div style="font-size:11px;color:rgba(244,243,241,.7);display:flex;align-items:center;gap:7px"><span style="color:var(--gold);font-size:12px">✓</span><span>Buyer framing — 3 versions <span class="pb">PRO</span></span></div>
           </div>
           <div style="background:var(--gold3);border:1px solid var(--border2);border-radius:8px;padding:11px 14px;margin-bottom:16px;display:flex;align-items:center;gap:10px">
-            <div style="font-size:16px">⏱️</div>
+            <div style="font-size:16px"></div>
             <div style="font-size:12px;color:var(--gold2);line-height:1.5">Agents save <strong>5 to 8 hours every week</strong>. At $29/month that's less than 15 minutes of your time.</div>
           </div>
           <button class="btn btn-gold btn-full" onclick="startApp()">Start free 7-day trial — no card needed</button>
@@ -441,28 +442,28 @@ textarea.input{resize:vertical;min-height:80px;line-height:1.55}
       </div>
       <div class="sb-nav">
         <div class="sb-section">Generate</div>
-        <div class="sb-item active" id="nav-gen" onclick="showView('gen',this)"><div class="sb-item-icon">✍️</div>New listing</div>
-        <div class="sb-item" id="nav-batch" onclick="showView('batch',this)"><div class="sb-item-icon">⚡</div>Batch mode <div class="sb-item-badge">PRO</div></div>
-        <div class="sb-item" id="nav-buyer" onclick="showView('buyer',this)"><div class="sb-item-icon">🎯</div>Buyer framing <div class="sb-item-badge">PRO</div></div>
+        <div class="sb-item active" id="nav-gen" onclick="showView('gen',this)"><svg class="sb-icon" viewBox="0 0 16 16"><path d="M2 12.5V14h1.5l4.87-4.87-1.5-1.5L2 12.5zm7.08-7.08l-5.95 5.95 1.5 1.5 5.95-5.95-1.5-1.5zM13.71 4.04a.4.4 0 000-.57l-1.18-1.18a.4.4 0 00-.57 0l-.93.93 1.75 1.75.93-.93z"/></svg>New listing</div>
+        <div class="sb-item" id="nav-batch" onclick="showView('batch',this)"><svg class="sb-icon" viewBox="0 0 16 16"><path d="M2 3h12v2H2V3zm0 4h12v2H2V7zm0 4h8v2H2v-2z"/></svg>Batch mode <div class="sb-item-badge">PRO</div></div>
+        <div class="sb-item" id="nav-buyer" onclick="showView('buyer',this)"><svg class="sb-icon" viewBox="0 0 16 16"><path d="M8 1a3 3 0 100 6A3 3 0 008 1zM1 13c0-2.76 3.13-5 7-5s7 2.24 7 5H1z"/></svg>Buyer framing <div class="sb-item-badge">PRO</div></div>
 
         <div class="sb-section">Agent tools</div>
-        <div class="sb-item" id="nav-sold" onclick="showView('sold',this)"><div class="sb-item-icon">🏡</div>Just sold</div>
-        <div class="sb-item" id="nav-openhouse" onclick="showView('openhouse',this)"><div class="sb-item-icon">🚪</div>Open house kit</div>
-        <div class="sb-item" id="nav-pricereduction" onclick="showView('pricereduction',this)"><div class="sb-item-icon">📉</div>Price reduction</div>
-        <div class="sb-item" id="nav-sellerupdate" onclick="showView('sellerupdate',this)"><div class="sb-item-icon">📊</div>Seller update</div>
-        <div class="sb-item" id="nav-bio" onclick="showView('bio',this)"><div class="sb-item-icon">👤</div>Agent bio</div>
-        <div class="sb-item" id="nav-staging" onclick="showView('staging',this)"><div class="sb-item-icon">🛋️</div>Virtual staging copy</div>
+        <div class="sb-item" id="nav-sold" onclick="showView('sold',this)"><svg class="sb-icon" viewBox="0 0 16 16"><path d="M8 1l1.8 3.6 4 .6-2.9 2.8.7 4L8 10l-3.6 1.9.7-4L2.2 5.2l4-.6L8 1z"/></svg>Just sold</div>
+        <div class="sb-item" id="nav-openhouse" onclick="showView('openhouse',this)"><svg class="sb-icon" viewBox="0 0 16 16"><path d="M8 1L1 7h2v7h4v-4h2v4h4V7h2L8 1z"/></svg>Open house kit</div>
+        <div class="sb-item" id="nav-pricereduction" onclick="showView('pricereduction',this)"><svg class="sb-icon" viewBox="0 0 16 16"><path d="M2 4h12v1.5L8 11 2 5.5V4zm0 3.5L8 13l6-5.5V14H2V7.5z"/></svg>Price reduction</div>
+        <div class="sb-item" id="nav-sellerupdate" onclick="showView('sellerupdate',this)"><svg class="sb-icon" viewBox="0 0 16 16"><path d="M13 2H3a1 1 0 00-1 1v9a1 1 0 001 1h2l3 2 3-2h2a1 1 0 001-1V3a1 1 0 00-1-1zM5 7h6v1.5H5V7zm0-2h6v1.5H5V5zm4 6H5v-1.5h4V11z"/></svg>Seller update</div>
+        <div class="sb-item" id="nav-bio" onclick="showView('bio',this)"><svg class="sb-icon" viewBox="0 0 16 16"><path d="M8 1a3 3 0 100 6A3 3 0 008 1zM1 13c0-2.76 3.13-5 7-5s7 2.24 7 5H1z"/></svg>Agent bio</div>
+        <div class="sb-item" id="nav-staging" onclick="showView('staging',this)"><svg class="sb-icon" viewBox="0 0 16 16"><path d="M1 11V4a1 1 0 011-1h12a1 1 0 011 1v7H1zm2-6v5h10V5H3zm-2 7h14v1.5H1V12z"/></svg>Virtual staging</div>
 
         <div class="sb-section">Compliance & Translation</div>
-        <div class="sb-item" id="nav-fairhousing" onclick="showView('fairhousing',this)"><div class="sb-item-icon">⚖️</div>Fair housing check</div>
-        <div class="sb-item" id="nav-translate" onclick="showView('translate',this)"><div class="sb-item-icon">🌎</div>Spanish translation</div>
+        <div class="sb-item" id="nav-fairhousing" onclick="showView('fairhousing',this)"><svg class="sb-icon" viewBox="0 0 16 16"><path d="M8 1L1 4v1h14V4L8 1zM2 6v6H1v1h14v-1h-1V6H2zm2 0h2v6H4V6zm4 0h2v6H8V6zm4 0h2v6h-2V6z"/></svg>Fair housing check</div>
+        <div class="sb-item" id="nav-translate" onclick="showView('translate',this)"><svg class="sb-icon" viewBox="0 0 16 16"><path d="M9 1h6v2l-1.5.5A10 10 0 0111 7.5c.6.9 1.4 1.7 2.5 2.5L12 11.5A11 11 0 019.5 8.5a11 11 0 01-2.5 3L5.5 10a10 10 0 002.5-3A10 10 0 016 4H4v2H2V1h6v1zm-1 4a8 8 0 01-1.5 3A8 8 0 018 5z"/></svg>Spanish translation</div>
 
         <div class="sb-section">Market Intelligence</div>
-        <div class="sb-item" id="nav-marketreport" onclick="showView('marketreport',this)"><div class="sb-item-icon">📈</div>Market report</div>
-        <div class="sb-item" id="nav-cma" onclick="showView('cma',this)"><div class="sb-item-icon">🏷️</div>CMA narrative</div>
+        <div class="sb-item" id="nav-marketreport" onclick="showView('marketreport',this)"><svg class="sb-icon" viewBox="0 0 16 16"><path d="M1 12l4-4 3 3 4-5 3 2V14H1v-2zm0-1.5l4-4 3 3 4-5 3 2V2H1v8.5z"/></svg>Market report</div>
+        <div class="sb-item" id="nav-cma" onclick="showView('cma',this)"><svg class="sb-icon" viewBox="0 0 16 16"><path d="M2 2h12v12H2V2zm1.5 1.5v9h9v-9h-9zm2 2h5v1.5h-5V5.5zm0 2.5h5V9.5h-5V8zm0 2.5h3V12.5h-3V10.5z"/></svg>CMA narrative</div>
 
         <div class="sb-section">Account</div>
-        <div class="sb-item" id="nav-hist" onclick="showView('hist',this)"><div class="sb-item-icon">📋</div>History</div>
+        <div class="sb-item" id="nav-hist" onclick="showView('hist',this)"><svg class="sb-icon" viewBox="0 0 16 16"><path d="M8 1a7 7 0 100 14A7 7 0 008 1zM7 4.5h1.5v4l2.5 1.5-.75 1.3L7 9.5V4.5z"/></svg>History</div>
       </div>
       <div class="sb-bottom">
         <button class="sb-pro-btn" id="proBtn" onclick="togglePro()">⭐ Upgrade to Pro</button>
@@ -485,15 +486,15 @@ textarea.input{resize:vertical;min-height:80px;line-height:1.55}
             <div style="overflow-y:auto;height:100%;padding-right:4px">
               <div class="card" style="margin-bottom:16px">
                 <div class="card-body">
-                  <div class="section-label">Property photos <span style="color:var(--gold2);font-size:9px;text-transform:none;letter-spacing:0">✨ optional but powerful</span></div>
+                  <div class="section-label">Property photos <span style="color:var(--gold2);font-size:9px;text-transform:none;letter-spacing:0">optional but powerful</span></div>
                   <div class="photo-drop" id="ua" ondragover="ev(event)" ondrop="drop(event)">
                     <input type="file" accept="image/jpeg,image/png,image/webp" multiple onchange="hph(event)">
-                    <div class="photo-drop-icon">📸</div>
+                    
                     <div class="photo-drop-title">Drop photos here or click to upload</div>
                     <div class="photo-drop-sub">Up to 15 photos · Listrolab writes from what it sees</div>
                   </div>
                   <div class="photo-previews" id="pp" style="display:none"></div>
-                  <div class="photo-hint" id="ph" style="display:none">📸 Photo writing active — listing will name specific finishes from your photos</div>
+                  <div class="photo-hint" id="ph" style="display:none">Photo writing active — listing will name specific finishes from your photos</div>
                 </div>
               </div>
 
@@ -547,7 +548,7 @@ textarea.input{resize:vertical;min-height:80px;line-height:1.55}
                       </div>
                     </div>
                   </div>
-                  <div class="pi-section" id="pis" style="display:none"><div class="pi-label">📸 Spotted from your photos</div><div class="pi-tags" id="pit"></div></div>
+                  <div class="pi-section" id="pis" style="display:none"><div class="pi-label">Spotted from your photos</div><div class="pi-tags" id="pit"></div></div>
                 </div>
 
                 <div class="section-label">Quick tools</div>
@@ -564,7 +565,7 @@ textarea.input{resize:vertical;min-height:80px;line-height:1.55}
                 <div id="socialArea" style="display:none;margin-top:12px">
                   <div class="output-card">
                     <div class="output-hdr"><div class="output-lbl"><div class="live-dot"></div>Social captions</div><button class="copy-btn" onclick="cp('socialOut')">Copy</button></div>
-                    <div class="stabs"><div class="stab active" onclick="showSocial('ig',this)">📸 Instagram</div><div class="stab" onclick="showSocial('fb',this)">👥 Facebook</div><div class="stab" onclick="showSocial('em',this)">📧 Email</div></div>
+                    <div class="stabs"><div class="stab active" onclick="showSocial('ig',this)">Instagram</div><div class="stab" onclick="showSocial('fb',this)">Facebook</div><div class="stab" onclick="showSocial('em',this)">Email</div></div>
                     <div class="output-body empty" id="socialOut"></div>
                   </div>
                 </div>
@@ -629,7 +630,7 @@ textarea.input{resize:vertical;min-height:80px;line-height:1.55}
           <div id="buyer-locked"><div class="pro-lock"><div class="pro-lock-icon">🎯</div><div class="pro-lock-title">Buyer Framing</div><div class="pro-lock-sub">Three versions of any listing — rewritten for different buyer types. One click, three audiences.</div><button class="btn btn-gold" onclick="unlockPro()">Upgrade to Pro — $29/mo</button></div></div>
           <div id="buyer-unlocked" style="display:none">
             <button class="gen-btn" id="byb" onclick="genBuyer()" style="margin-bottom:16px;font-size:16px">Generate all 3 buyer versions →</button>
-            <div class="buyer-tabs"><div class="buyer-tab active" onclick="showBuyer('families',this)">👨‍👩‍👧 Families</div><div class="buyer-tab" onclick="showBuyer('investors',this)">📈 Investors</div><div class="buyer-tab" onclick="showBuyer('downsizers',this)">🏡 Downsizers</div></div>
+            <div class="buyer-tabs"><div class="buyer-tab active" onclick="showBuyer('families',this)">Families</div><div class="buyer-tab" onclick="showBuyer('investors',this)">Investors</div><div class="buyer-tab" onclick="showBuyer('downsizers',this)">Downsizers</div></div>
             <div class="output-card"><div class="output-hdr"><div class="output-lbl"><div class="live-dot"></div><span id="byl2">For young families</span></div><button class="copy-btn" onclick="cp('bout')">Copy</button></div><div class="output-body empty" id="bout">Generate a listing first, then click above.</div></div>
           </div>
         </div>
@@ -645,10 +646,10 @@ textarea.input{resize:vertical;min-height:80px;line-height:1.55}
             <div class="field"><div class="label">What made this sale special</div><input class="input" type="text" id="sold-note" placeholder="e.g. 4 offers in 48 hours, sold over asking"></div>
           </div><div class="card-foot"><button class="gen-btn" onclick="genJustSold()"><span id="sold-bt">Generate just sold content →</span></button></div></div>
           <div style="height:100%">
-            <div id="sold-placeholder" class="tool-placeholder"><div class="tool-placeholder-icon">🏡</div><div class="tool-placeholder-title">Just sold content</div><div class="tool-placeholder-sub">Fill in the details and generate</div></div>
+            <div id="sold-placeholder" class="tool-placeholder"><div class="tool-placeholder-icon-text"></div><div class="tool-placeholder-title">Just sold content</div><div class="tool-placeholder-sub">Fill in the details and generate</div></div>
             <div id="sold-out" style="display:none;height:100%">
               <div class="output-card" style="height:100%;display:flex;flex-direction:column"><div class="output-hdr"><div class="output-lbl"><div class="live-dot"></div><span id="sold-lbl">Instagram post</span></div><button class="copy-btn" onclick="cp('sold-result')">Copy</button></div>
-              <div class="stabs"><div class="stab active" onclick="showSoldTab('ig',this)">📸 Instagram</div><div class="stab" onclick="showSoldTab('fb',this)">👥 Facebook</div><div class="stab" onclick="showSoldTab('em',this)">📧 Email</div><div class="stab" onclick="showSoldTab('ty',this)">💛 Thank you</div></div>
+              <div class="stabs"><div class="stab active" onclick="showSoldTab('ig',this)">Instagram</div><div class="stab" onclick="showSoldTab('fb',this)">Facebook</div><div class="stab" onclick="showSoldTab('em',this)">Email</div><div class="stab" onclick="showSoldTab('ty',this)">Thank you</div></div>
               <div class="output-body empty" id="sold-result" style="flex:1"></div></div>
             </div>
           </div>
@@ -665,10 +666,10 @@ textarea.input{resize:vertical;min-height:80px;line-height:1.55}
             <div class="field"><div class="label">One hook that makes this worth attending</div><input class="input" type="text" id="oh-hook" placeholder="e.g. huge backyard, top school district, renovated kitchen"></div>
           </div><div class="card-foot"><button class="gen-btn" onclick="genOpenHouse()"><span id="oh-bt">Generate open house kit →</span></button></div></div>
           <div style="height:100%">
-            <div id="oh-placeholder" class="tool-placeholder"><div class="tool-placeholder-icon">🚪</div><div class="tool-placeholder-title">Open house kit</div><div class="tool-placeholder-sub">Fill in the details and generate</div></div>
+            <div id="oh-placeholder" class="tool-placeholder"><div class="tool-placeholder-icon-text"></div><div class="tool-placeholder-title">Open house kit</div><div class="tool-placeholder-sub">Fill in the details and generate</div></div>
             <div id="oh-out" style="display:none;height:100%">
               <div class="output-card" style="height:100%;display:flex;flex-direction:column"><div class="output-hdr"><div class="output-lbl"><div class="live-dot"></div><span id="oh-lbl">Instagram caption</span></div><button class="copy-btn" onclick="cp('oh-result')">Copy</button></div>
-              <div class="stabs"><div class="stab active" onclick="showOhTab('ig',this)">📸 Instagram</div><div class="stab" onclick="showOhTab('fb',this)">👥 Facebook</div><div class="stab" onclick="showOhTab('em',this)">📧 Email</div><div class="stab" onclick="showOhTab('tx',this)">💬 Text</div></div>
+              <div class="stabs"><div class="stab active" onclick="showOhTab('ig',this)">Instagram</div><div class="stab" onclick="showOhTab('fb',this)">Facebook</div><div class="stab" onclick="showOhTab('em',this)">Email</div><div class="stab" onclick="showOhTab('tx',this)">Text</div></div>
               <div class="output-body empty" id="oh-result" style="flex:1"></div></div>
             </div>
           </div>
@@ -685,10 +686,10 @@ textarea.input{resize:vertical;min-height:80px;line-height:1.55}
             <div class="field"><div class="label">Why now is a great time to buy</div><input class="input" type="text" id="pr-why" placeholder="e.g. motivated seller, quick close, summer before school starts"></div>
           </div><div class="card-foot"><button class="gen-btn" onclick="genPriceReduction()"><span id="pr-bt">Generate price reduction content →</span></button></div></div>
           <div style="height:100%">
-            <div id="pr-placeholder" class="tool-placeholder"><div class="tool-placeholder-icon">📉</div><div class="tool-placeholder-title">Price reduction content</div><div class="tool-placeholder-sub">Fill in the details and generate</div></div>
+            <div id="pr-placeholder" class="tool-placeholder"><div class="tool-placeholder-icon-text"></div><div class="tool-placeholder-title">Price reduction content</div><div class="tool-placeholder-sub">Fill in the details and generate</div></div>
             <div id="pr-out" style="display:none;height:100%">
               <div class="output-card" style="height:100%;display:flex;flex-direction:column"><div class="output-hdr"><div class="output-lbl"><div class="live-dot"></div><span id="pr-lbl">Social post</span></div><button class="copy-btn" onclick="cp('pr-result')">Copy</button></div>
-              <div class="stabs"><div class="stab active" onclick="showPrTab('social',this)">📱 Social</div><div class="stab" onclick="showPrTab('email',this)">📧 Email</div><div class="stab" onclick="showPrTab('text',this)">💬 Text</div></div>
+              <div class="stabs"><div class="stab active" onclick="showPrTab('social',this)">Social</div><div class="stab" onclick="showPrTab('email',this)">Email</div><div class="stab" onclick="showPrTab('text',this)">Text</div></div>
               <div class="output-body empty" id="pr-result" style="flex:1"></div></div>
             </div>
           </div>
@@ -705,7 +706,7 @@ textarea.input{resize:vertical;min-height:80px;line-height:1.55}
             <div class="field"><div class="label">Recommended next step</div><input class="input" type="text" id="su-next" placeholder="e.g. consider a $15k price adjustment, add staging to master bedroom"></div>
           </div><div class="card-foot"><button class="gen-btn" onclick="genSellerUpdate()"><span id="su-bt">Generate seller update →</span></button></div></div>
           <div style="height:100%">
-            <div id="su-placeholder" class="tool-placeholder"><div class="tool-placeholder-icon">📊</div><div class="tool-placeholder-title">Seller update email</div><div class="tool-placeholder-sub">Fill in the details and generate</div></div>
+            <div id="su-placeholder" class="tool-placeholder"><div class="tool-placeholder-icon-text"></div><div class="tool-placeholder-title">Seller update email</div><div class="tool-placeholder-sub">Fill in the details and generate</div></div>
             <div id="su-out" style="display:none;height:100%">
               <div class="output-card" style="height:100%;display:flex;flex-direction:column"><div class="output-hdr"><div class="output-lbl"><div class="live-dot"></div>Seller update email</div><button class="copy-btn" onclick="cp('su-result')">Copy</button></div><div class="output-body empty" id="su-result" style="flex:1"></div></div>
             </div>
@@ -723,7 +724,7 @@ textarea.input{resize:vertical;min-height:80px;line-height:1.55}
             <div class="field"><div class="label">One personal detail</div><input class="input" type="text" id="bio-pers" placeholder="e.g. mom of two, lifelong Chicago resident, former teacher"></div>
           </div><div class="card-foot"><button class="gen-btn" onclick="genBio()"><span id="bio-bt">Generate my bio →</span></button></div></div>
           <div style="height:100%">
-            <div id="bio-placeholder" class="tool-placeholder"><div class="tool-placeholder-icon">👤</div><div class="tool-placeholder-title">Your agent bio</div><div class="tool-placeholder-sub">Fill in your details and generate</div></div>
+            <div id="bio-placeholder" class="tool-placeholder"><div class="tool-placeholder-icon-text"></div><div class="tool-placeholder-title">Your agent bio</div><div class="tool-placeholder-sub">Fill in your details and generate</div></div>
             <div id="bio-out" style="display:none;height:100%">
               <div class="output-card" style="height:100%;display:flex;flex-direction:column"><div class="output-hdr"><div class="output-lbl"><div class="live-dot"></div><span id="bio-lbl">Short bio</span></div><button class="copy-btn" onclick="cp('bio-result')">Copy</button></div>
               <div class="stabs"><div class="stab active" onclick="showBioTab('short',this)">Short</div><div class="stab" onclick="showBioTab('medium',this)">Medium</div><div class="stab" onclick="showBioTab('full',this)">Full</div></div>
@@ -743,7 +744,7 @@ textarea.input{resize:vertical;min-height:80px;line-height:1.55}
                 <div class="section-label">Upload empty room photo</div>
                 <div class="photo-drop" id="stag-ua" style="position:relative">
                   <input type="file" accept="image/jpeg,image/png,image/webp" id="stagPhoto" onchange="handleStagPhoto(event)" style="position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%">
-                  <div class="photo-drop-icon">🛋️</div>
+                  
                   <div class="photo-drop-title">Upload an empty room photo</div>
                   <div class="photo-drop-sub">Kitchen, living room, bedroom, backyard</div>
                 </div>
@@ -769,13 +770,13 @@ textarea.input{resize:vertical;min-height:80px;line-height:1.55}
             </div>
           </div>
           <div style="height:100%">
-            <div id="stag-placeholder" class="tool-placeholder"><div class="tool-placeholder-icon">🛋️</div><div class="tool-placeholder-title">Staging description</div><div class="tool-placeholder-sub">Upload a room photo and generate</div></div>
+            <div id="stag-placeholder" class="tool-placeholder"><div class="tool-placeholder-icon-text"></div><div class="tool-placeholder-title">Staging description</div><div class="tool-placeholder-sub">Upload a room photo and generate</div></div>
             <div id="stag-out" style="display:none;height:100%">
               <div class="output-card" style="height:100%;display:flex;flex-direction:column">
                 <div class="output-hdr"><div class="output-lbl"><div class="live-dot"></div>Virtual staging description</div><button class="copy-btn" onclick="cp('stag-result')">Copy</button></div>
                 <div class="output-body empty" id="stag-result" style="flex:1"></div>
                 <div id="stag-tips" style="display:none;padding:12px 16px;border-top:1px solid var(--border);background:rgba(201,168,76,.05)">
-                  <div style="font-size:10px;color:var(--gold);text-transform:uppercase;letter-spacing:.5px;font-weight:500;margin-bottom:6px">💡 How to use this</div>
+                  <div style="font-size:10px;color:var(--gold);text-transform:uppercase;letter-spacing:.5px;font-weight:500;margin-bottom:6px">How to use this</div>
                   <div style="font-size:12px;color:var(--mid);line-height:1.6">Add this paragraph to your MLS description when rooms are empty. Buyers visualize the space. Photos don't have to be perfect.</div>
                 </div>
               </div>
@@ -791,7 +792,7 @@ textarea.input{resize:vertical;min-height:80px;line-height:1.55}
           <div class="card">
             <div class="card-body">
               <div style="background:rgba(201,168,76,.08);border:1px solid var(--border2);border-radius:8px;padding:12px 14px;margin-bottom:16px">
-                <div style="font-size:11px;color:var(--gold2);font-weight:500;margin-bottom:4px">⚖️ Why this matters</div>
+                <div style="font-size:11px;color:var(--gold2);font-weight:500;margin-bottom:4px">Why this matters</div>
                 <div style="font-size:12px;color:var(--mid);line-height:1.6">The Fair Housing Act prohibits language that implies preference or restriction based on race, color, religion, sex, national origin, disability, or familial status. Violations can result in fines and license suspension.</div>
               </div>
               <div class="field"><div class="label">Paste your listing copy</div><textarea class="input" id="fh-input" placeholder="Paste your listing description here to scan for potential Fair Housing violations..." style="min-height:200px"></textarea></div>
@@ -799,7 +800,7 @@ textarea.input{resize:vertical;min-height:80px;line-height:1.55}
             <div class="card-foot"><button class="gen-btn" onclick="checkFairHousing()"><span id="fh-bt">Scan for violations →</span></button></div>
           </div>
           <div style="height:100%">
-            <div id="fh-placeholder" class="tool-placeholder"><div class="tool-placeholder-icon">⚖️</div><div class="tool-placeholder-title">Compliance results</div><div class="tool-placeholder-sub">Paste a listing and scan</div></div>
+            <div id="fh-placeholder" class="tool-placeholder"><div class="tool-placeholder-icon-text"></div><div class="tool-placeholder-title">Compliance results</div><div class="tool-placeholder-sub">Paste a listing and scan</div></div>
             <div id="fh-out" style="display:none;height:100%">
               <div class="output-card" style="height:100%;display:flex;flex-direction:column">
                 <div class="output-hdr"><div class="output-lbl"><div class="live-dot"></div>Compliance report</div><button class="copy-btn" onclick="cp('fh-result')">Copy report</button></div>
@@ -826,7 +827,7 @@ textarea.input{resize:vertical;min-height:80px;line-height:1.55}
           <div class="card">
             <div class="card-body">
               <div style="background:rgba(201,168,76,.08);border:1px solid var(--border2);border-radius:8px;padding:12px 14px;margin-bottom:16px">
-                <div style="font-size:11px;color:var(--gold2);font-weight:500;margin-bottom:4px">🌎 Why this matters</div>
+                <div style="font-size:11px;color:var(--gold2);font-weight:500;margin-bottom:4px">Why this matters</div>
                 <div style="font-size:12px;color:var(--mid);line-height:1.6">Over 40 million Spanish speakers in the US. Listing in Spanish reaches buyers other agents ignore. Takes 10 seconds with Listrolab.</div>
               </div>
               <div class="field"><div class="label">Listing to translate</div><textarea class="input" id="tr-input" placeholder="Paste your English listing here or generate one first then come back to translate it..." style="min-height:160px"></textarea></div>
@@ -844,7 +845,7 @@ textarea.input{resize:vertical;min-height:80px;line-height:1.55}
             <div class="card-foot"><button class="gen-btn" onclick="genTranslation()"><span id="tr-bt">Translate to Spanish →</span></button></div>
           </div>
           <div style="height:100%">
-            <div id="tr-placeholder" class="tool-placeholder"><div class="tool-placeholder-icon">🌎</div><div class="tool-placeholder-title">Spanish translation</div><div class="tool-placeholder-sub">Paste a listing and translate</div></div>
+            <div id="tr-placeholder" class="tool-placeholder"><div class="tool-placeholder-icon-text"></div><div class="tool-placeholder-title">Spanish translation</div><div class="tool-placeholder-sub">Paste a listing and translate</div></div>
             <div id="tr-out" style="display:none;height:100%">
               <div class="output-card" style="height:100%;display:flex;flex-direction:column">
                 <div class="output-hdr"><div class="output-lbl"><div class="live-dot"></div>Translated listing (Spanish)</div><button class="copy-btn" onclick="cp('tr-result')">Copy</button></div>
@@ -866,7 +867,7 @@ textarea.input{resize:vertical;min-height:80px;line-height:1.55}
           <div class="card">
             <div class="card-body">
               <div style="background:rgba(201,168,76,.08);border:1px solid var(--border2);border-radius:8px;padding:12px 14px;margin-bottom:16px">
-                <div style="font-size:11px;color:var(--gold2);font-weight:500;margin-bottom:4px">📈 What this generates</div>
+                <div style="font-size:11px;color:var(--gold2);font-weight:500;margin-bottom:4px">What this generates</div>
                 <div style="font-size:12px;color:var(--mid);line-height:1.6">A professional market narrative agents use in listing presentations, client emails, and social posts. Covers price trends, days on market, buyer demand, and what it means for sellers right now.</div>
               </div>
               <div class="field"><div class="label">Neighborhood or zip code</div><input class="input" type="text" id="mr-area" placeholder="e.g. Oak Park, IL or 60302"></div>
@@ -896,7 +897,7 @@ textarea.input{resize:vertical;min-height:80px;line-height:1.55}
             <div class="card-foot"><button class="gen-btn" onclick="genMarketReport()"><span id="mr-bt">Generate market report →</span></button></div>
           </div>
           <div style="height:100%">
-            <div id="mr-placeholder" class="tool-placeholder"><div class="tool-placeholder-icon">📈</div><div class="tool-placeholder-title">Market report</div><div class="tool-placeholder-sub">Fill in the market data and generate</div></div>
+            <div id="mr-placeholder" class="tool-placeholder"><div class="tool-placeholder-icon-text"></div><div class="tool-placeholder-title">Market report</div><div class="tool-placeholder-sub">Fill in the market data and generate</div></div>
             <div id="mr-out" style="display:none;height:100%">
               <div class="output-card" style="height:100%;display:flex;flex-direction:column">
                 <div class="output-hdr">
@@ -906,9 +907,9 @@ textarea.input{resize:vertical;min-height:80px;line-height:1.55}
                   </div>
                 </div>
                 <div class="stabs">
-                  <div class="stab active" onclick="showMrTab('narrative',this)">📝 Narrative</div>
+                  <div class="stab active" onclick="showMrTab('narrative',this)">Narrative</div>
                   <div class="stab" onclick="showMrTab('social',this)">📱 Social post</div>
-                  <div class="stab" onclick="showMrTab('email',this)">📧 Email version</div>
+                  <div class="stab" onclick="showMrTab('email',this)">Email version</div>
                 </div>
                 <div class="output-body empty" id="mr-result" style="flex:1"></div>
               </div>
@@ -924,7 +925,7 @@ textarea.input{resize:vertical;min-height:80px;line-height:1.55}
           <div class="card">
             <div class="card-body">
               <div style="background:rgba(201,168,76,.08);border:1px solid var(--border2);border-radius:8px;padding:12px 14px;margin-bottom:16px">
-                <div style="font-size:11px;color:var(--gold2);font-weight:500;margin-bottom:4px">🏷️ What this generates</div>
+                <div style="font-size:11px;color:var(--gold2);font-weight:500;margin-bottom:4px">What this generates</div>
                 <div style="font-size:12px;color:var(--mid);line-height:1.6">Agents have the data but writing the CMA summary for sellers is tedious. Paste in your comps and Listrolab writes a clear, professional narrative that explains the pricing rationale in plain English. Sellers understand it. Sellers trust it.</div>
               </div>
               <div class="field">
@@ -962,7 +963,7 @@ textarea.input{resize:vertical;min-height:80px;line-height:1.55}
             <div class="card-foot"><button class="gen-btn" onclick="genCMA()"><span id="cma-bt">Generate CMA narrative →</span></button></div>
           </div>
           <div style="height:100%">
-            <div id="cma-placeholder" class="tool-placeholder"><div class="tool-placeholder-icon">🏷️</div><div class="tool-placeholder-title">CMA narrative</div><div class="tool-placeholder-sub">Fill in your comp data and generate</div></div>
+            <div id="cma-placeholder" class="tool-placeholder"><div class="tool-placeholder-icon-text"></div><div class="tool-placeholder-title">CMA narrative</div><div class="tool-placeholder-sub">Fill in your comp data and generate</div></div>
             <div id="cma-out" style="display:none;height:100%">
               <div class="output-card" style="height:100%;display:flex;flex-direction:column">
                 <div class="output-hdr">
@@ -970,9 +971,9 @@ textarea.input{resize:vertical;min-height:80px;line-height:1.55}
                   <button class="copy-btn" onclick="cp('cma-result')">Copy</button>
                 </div>
                 <div class="stabs">
-                  <div class="stab active" onclick="showCmaTab('narrative',this)">📝 Full narrative</div>
-                  <div class="stab" onclick="showCmaTab('summary',this)">⚡ Short summary</div>
-                  <div class="stab" onclick="showCmaTab('email',this)">📧 Email to seller</div>
+                  <div class="stab active" onclick="showCmaTab('narrative',this)">Full narrative</div>
+                  <div class="stab" onclick="showCmaTab('summary',this)">Short summary</div>
+                  <div class="stab" onclick="showCmaTab('email',this)">Email to seller</div>
                 </div>
                 <div class="output-body empty" id="cma-result" style="flex:1"></div>
               </div>
