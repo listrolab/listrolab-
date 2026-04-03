@@ -553,10 +553,10 @@ textarea.input{resize:vertical;min-height:80px;line-height:1.55}
 
                 <div class="section-label">Quick tools</div>
                 <div class="quick-tools">
-                  <div class="qtool" onclick="genHeadlines()">✏️ Headlines</div>
-                  <div class="qtool" onclick="genSocial()">📱 Social captions</div>
-                  <div class="qtool" onclick="toggleRW()">🔄 Rewrite</div>
-                  <div class="qtool" onclick="genEmail()">📧 Buyer email</div>
+                  <div class="qtool" onclick="genHeadlines()">Headlines</div>
+                  <div class="qtool" onclick="genSocial()">Social captions</div>
+                  <div class="qtool" onclick="toggleRW()">Rewrite</div>
+                  <div class="qtool" onclick="genEmail()">Buyer email</div>
                 </div>
 
                 <div id="headlinesArea" style="display:none;margin-top:12px">
@@ -908,7 +908,7 @@ textarea.input{resize:vertical;min-height:80px;line-height:1.55}
                 </div>
                 <div class="stabs">
                   <div class="stab active" onclick="showMrTab('narrative',this)">Narrative</div>
-                  <div class="stab" onclick="showMrTab('social',this)">📱 Social post</div>
+                  <div class="stab" onclick="showMrTab('social',this)">Social post</div>
                   <div class="stab" onclick="showMrTab('email',this)">Email version</div>
                 </div>
                 <div class="output-body empty" id="mr-result" style="flex:1"></div>
@@ -994,11 +994,11 @@ textarea.input{resize:vertical;min-height:80px;line-height:1.55}
   <!-- MOBILE BOTTOM NAV -->
   <div class="mobile-nav">
     <div class="mobile-nav-items">
-      <div class="mobile-nav-item active" id="mnav-gen" onclick="showView('gen',document.getElementById('nav-gen'));setMobileNav('mnav-gen')"><div class="mobile-nav-icon">✍️</div>Generate</div>
-      <div class="mobile-nav-item" id="mnav-tools" onclick="showView('sold',document.getElementById('nav-sold'));setMobileNav('mnav-tools')"><div class="mobile-nav-icon">🛠️</div>Tools</div>
-      <div class="mobile-nav-item" id="mnav-market" onclick="showView('marketreport',document.getElementById('nav-marketreport'));setMobileNav('mnav-market')"><div class="mobile-nav-icon">📈</div>Market</div>
-      <div class="mobile-nav-item" id="mnav-hist" onclick="showView('hist',document.getElementById('nav-hist'));setMobileNav('mnav-hist')"><div class="mobile-nav-icon">📋</div>History</div>
-      <div class="mobile-nav-item" id="mnav-menu" onclick="toggleMobileMenu()"><div class="mobile-nav-icon">☰</div>More</div>
+      <div class="mobile-nav-item active" id="mnav-gen" onclick="showView('gen',document.getElementById('nav-gen'));setMobileNav('mnav-gen')"><svg style="width:20px;height:20px;fill:currentColor" viewBox="0 0 16 16"><path d="M2 12.5V14h1.5l4.87-4.87-1.5-1.5L2 12.5zm7.08-7.08l-5.95 5.95 1.5 1.5 5.95-5.95-1.5-1.5zM13.71 4.04a.4.4 0 000-.57l-1.18-1.18a.4.4 0 00-.57 0l-.93.93 1.75 1.75.93-.93z"/></svg>Generate</div>
+      <div class="mobile-nav-item" id="mnav-tools" onclick="showView('sold',document.getElementById('nav-sold'));setMobileNav('mnav-tools')"><svg style="width:20px;height:20px;fill:currentColor" viewBox="0 0 16 16"><path d="M13.5 2.5l-1.5 1.5-1-1L12.5 1A3 3 0 009 4a3 3 0 00.3 1.3L2 12.6 3.4 14l7.3-7.3A3 3 0 0012 7a3 3 0 001.5-4.5z"/></svg>Tools</div>
+      <div class="mobile-nav-item" id="mnav-market" onclick="showView('marketreport',document.getElementById('nav-marketreport'));setMobileNav('mnav-market')"><svg style="width:20px;height:20px;fill:currentColor" viewBox="0 0 16 16"><path d="M1 12l4-4 3 3 4-5 3 2V14H1v-2z"/></svg>Market</div>
+      <div class="mobile-nav-item" id="mnav-hist" onclick="showView('hist',document.getElementById('nav-hist'));setMobileNav('mnav-hist')"><svg style="width:20px;height:20px;fill:currentColor" viewBox="0 0 16 16"><path d="M11 1H5a1 1 0 00-1 1v12a1 1 0 001 1h6a1 1 0 001-1V2a1 1 0 00-1-1zM6 4h4v1H6V4zm0 2.5h4v1H6v-1zm0 2.5h2v1H6V9z"/></svg>History</div>
+      <div class="mobile-nav-item" id="mnav-menu" onclick="toggleMobileMenu()">≡More</div>
     </div>
   </div>
 </div>
@@ -1190,7 +1190,7 @@ function rp(){
   const a=document.getElementById('ua'),p=document.getElementById('pp'),h=document.getElementById('ph');
   if(!S.pd.length){a.style.display='block';p.style.display='none';h.style.display='none';return;}
   a.style.display='none';p.style.display='flex';p.style.flexWrap='wrap';h.style.display='block';
-  h.textContent=`📸 ${S.pd.length} photo${S.pd.length>1?'s':''} uploaded — listing will name specific finishes and details from your photos`;
+  h.textContent=`${S.pd.length} photo${S.pd.length>1?'s':''} uploaded — listing will name specific finishes and details from your photos`;
   p.innerHTML='';
   S.pd.forEach((src,i)=>{const w=document.createElement('div');w.className='photo-thumb';const img=document.createElement('img');img.src=src;const btn=document.createElement('button');btn.className='photo-rm';btn.textContent='✕';btn.onclick=()=>{S.photos.splice(i,1);S.pd.splice(i,1);rp();if(!S.pd.length)document.getElementById('ua').style.display='block';};w.appendChild(img);w.appendChild(btn);p.appendChild(w);});
   if(S.pd.length<15){const a2=document.createElement('div');a2.className='photo-add';a2.innerHTML=`+<span style="font-size:9px;color:var(--mid);margin-top:2px">${15-S.pd.length} left</span><input type="file" accept="image/jpeg,image/png,image/webp" multiple onchange="hph(event)">`;p.appendChild(a2);}
@@ -1240,40 +1240,35 @@ async function gen(){
   const o=document.getElementById('out');o.textContent=hasP?'Reading your photos...':'Writing your listing...';o.className='output-body empty';
   document.getElementById('pis').style.display='none';
   ['headlinesArea','socialArea','emailArea'].forEach(id=>document.getElementById(id).style.display='none');
-  const prompt=`You are the best real estate copywriter in America. Write for Listrolab.
+  const prompt=`You are the best real estate copywriter in America. You write for Listrolab. Your listings sound like a sharp, experienced agent wrote them — not like AI.
+
 Property: ${pt} in ${loc}
 ${bb}${sq?` · ${sq}`:''}
 ${prc?`Price: ${prc}`:''}
 ${feat?`Standout features: ${feat}`:''}
 Writing for: ${buy}
 ${getToneInstructions(S.tone)}
-${hasP?`PHOTO ANALYSIS REQUIRED — THIS IS YOUR PRIMARY JOB:
-You have ${photosToUse.length} property photo(s) attached. Before writing a single word of the listing, study every photo carefully.
+${hasP?`PHOTO ANALYSIS — DO THIS BEFORE WRITING ANYTHING:
+You have ${photosToUse.length} photo(s). Study every detail carefully.
+Name exactly what you see: white shaker cabinets, coffered ceiling with white beams, wide-plank dark hardwood floors, white pendant lights over the island, stone and stucco exterior, taupe curtains.
+NEVER use: "gorgeous", "stunning", "beautiful", "amazing", "magical", "perfect", "incredible", "wonderful", "modern finishes", "updated kitchen", "natural light", "open concept", "hardwood floors" (say the actual type), "won't last long", "picture yourself", "you'll love".
+Every visual detail you mention must be confirmed in the photos.`:''}
 
-Your listing MUST include specific details from the photos. For each photo, identify:
-- FLOORING: exact material, color, pattern (white oak wide plank, herringbone tile, polished concrete, etc.)
-- CABINETRY: exact style, color, hardware (white shaker, navy blue flat front, natural wood, brass pulls, etc.)
-- COUNTERTOPS: exact material and edge (waterfall quartz, Carrara marble, butcher block, etc.)
-- FIXTURES: lighting style, faucet finish (brushed nickel, matte black, vintage brass, etc.)
-- CEILINGS: height, details (vaulted, coffered, exposed beams, recessed lighting, etc.)
-- WINDOWS: size, style, light quality (floor to ceiling, bay window, transoms, how light moves through the space)
-- OUTDOOR SPACES: condition, features, privacy, landscaping
-- ANY DISTINCTIVE ARCHITECTURAL DETAILS you can see
+Write exactly 3 paragraphs:
 
-FORBIDDEN: "modern finishes", "updated kitchen", "hardwood floors", "open concept", "natural light" — these are meaningless. Every detail must be something you can visually confirm in the photos.
+Paragraph 1 — The hook. Drop the buyer into a specific moment or feeling of living in this home. Make it concrete, not abstract. BANNED openers: "Welcome to", "Nestled", "This stunning", "This beautiful", "Discover", "Introducing", "Picture yourself", "Imagine". Start with the property, the neighborhood, or a specific detail — not with the buyer's imagination.
 
-If a detail appears in multiple photos, mention it once with confidence. If you can see it, name it specifically.`
-:''}
-Write 3 tight paragraphs:
-1. Put buyer inside the feeling of living there. NEVER start: Welcome to / Nestled / This stunning / This beautiful / Discover.
-2. Name 3-4 hyper-specific details. ${hasP?'Must come from photos.':'Be visual and specific.'}
-3. One sentence of real urgency tied to this location.
-CRITICAL WRITING RULES — these are non-negotiable:
-- Zero dashes of any kind. No em dashes. No hyphens used as punctuation. If you feel the urge to use a dash, rewrite the sentence so it flows naturally without one.
-- Zero ellipsis. No "..."
-- No bullet points or lists.
-- Write the way a thoughtful human writes. Varied sentence length. Natural rhythm. No AI-sounding patterns.
-- Under 160 words total. Return ONLY the listing text.`;
+Paragraph 2 — The proof. Name 3-4 specific details that make this property stand out. ${hasP?'Every detail must come from the photos — name materials, finishes, and architectural features exactly as you see them.':'Be precise and visual, no generic descriptions.'} No adjectives that every listing uses.
+
+Paragraph 3 — The close. One or two sentences. Specific to this location and market. Not "won't last long." Something true about this area right now.
+
+WRITING RULES — every single one is required:
+- Zero dashes (em dashes or hyphens as punctuation). Rewrite any sentence that wants a dash.
+- Zero ellipsis.
+- No second-person "you" or "your" — write about the property, not at the buyer.
+- No empty adjectives: gorgeous, stunning, beautiful, amazing, magical, perfect, incredible, wonderful, charming, spacious, cozy, luxurious (unless it actually is a luxury property).
+- Varied sentence length. Short punchy sentences mixed with longer ones. Sounds human.
+- Under 160 words. Return ONLY the listing text.`;
   try{
     let messages;
     if(hasP){
@@ -1337,12 +1332,12 @@ function renderBatch(){
   S.props.forEach((p,i)=>{
     const d=document.createElement('div');d.className=`batch-prop ${p.status}`;
     const photoCount=p.photoData?.length||0;
-    d.innerHTML=`<div class="batch-prop-hdr"><div><div style="font-size:13px;font-weight:500">Property ${i+1}${p.address?' — '+p.address:''}</div><div style="font-size:11px;color:var(--mid);margin-top:2px">${p.bb||'—'}${p.price?' · '+p.price:''}${photoCount?` · <span style="color:var(--gold2)">📸 ${photoCount} photo${photoCount>1?'s':''}</span>`:''}</div></div><div style="display:flex;align-items:center;gap:8px"><span class="batch-st ${p.status}">${sl[p.status]}</span><button class="batch-rm" onclick="rmProp(${p.id})">✕</button></div></div>
+    d.innerHTML=`<div class="batch-prop-hdr"><div><div style="font-size:13px;font-weight:500">Property ${i+1}${p.address?' — '+p.address:''}</div><div style="font-size:11px;color:var(--mid);margin-top:2px">${p.bb||'—'}${p.price?' · '+p.price:''}${photoCount?` · <span style="color:var(--gold2)">${photoCount} photo${photoCount>1?'s':''}</span>`:''}</div></div><div style="display:flex;align-items:center;gap:8px"><span class="batch-st ${p.status}">${sl[p.status]}</span><button class="batch-rm" onclick="rmProp(${p.id})">✕</button></div></div>
     <div class="batch-prop-grid"><div><div class="label">Address</div><input class="input" placeholder="e.g. 123 Oak St" value="${p.address}" oninput="upd(${p.id},'address',this.value)"></div><div><div class="label">Price</div><input class="input" placeholder="e.g. $549k" value="${p.price}" oninput="upd(${p.id},'price',this.value)"></div><div><div class="label">Beds/Baths</div><input class="input" placeholder="e.g. 4bd/2ba" value="${p.bb}" oninput="upd(${p.id},'bb',this.value)"></div><div><div class="label">Tone</div><input class="input" placeholder="Warm/Luxury/Pro" value="${p.tone}" oninput="upd(${p.id},'tone',this.value)"></div></div>
     <div style="padding:0 16px 10px"><div class="label">Key features</div><input class="input" placeholder="white shaker cabinets, quartz island..." value="${p.feat}" oninput="upd(${p.id},'feat',this.value)"></div>
     <div style="padding:0 16px 14px;display:flex;align-items:center;gap:10px">
       <div style="position:relative;flex-shrink:0">
-        <button style="font-size:11px;padding:6px 12px;border-radius:6px;border:1px solid var(--border2);background:var(--gold3);color:var(--gold2);cursor:pointer;font-family:'DM Sans',sans-serif" onclick="document.getElementById('bp-photo-${p.id}').click()">📸 ${photoCount?`${photoCount} photo${photoCount>1?'s':''}  ✕`:'Add photos'}</button>
+        <button style="font-size:11px;padding:6px 12px;border-radius:6px;border:1px solid var(--border2);background:var(--gold3);color:var(--gold2);cursor:pointer;font-family:'DM Sans',sans-serif" onclick="document.getElementById('bp-photo-${p.id}').click()">${photoCount?`${photoCount} photo${photoCount>1?'s':''}  ✕`:'Add photos'}</button>
         <input type="file" id="bp-photo-${p.id}" accept="image/jpeg,image/png,image/webp" multiple style="display:none" onchange="handleBatchPhoto(event,${p.id})">
       </div>
       ${photoCount?`<div style="display:flex;gap:4px;flex-wrap:wrap">${p.photoData.slice(0,4).map(src=>`<img src="${src}" style="width:36px;height:36px;border-radius:4px;object-fit:cover;border:1px solid var(--border2)">`).join('')}${photoCount>4?`<div style="width:36px;height:36px;border-radius:4px;background:var(--bg3);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:10px;color:var(--mid)">+${photoCount-4}</div>`:''}</div><button onclick="clearBatchPhotos(${p.id})" style="font-size:10px;color:var(--mid);background:none;border:none;cursor:pointer">Clear</button>`:'<div style="font-size:11px;color:var(--mid)">Add up to 20 photos per property</div>'}
