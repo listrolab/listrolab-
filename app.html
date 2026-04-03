@@ -382,7 +382,11 @@ textarea.input{resize:vertical;min-height:80px;line-height:1.55}
           <div style="background:var(--gold3);border:1px solid var(--border2);border-radius:8px;padding:11px 14px;margin-bottom:14px;font-size:12px;color:var(--gold2);line-height:1.5">
             Most agents hit the 5-generation limit on day one and upgrade immediately.
           </div>
-          <button class="btn btn-gold btn-full" onclick="startApp()">Start free trial — no card needed</button>
+          <div style="margin-bottom:12px">
+            <div style="font-size:10px;color:var(--mid);text-transform:uppercase;letter-spacing:.5px;font-weight:500;margin-bottom:6px">Your email</div>
+            <input type="email" id="pw-email-free" class="input" placeholder="agent@brokerage.com" autocomplete="email" style="background:var(--bg3)">
+          </div>
+          <button class="btn btn-gold btn-full" onclick="startWithEmailFree()">Start free trial — no card needed</button>
           <button onclick="pwTab('pro')" style="width:100%;padding:11px;background:transparent;color:var(--gold);font-family:'DM Sans',sans-serif;font-size:12px;border:none;cursor:pointer;margin-top:6px">See what Pro includes →</button>
         </div>
 
@@ -412,7 +416,11 @@ textarea.input{resize:vertical;min-height:80px;line-height:1.55}
             <div style="font-size:16px"></div>
             <div style="font-size:12px;color:var(--gold2);line-height:1.5">Agents save <strong>5 to 8 hours every week</strong>. At $29/month that's less than 15 minutes of your time.</div>
           </div>
-          <button class="btn btn-gold btn-full" onclick="startApp()">Start free 7-day trial — no card needed</button>
+          <div style="margin-bottom:12px">
+            <div style="font-size:10px;color:var(--mid);text-transform:uppercase;letter-spacing:.5px;font-weight:500;margin-bottom:6px">Your email</div>
+            <input type="email" id="pw-email" class="input" placeholder="agent@brokerage.com" autocomplete="email" style="background:var(--bg3)">
+          </div>
+          <button class="btn btn-gold btn-full" onclick="startWithEmail()">Start free 7-day trial — no card needed</button>
           <button onclick="pwTab('free')" style="width:100%;padding:11px;background:transparent;color:var(--mid);font-family:'DM Sans',sans-serif;font-size:12px;border:none;cursor:pointer;margin-top:6px">See free plan instead</button>
         </div>
 
@@ -486,7 +494,7 @@ textarea.input{resize:vertical;min-height:80px;line-height:1.55}
             <div style="overflow-y:auto;height:100%;padding-right:4px">
               <div class="card" style="margin-bottom:16px">
                 <div class="card-body">
-                  <div class="section-label">Property photos <span style="color:var(--gold2);font-size:9px;text-transform:none;letter-spacing:0">optional but powerful</span></div>
+                  <div class="section-label">Property photos <span style="color:var(--mid);font-size:9px;text-transform:none;letter-spacing:0;font-weight:400">— optional, recommended</span></div>
                   <div class="photo-drop" id="ua" ondragover="ev(event)" ondrop="drop(event)">
                     <input type="file" accept="image/jpeg,image/png,image/webp" multiple onchange="hph(event)">
                     
@@ -1068,6 +1076,32 @@ function goTo(s){
   window.scrollTo(0,0);
 }
 function goPaywall(){goTo('pw');}
+
+async function submitEmail(email,plan){
+  if(!email||!email.includes('@'))return;
+  try{
+    // Save locally
+    localStorage.setItem('ll_email',email);
+    // Submit to Formspree — replace YOUR_FORM_ID with your actual Formspree form ID
+    await fetch('https://formspree.io/f/YOUR_FORM_ID',{
+      method:'POST',
+      headers:{'Content-Type':'application/json','Accept':'application/json'},
+      body:JSON.stringify({email,plan,name:OB.name||'',date:new Date().toISOString()})
+    });
+  }catch(e){
+    // Fail silently — don't block the user if email submission fails
+  }
+}
+function startWithEmail(){
+  const email=document.getElementById('pw-email')?.value?.trim();
+  submitEmail(email,'pro');
+  startApp();
+}
+function startWithEmailFree(){
+  const email=document.getElementById('pw-email-free')?.value?.trim();
+  submitEmail(email,'free');
+  startApp();
+}
 const OB={name:''};
 
 function obStep1(){
