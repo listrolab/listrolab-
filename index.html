@@ -824,8 +824,8 @@ function submitEmail(){
   localStorage.setItem('ll_email', raw);
   localStorage.setItem('ll_email_date', new Date().toISOString());
 
-  // Submit to Formspree — replace YOUR_FORM_ID with your Formspree form ID
-  fetch('https://formspree.io/f/YOUR_FORM_ID', {
+  // Submit to Formspree — replace meeplyge with your Formspree form ID
+  fetch('https://formspree.io/f/meeplyge', {
     method: 'POST',
     headers: {'Content-Type': 'application/json', 'Accept': 'application/json'},
     body: JSON.stringify({email: raw, source: 'landing-page-cta', plan: 'founder', date: new Date().toISOString()})
