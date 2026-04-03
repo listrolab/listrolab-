@@ -535,14 +535,17 @@ textarea.input{resize:vertical;min-height:80px;line-height:1.55}
                     <div class="mls-bar">
                       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:5px">
                         <div style="font-size:10px;color:var(--mid);text-transform:uppercase;letter-spacing:.5px">MLS character count</div>
-                        <div style="font-size:11px;font-weight:600" id="mlsCount">0</div>
+                        <div style="display:flex;align-items:center;gap:10px">
+                          <button id="trim-btn" onclick="trimToFit()" style="display:none;font-size:10px;padding:3px 10px;border-radius:5px;border:none;background:var(--gold);color:#0f0f13;cursor:pointer;font-family:'DM Sans',sans-serif;font-weight:500">Trim to fit</button>
+                          <div style="font-size:11px;font-weight:600" id="mlsCount">0</div>
+                        </div>
                       </div>
                       <div style="height:4px;background:rgba(255,255,255,.06);border-radius:2px;overflow:hidden">
                         <div id="mlsFill" style="height:100%;border-radius:2px;transition:width .3s,background .3s;width:0%"></div>
                       </div>
                       <div class="mls-presets">
-                        <div class="mls-preset active" onclick="setMLS(500)" id="mls500">500</div>
-                        <div class="mls-preset" onclick="setMLS(750)" id="mls750">750</div>
+                        <div class="mls-preset" onclick="setMLS(500)" id="mls500">500</div>
+                        <div class="mls-preset active" onclick="setMLS(750)" id="mls750">750</div>
                         <div class="mls-preset" onclick="setMLS(1000)" id="mls1000">1000</div>
                         <div class="mls-preset" onclick="setMLS(2000)" id="mls2000">2000</div>
                       </div>
@@ -1309,9 +1312,26 @@ async function spotted(){
 }
 
 // MLS
-let mlsLimit=500;
-function updateMLS(){const text=document.getElementById('out').textContent||'';const count=text.length;const pct=Math.min((count/mlsLimit)*100,100);const ce=document.getElementById('mlsCount');const fe=document.getElementById('mlsFill');if(!ce)return;ce.textContent=`${count} / ${mlsLimit}`;ce.style.color=count>mlsLimit?'#ff5f57':count>mlsLimit*.9?'#febc2e':'var(--green)';fe.style.width=pct+'%';fe.style.background=count>mlsLimit?'#ff5f57':count>mlsLimit*.9?'#febc2e':'var(--green)';document.getElementById('mlsBar').style.display='block';}
+let mlsLimit=750;
+function updateMLS(){const text=document.getElementById('out').textContent||'';const count=text.length;const pct=Math.min((count/mlsLimit)*100,100);const ce=document.getElementById('mlsCount');const fe=document.getElementById('mlsFill');if(!ce)return;ce.textContent=`${count} / ${mlsLimit}`;ce.style.color=count>mlsLimit?'#ff5f57':count>mlsLimit*.9?'#febc2e':'var(--green)';fe.style.width=pct+'%';fe.style.background=count>mlsLimit?'#ff5f57':count>mlsLimit*.9?'#febc2e':'var(--green)';document.getElementById('mlsBar').style.display='block';
+// Show trim button if over limit
+const trimBtn=document.getElementById('trim-btn');
+if(trimBtn)trimBtn.style.display=count>mlsLimit?'block':'none';
+}
 function setMLS(n){mlsLimit=n;['500','750','1000','2000'].forEach(v=>{const el=document.getElementById('mls'+v);if(el){el.classList.toggle('active',v==n);}});updateMLS();}
+async function trimToFit(){
+  if(!S.last)return;
+  const btn=document.getElementById('trim-btn');
+  btn.textContent='Trimming...';btn.disabled=true;
+  try{
+    const text=await callAPI([{role:'user',content:`Trim this real estate listing to fit within ${mlsLimit} characters while keeping the best parts. Preserve the specific property details and the urgency close. Cut filler words and redundant phrases. Keep the same structure and voice. Zero dashes. Return ONLY the trimmed listing.\n\nCurrent listing (${S.last.length} chars, need under ${mlsLimit}):\n${S.last}`}],400);
+    document.getElementById('out').textContent=text;
+    S.last=text;
+    updateMLS();
+    showToast(`Trimmed to ${text.length} characters`);
+  }catch(e){showToast('Error trimming — try again');}
+  btn.textContent='Trim to fit';btn.disabled=false;
+}
 
 // QUICK TOOLS
 async function genHeadlines(){if(!S.last){showToast('Generate a listing first');return;}document.getElementById('headlinesArea').style.display='block';const el=document.getElementById('headlinesOut');el.textContent='Generating...';el.className='output-body empty';try{const text=await callAPI([{role:'user',content:`Based on this listing, write 5 punchy headline options. Each under 10 words, emotionally compelling, completely different from each other. No dashes. Return ONLY a numbered list.\n\nListing:\n${S.last}`}],300);el.textContent=text;el.className='output-body';}catch(e){el.textContent='Error — try again.';}}
