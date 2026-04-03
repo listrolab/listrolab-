@@ -24,6 +24,43 @@ html,body{height:100%;background:var(--bg);color:var(--white);font-family:'DM Sa
 .sidebar{width:var(--sidebar);flex-shrink:0;background:var(--bg2);border-right:1px solid var(--border);display:flex;flex-direction:column;height:100vh;position:fixed;left:0;top:0;z-index:10}
 .main{margin-left:var(--sidebar);flex:1;overflow-y:auto;height:100vh}
 
+/* MOBILE NAV */
+.mobile-nav{display:none;position:fixed;bottom:0;left:0;right:0;background:rgba(15,15,19,.97);border-top:1px solid var(--border);z-index:20;padding:8px 0 max(12px,env(safe-area-inset-bottom));backdrop-filter:blur(20px)}
+.mobile-nav-items{display:flex;justify-content:space-around}
+.mobile-nav-item{display:flex;flex-direction:column;align-items:center;gap:3px;cursor:pointer;color:var(--mid);font-size:9px;text-transform:uppercase;letter-spacing:.5px;padding:4px 12px;border-radius:8px;transition:color .15s;-webkit-tap-highlight-color:transparent}
+.mobile-nav-item.active{color:var(--gold)}
+.mobile-nav-icon{font-size:20px}
+.mobile-hamburger{display:none;position:fixed;top:0;left:0;right:0;background:var(--bg2);border-bottom:1px solid var(--border);padding:14px 18px;z-index:15;display:none;align-items:center;justify-content:space-between}
+.mobile-menu-btn{background:none;border:none;color:var(--white);font-size:22px;cursor:pointer;padding:4px}
+.sidebar-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:9;backdrop-filter:blur(2px)}
+
+@media(max-width:768px){
+  .layout{flex-direction:column}
+  .sidebar{transform:translateX(-100%);transition:transform .25s ease;z-index:11}
+  .sidebar.open{transform:translateX(0)}
+  .sidebar-overlay.show{display:block}
+  .main{margin-left:0;padding-bottom:80px;height:100vh}
+  .mobile-hamburger{display:flex}
+  .mobile-nav{display:block}
+  .topbar{padding:14px 18px;padding-top:calc(14px + 52px)}
+  .content{padding:16px}
+  .content-2col{grid-template-columns:1fr;height:auto;gap:16px}
+  .content-3col{grid-template-columns:1fr}
+  .field-row{grid-template-columns:1fr}
+  .field-row-3{grid-template-columns:1fr}
+  .hist-grid{grid-template-columns:1fr}
+  .tone-grid{grid-template-columns:repeat(2,1fr)}
+  .batch-prop-grid{grid-template-columns:1fr 1fr}
+  .pw-plans{grid-template-columns:1fr}
+  .auth-body{padding:20px}
+  .auth-hero{padding:24px 20px 20px}
+  .auth-card{border-radius:12px}
+  .auth-wrap{padding:16px;align-items:flex-start;padding-top:24px}
+  [id^="view-"]{padding-bottom:16px}
+  .output-card{min-height:300px}
+  .pro-lock{padding:24px 20px}
+}
+
 /* SIDEBAR */
 .sb-logo{padding:24px 20px 20px;border-bottom:1px solid var(--border)}
 .sb-logo-text{font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:600;letter-spacing:-.3px}
@@ -385,6 +422,15 @@ textarea.input{resize:vertical;min-height:80px;line-height:1.55}
 
 <!-- MAIN APP -->
 <div class="screen" id="screen-app">
+  <!-- MOBILE HEADER -->
+  <div class="mobile-hamburger" id="mobileHeader">
+    <button class="mobile-menu-btn" onclick="toggleMobileMenu()">☰</button>
+    <div style="font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:600">Listro<span style="color:var(--gold)">lab</span></div>
+    <button class="sb-pro-btn" id="proBtn2" onclick="togglePro()" style="width:auto;padding:7px 14px;font-size:11px">⭐ Pro</button>
+  </div>
+
+  <!-- SIDEBAR OVERLAY -->
+  <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleMobileMenu()"></div>
   <div class="layout">
 
     <!-- SIDEBAR -->
@@ -943,6 +989,17 @@ textarea.input{resize:vertical;min-height:80px;line-height:1.55}
 
     </div>
   </div>
+
+  <!-- MOBILE BOTTOM NAV -->
+  <div class="mobile-nav">
+    <div class="mobile-nav-items">
+      <div class="mobile-nav-item active" id="mnav-gen" onclick="showView('gen',document.getElementById('nav-gen'));setMobileNav('mnav-gen')"><div class="mobile-nav-icon">✍️</div>Generate</div>
+      <div class="mobile-nav-item" id="mnav-tools" onclick="showView('sold',document.getElementById('nav-sold'));setMobileNav('mnav-tools')"><div class="mobile-nav-icon">🛠️</div>Tools</div>
+      <div class="mobile-nav-item" id="mnav-market" onclick="showView('marketreport',document.getElementById('nav-marketreport'));setMobileNav('mnav-market')"><div class="mobile-nav-icon">📈</div>Market</div>
+      <div class="mobile-nav-item" id="mnav-hist" onclick="showView('hist',document.getElementById('nav-hist'));setMobileNav('mnav-hist')"><div class="mobile-nav-icon">📋</div>History</div>
+      <div class="mobile-nav-item" id="mnav-menu" onclick="toggleMobileMenu()"><div class="mobile-nav-icon">☰</div>More</div>
+    </div>
+  </div>
 </div>
 
 <div class="toast" id="toast"></div>
@@ -1081,13 +1138,26 @@ function pwTab(tab){
 }
 function togglePro(){if(!S.isPro)unlockPro();}
 function applyPro(){
-  const b=document.getElementById('proBtn');b.textContent='⭐ Pro active';b.classList.add('unlocked');
-  ['batch-locked','buyer-locked'].forEach(id=>document.getElementById(id).style.display='none');
-  ['batch-unlocked','buyer-unlocked'].forEach(id=>document.getElementById(id).style.display='block');
+  const b=document.getElementById('proBtn');if(b){b.textContent='⭐ Pro active';b.classList.add('unlocked');}
+  const b2=document.getElementById('proBtn2');if(b2){b2.textContent='⭐ Pro';b2.classList.add('unlocked');}
+  ['batch-locked','buyer-locked'].forEach(id=>{const el=document.getElementById(id);if(el)el.style.display='none';});
+  ['batch-unlocked','buyer-unlocked'].forEach(id=>{const el=document.getElementById(id);if(el)el.style.display='block';});
 }
 function unlockPro(){
   S.isPro=true;try{localStorage.setItem('ll_pro','true');}catch(e){}
   applyPro();if(!S.props.length)addProp();showToast('Pro unlocked! Batch + buyer framing active');
+}
+function toggleMobileMenu(){
+  const sidebar=document.querySelector('.sidebar');
+  const overlay=document.getElementById('sidebarOverlay');
+  const isOpen=sidebar.classList.contains('open');
+  sidebar.classList.toggle('open',!isOpen);
+  overlay.classList.toggle('show',!isOpen);
+}
+function setMobileNav(id){
+  document.querySelectorAll('.mobile-nav-item').forEach(n=>n.classList.remove('active'));
+  const el=document.getElementById(id);
+  if(el)el.classList.add('active');
 }
 function showView(name,el){
   if(!S.isPro&&!S.isDevMode&&PRO_TOOLS.includes(name)){
@@ -1100,6 +1170,9 @@ function showView(name,el){
   const v=document.getElementById('view-'+name);
   if(v)v.style.display='block';
   if(name==='hist')renderHist();
+  // Close mobile menu if open
+  document.querySelector('.sidebar')?.classList.remove('open');
+  document.getElementById('sidebarOverlay')?.classList.remove('show');
 }
 function sTone(el,t){
   if(!S.isPro&&!S.isDevMode&&t!=='warm'){showUpgradeModal('All 4 tones are a Pro feature. Free plan includes warm tone only.');return;}
