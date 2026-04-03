@@ -440,7 +440,7 @@ textarea.input{resize:vertical;min-height:80px;line-height:1.55}
                     <input type="file" accept="image/jpeg,image/png,image/webp" multiple onchange="hph(event)">
                     <div class="photo-drop-icon">📸</div>
                     <div class="photo-drop-title">Drop photos here or click to upload</div>
-                    <div class="photo-drop-sub">Up to 10 photos · Listrolab writes from what it sees</div>
+                    <div class="photo-drop-sub">Up to 15 photos · Listrolab writes from what it sees</div>
                   </div>
                   <div class="photo-previews" id="pp" style="display:none"></div>
                   <div class="photo-hint" id="ph" style="display:none">📸 Photo writing active — listing will name specific finishes from your photos</div>
@@ -985,7 +985,7 @@ function sTone(el,t){
 function ev(e){e.preventDefault();}
 function drop(e){e.preventDefault();pf(Array.from(e.dataTransfer.files).filter(f=>f.type.startsWith('image/')));}
 function hph(e){pf(Array.from(e.target.files));}
-function pf(files){files.slice(0,10-S.photos.length).forEach(f=>{const r=new FileReader();r.onload=e=>{const img=new Image();img.onload=()=>{const c=document.createElement('canvas');const M=800;let w=img.width,h=img.height;if(w>M||h>M){if(w>h){h=Math.round(h*M/w);w=M;}else{w=Math.round(w*M/h);h=M;}}c.width=w;c.height=h;c.getContext('2d').drawImage(img,0,0,w,h);const comp=c.toDataURL('image/jpeg',0.6);if(comp.length>500000){const c2=document.createElement('canvas');c2.width=Math.round(w*.6);c2.height=Math.round(h*.6);c2.getContext('2d').drawImage(img,0,0,c2.width,c2.height);S.photos.push(f);S.pd.push(c2.toDataURL('image/jpeg',.5));}else{S.photos.push(f);S.pd.push(comp);}rp();};img.src=e.target.result;};r.readAsDataURL(f);});}
+function pf(files){files.slice(0,15-S.photos.length).forEach(f=>{const r=new FileReader();r.onload=e=>{const img=new Image();img.onload=()=>{const c=document.createElement('canvas');const M=800;let w=img.width,h=img.height;if(w>M||h>M){if(w>h){h=Math.round(h*M/w);w=M;}else{w=Math.round(w*M/h);h=M;}}c.width=w;c.height=h;c.getContext('2d').drawImage(img,0,0,w,h);const comp=c.toDataURL('image/jpeg',0.6);if(comp.length>500000){const c2=document.createElement('canvas');c2.width=Math.round(w*.6);c2.height=Math.round(h*.6);c2.getContext('2d').drawImage(img,0,0,c2.width,c2.height);S.photos.push(f);S.pd.push(c2.toDataURL('image/jpeg',.5));}else{S.photos.push(f);S.pd.push(comp);}rp();};img.src=e.target.result;};r.readAsDataURL(f);});}
 function rp(){
   const a=document.getElementById('ua'),p=document.getElementById('pp'),h=document.getElementById('ph');
   if(!S.pd.length){a.style.display='block';p.style.display='none';h.style.display='none';return;}
@@ -993,7 +993,7 @@ function rp(){
   h.textContent=`📸 ${S.pd.length} photo${S.pd.length>1?'s':''} uploaded — listing will name specific finishes and details from your photos`;
   p.innerHTML='';
   S.pd.forEach((src,i)=>{const w=document.createElement('div');w.className='photo-thumb';const img=document.createElement('img');img.src=src;const btn=document.createElement('button');btn.className='photo-rm';btn.textContent='✕';btn.onclick=()=>{S.photos.splice(i,1);S.pd.splice(i,1);rp();if(!S.pd.length)document.getElementById('ua').style.display='block';};w.appendChild(img);w.appendChild(btn);p.appendChild(w);});
-  if(S.pd.length<10){const a2=document.createElement('div');a2.className='photo-add';a2.innerHTML=`+<span style="font-size:9px;color:var(--mid);margin-top:2px">${10-S.pd.length} left</span><input type="file" accept="image/jpeg,image/png,image/webp" multiple onchange="hph(event)">`;p.appendChild(a2);}
+  if(S.pd.length<15){const a2=document.createElement('div');a2.className='photo-add';a2.innerHTML=`+<span style="font-size:9px;color:var(--mid);margin-top:2px">${15-S.pd.length} left</span><input type="file" accept="image/jpeg,image/png,image/webp" multiple onchange="hph(event)">`;p.appendChild(a2);}
 }
 
 // API
@@ -1029,7 +1029,7 @@ async function gen(){
   let photosToUse=S.pd;
   if(!S.isPro&&!S.isDevMode&&S.pd.length>3){
     photosToUse=S.pd.slice(0,3);
-    showToast('Free plan: using first 3 photos — upgrade for up to 10');
+    showToast('Free plan: using first 3 photos — upgrade for up to 15');
   }
   const hasP=photosToUse.length>0;
   const btn=document.getElementById('gb'),btt=document.getElementById('gbt');
@@ -1118,7 +1118,7 @@ function renderBatch(){
         <button style="font-size:11px;padding:6px 12px;border-radius:6px;border:1px solid var(--border2);background:var(--gold3);color:var(--gold2);cursor:pointer;font-family:'DM Sans',sans-serif" onclick="document.getElementById('bp-photo-${p.id}').click()">📸 ${photoCount?`${photoCount} photo${photoCount>1?'s':''}  ✕`:'Add photos'}</button>
         <input type="file" id="bp-photo-${p.id}" accept="image/jpeg,image/png,image/webp" multiple style="display:none" onchange="handleBatchPhoto(event,${p.id})">
       </div>
-      ${photoCount?`<div style="display:flex;gap:4px;flex-wrap:wrap">${p.photoData.slice(0,4).map(src=>`<img src="${src}" style="width:36px;height:36px;border-radius:4px;object-fit:cover;border:1px solid var(--border2)">`).join('')}${photoCount>4?`<div style="width:36px;height:36px;border-radius:4px;background:var(--bg3);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:10px;color:var(--mid)">+${photoCount-4}</div>`:''}</div><button onclick="clearBatchPhotos(${p.id})" style="font-size:10px;color:var(--mid);background:none;border:none;cursor:pointer">Clear</button>`:'<div style="font-size:11px;color:var(--mid)">Photos help write more specific copy</div>'}
+      ${photoCount?`<div style="display:flex;gap:4px;flex-wrap:wrap">${p.photoData.slice(0,4).map(src=>`<img src="${src}" style="width:36px;height:36px;border-radius:4px;object-fit:cover;border:1px solid var(--border2)">`).join('')}${photoCount>4?`<div style="width:36px;height:36px;border-radius:4px;background:var(--bg3);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:10px;color:var(--mid)">+${photoCount-4}</div>`:''}</div><button onclick="clearBatchPhotos(${p.id})" style="font-size:10px;color:var(--mid);background:none;border:none;cursor:pointer">Clear</button>`:'<div style="font-size:11px;color:var(--mid)">Add up to 20 photos per property</div>'}
     </div>
     ${p.output?`<div class="batch-out"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px"><div style="font-size:11px;color:var(--green);font-weight:600">✓ Generated</div><button class="copy-btn" onclick="copyBatchOut(${p.id})">Copy</button></div><div id="batch-out-text-${p.id}">${p.output}</div></div>`:''}`;
     el.appendChild(d);
@@ -1127,7 +1127,7 @@ function renderBatch(){
 
 function handleBatchPhoto(e,propId){
   const p=S.props.find(x=>x.id===propId);if(!p)return;
-  const files=Array.from(e.target.files).slice(0,5-p.photoData.length);
+  const files=Array.from(e.target.files).slice(0,20-p.photoData.length);
   files.forEach(f=>{const r=new FileReader();r.onload=ev=>{const img=new Image();img.onload=()=>{const c=document.createElement('canvas');const M=800;let w=img.width,h=img.height;if(w>M||h>M){if(w>h){h=Math.round(h*M/w);w=M;}else{w=Math.round(w*M/h);h=M;}}c.width=w;c.height=h;c.getContext('2d').drawImage(img,0,0,w,h);p.photos.push(f);p.photoData.push(c.toDataURL('image/jpeg',0.6));renderBatch();};img.src=ev.target.result;};r.readAsDataURL(f);});
 }
 function clearBatchPhotos(propId){const p=S.props.find(x=>x.id===propId);if(p){p.photos=[];p.photoData=[];}renderBatch();}
