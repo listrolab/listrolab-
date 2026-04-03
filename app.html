@@ -411,6 +411,10 @@ textarea.input{resize:vertical;min-height:80px;line-height:1.55}
         <div class="sb-item" id="nav-fairhousing" onclick="showView('fairhousing',this)"><div class="sb-item-icon">⚖️</div>Fair housing check</div>
         <div class="sb-item" id="nav-translate" onclick="showView('translate',this)"><div class="sb-item-icon">🌎</div>Spanish translation</div>
 
+        <div class="sb-section">Market Intelligence</div>
+        <div class="sb-item" id="nav-marketreport" onclick="showView('marketreport',this)"><div class="sb-item-icon">📈</div>Market report</div>
+        <div class="sb-item" id="nav-cma" onclick="showView('cma',this)"><div class="sb-item-icon">🏷️</div>CMA narrative</div>
+
         <div class="sb-section">Account</div>
         <div class="sb-item" id="nav-hist" onclick="showView('hist',this)"><div class="sb-item-icon">📋</div>History</div>
       </div>
@@ -803,6 +807,128 @@ textarea.input{resize:vertical;min-height:80px;line-height:1.55}
                   <button class="copy-btn" onclick="cp('tr-result')">Copy Spanish</button>
                   <button class="copy-btn" onclick="showBoth()" id="tr-both-btn">Show both languages</button>
                 </div>
+              </div>
+            </div>
+          </div>
+        </div></div>
+      </div>
+
+      <!-- MARKET REPORT -->
+      <div id="view-marketreport" style="display:none">
+        <div class="topbar"><div><div class="topbar-title">Market report</div><div class="topbar-sub">Professional neighborhood market reports for listing presentations and client campaigns</div></div></div>
+        <div class="content"><div class="content-2col">
+          <div class="card">
+            <div class="card-body">
+              <div style="background:rgba(201,168,76,.08);border:1px solid var(--border2);border-radius:8px;padding:12px 14px;margin-bottom:16px">
+                <div style="font-size:11px;color:var(--gold2);font-weight:500;margin-bottom:4px">📈 What this generates</div>
+                <div style="font-size:12px;color:var(--mid);line-height:1.6">A professional market narrative agents use in listing presentations, client emails, and social posts. Covers price trends, days on market, buyer demand, and what it means for sellers right now.</div>
+              </div>
+              <div class="field"><div class="label">Neighborhood or zip code</div><input class="input" type="text" id="mr-area" placeholder="e.g. Oak Park, IL or 60302"></div>
+              <div class="field-row">
+                <div><div class="label">Median sale price</div><input class="input" type="text" id="mr-price" placeholder="e.g. $425,000"></div>
+                <div><div class="label">Price change (vs last year)</div><input class="input" type="text" id="mr-change" placeholder="e.g. +8.2% or -3%"></div>
+              </div>
+              <div class="field-row">
+                <div><div class="label">Avg days on market</div><input class="input" type="text" id="mr-dom" placeholder="e.g. 18 days"></div>
+                <div><div class="label">Months of inventory</div><input class="input" type="text" id="mr-inv" placeholder="e.g. 1.4 months"></div>
+              </div>
+              <div class="field-row">
+                <div><div class="label">Homes sold (last 30 days)</div><input class="input" type="text" id="mr-sold" placeholder="e.g. 42"></div>
+                <div><div class="label">List to sale price ratio</div><input class="input" type="text" id="mr-ratio" placeholder="e.g. 102% (over asking)"></div>
+              </div>
+              <div class="field"><div class="label">Any notable market trends</div><textarea class="input" id="mr-notes" placeholder="e.g. Multiple offer situations common on move-in ready homes, investor activity increasing in south end, new school ratings boosting family demand..." style="min-height:70px"></textarea></div>
+              <div class="field"><div class="label">Report purpose</div>
+                <select class="input" id="mr-purpose">
+                  <option>Listing presentation for seller</option>
+                  <option>Buyer consultation</option>
+                  <option>Email newsletter to client list</option>
+                  <option>Social media post</option>
+                  <option>Market update for existing clients</option>
+                </select>
+              </div>
+            </div>
+            <div class="card-foot"><button class="gen-btn" onclick="genMarketReport()"><span id="mr-bt">Generate market report →</span></button></div>
+          </div>
+          <div style="height:100%">
+            <div id="mr-placeholder" class="tool-placeholder"><div class="tool-placeholder-icon">📈</div><div class="tool-placeholder-title">Market report</div><div class="tool-placeholder-sub">Fill in the market data and generate</div></div>
+            <div id="mr-out" style="display:none;height:100%">
+              <div class="output-card" style="height:100%;display:flex;flex-direction:column">
+                <div class="output-hdr">
+                  <div class="output-lbl"><div class="live-dot"></div><span id="mr-lbl">Market report</span></div>
+                  <div style="display:flex;gap:6px">
+                    <button class="copy-btn" onclick="cp('mr-result')">Copy</button>
+                  </div>
+                </div>
+                <div class="stabs">
+                  <div class="stab active" onclick="showMrTab('narrative',this)">📝 Narrative</div>
+                  <div class="stab" onclick="showMrTab('social',this)">📱 Social post</div>
+                  <div class="stab" onclick="showMrTab('email',this)">📧 Email version</div>
+                </div>
+                <div class="output-body empty" id="mr-result" style="flex:1"></div>
+              </div>
+            </div>
+          </div>
+        </div></div>
+      </div>
+
+      <!-- CMA NARRATIVE -->
+      <div id="view-cma" style="display:none">
+        <div class="topbar"><div><div class="topbar-title">CMA narrative</div><div class="topbar-sub">Turn raw comp data into a professional Comparative Market Analysis agents are proud to present</div></div></div>
+        <div class="content"><div class="content-2col">
+          <div class="card">
+            <div class="card-body">
+              <div style="background:rgba(201,168,76,.08);border:1px solid var(--border2);border-radius:8px;padding:12px 14px;margin-bottom:16px">
+                <div style="font-size:11px;color:var(--gold2);font-weight:500;margin-bottom:4px">🏷️ What this generates</div>
+                <div style="font-size:12px;color:var(--mid);line-height:1.6">Agents have the data but writing the CMA summary for sellers is tedious. Paste in your comps and Listrolab writes a clear, professional narrative that explains the pricing rationale in plain English. Sellers understand it. Sellers trust it.</div>
+              </div>
+              <div class="field">
+                <div class="label">Subject property</div>
+                <input class="input" type="text" id="cma-subject" placeholder="e.g. 123 Oak Street, Oak Park, IL — 4bd/2.5ba, 2,400 sqft">
+              </div>
+              <div class="field">
+                <div class="label">Recommended list price</div>
+                <input class="input" type="text" id="cma-price" placeholder="e.g. $549,000">
+              </div>
+              <div class="field">
+                <div class="label">Comparable sales (paste your comps)</div>
+                <textarea class="input" id="cma-comps" placeholder="Paste your comparable sales here. Example:&#10;&#10;456 Maple Ave — 4bd/2ba, 2,200 sqft — sold $521,000 — 12 days on market&#10;789 Pine Rd — 3bd/2.5ba, 2,100 sqft — sold $498,000 — 8 days on market&#10;321 Elm St — 4bd/3ba, 2,600 sqft — sold $565,000 — 22 days on market&#10;&#10;Include as much or as little detail as you have." style="min-height:140px"></textarea>
+              </div>
+              <div class="field-row">
+                <div><div class="label">Current market conditions</div>
+                  <select class="input" id="cma-market">
+                    <option>Strong seller's market</option>
+                    <option>Moderate seller's market</option>
+                    <option>Balanced market</option>
+                    <option>Buyer's market</option>
+                  </select>
+                </div>
+                <div><div class="label">Avg days on market</div><input class="input" type="text" id="cma-dom" placeholder="e.g. 14 days"></div>
+              </div>
+              <div class="field">
+                <div class="label">Subject property strengths vs comps</div>
+                <textarea class="input" id="cma-strengths" placeholder="e.g. Recently renovated kitchen, corner lot with more land, newer roof and HVAC, better school district..." style="min-height:60px"></textarea>
+              </div>
+              <div class="field">
+                <div class="label">Subject property adjustments (if any)</div>
+                <input class="input" type="text" id="cma-adj" placeholder="e.g. Slightly smaller garage, needs cosmetic updates to master bath">
+              </div>
+            </div>
+            <div class="card-foot"><button class="gen-btn" onclick="genCMA()"><span id="cma-bt">Generate CMA narrative →</span></button></div>
+          </div>
+          <div style="height:100%">
+            <div id="cma-placeholder" class="tool-placeholder"><div class="tool-placeholder-icon">🏷️</div><div class="tool-placeholder-title">CMA narrative</div><div class="tool-placeholder-sub">Fill in your comp data and generate</div></div>
+            <div id="cma-out" style="display:none;height:100%">
+              <div class="output-card" style="height:100%;display:flex;flex-direction:column">
+                <div class="output-hdr">
+                  <div class="output-lbl"><div class="live-dot"></div><span id="cma-lbl">CMA narrative</span></div>
+                  <button class="copy-btn" onclick="cp('cma-result')">Copy</button>
+                </div>
+                <div class="stabs">
+                  <div class="stab active" onclick="showCmaTab('narrative',this)">📝 Full narrative</div>
+                  <div class="stab" onclick="showCmaTab('summary',this)">⚡ Short summary</div>
+                  <div class="stab" onclick="showCmaTab('email',this)">📧 Email to seller</div>
+                </div>
+                <div class="output-body empty" id="cma-result" style="flex:1"></div>
               </div>
             </div>
           </div>
@@ -1326,7 +1452,121 @@ function showBoth(){
   else{r.textContent=`ENGLISH\n\n${trEnglish}\n\nSPANISH\n\n${trSpanish}`;document.getElementById('tr-both-btn').textContent='Show Spanish only';trBothMode=true;}
 }
 
-function cp(id){navigator.clipboard.writeText(document.getElementById(id).textContent).then(()=>showToast('Copied!'));}
+// MARKET REPORT
+const mrContent={narrative:'',social:'',email:''};
+async function genMarketReport(){
+  const area=document.getElementById('mr-area').value||'the area';
+  const price=document.getElementById('mr-price').value;
+  const change=document.getElementById('mr-change').value;
+  const dom=document.getElementById('mr-dom').value;
+  const inv=document.getElementById('mr-inv').value;
+  const sold=document.getElementById('mr-sold').value;
+  const ratio=document.getElementById('mr-ratio').value;
+  const notes=document.getElementById('mr-notes').value;
+  const purpose=document.getElementById('mr-purpose').value;
+  const btn=document.getElementById('mr-bt');btn.textContent='Generating...';
+  document.getElementById('mr-placeholder').style.display='none';
+  document.getElementById('mr-out').style.display='block';
+  const r=document.getElementById('mr-result');r.textContent='Writing your market report...';r.className='output-body empty';
+  try{
+    const text=await callAPI([{role:'user',content:`You are a senior real estate market analyst writing for Listrolab. Write a professional market report. Zero dashes. Write like a confident human expert, not AI.
+
+Area: ${area}
+Purpose: ${purpose}
+${price?`Median sale price: ${price}`:''}
+${change?`Year over year price change: ${change}`:''}
+${dom?`Average days on market: ${dom}`:''}
+${inv?`Months of inventory: ${inv}`:''}
+${sold?`Homes sold last 30 days: ${sold}`:''}
+${ratio?`List to sale price ratio: ${ratio}`:''}
+${notes?`Notable trends: ${notes}`:''}
+
+Write THREE versions. Return EXACTLY this format:
+
+[NARRATIVE]
+A professional 3-4 paragraph market narrative for ${purpose}. Open with the single most important headline stat framed as what it means for the client. Second paragraph covers price trends and what is driving them. Third paragraph covers demand signals like days on market, list to sale ratio, inventory. Final paragraph gives a clear actionable takeaway for the client. Confident, expert tone. No bullet points. No dashes.
+
+[SOCIAL]
+A 3-4 sentence social media post sharing the market update. Feels like an agent sharing genuinely useful insights, not a press release. Ends with 3 relevant hashtags. No dashes.
+
+[EMAIL]
+Subject: [compelling subject line about the market update]
+
+[4-5 sentence email to clients sharing the market update. Personal, direct, positions the agent as the local expert. Ends with an invitation to chat about what this means for their specific situation. No dashes.]`}],1000);
+
+    mrContent.narrative=text.match(/\[NARRATIVE\]([\s\S]*?)(?=\[SOCIAL\]|$)/)?.[1]?.trim()||'';
+    mrContent.social=text.match(/\[SOCIAL\]([\s\S]*?)(?=\[EMAIL\]|$)/)?.[1]?.trim()||'';
+    mrContent.email=text.match(/\[EMAIL\]([\s\S]*?)$/)?.[1]?.trim()||'';
+    showMrTab('narrative',document.querySelector('#mr-out .stab'));
+    showToast('Market report ready in 3 formats!');
+  }catch(e){r.textContent='Error generating — try again.';}
+  btn.textContent='Generate market report →';
+}
+function showMrTab(type,el){
+  document.querySelectorAll('#mr-out .stab').forEach(t=>t.classList.remove('active'));
+  if(el)el.classList.add('active');
+  const labels={narrative:'Market narrative',social:'Social post',email:'Email to clients'};
+  document.getElementById('mr-lbl').textContent=labels[type]||'';
+  const r=document.getElementById('mr-result');
+  r.textContent=mrContent[type]||'Generate first.';
+  r.className=mrContent[type]?'output-body':'output-body empty';
+}
+
+// CMA NARRATIVE
+const cmaContent={narrative:'',summary:'',email:''};
+async function genCMA(){
+  const subject=document.getElementById('cma-subject').value||'the subject property';
+  const price=document.getElementById('cma-price').value;
+  const comps=document.getElementById('cma-comps').value;
+  const market=document.getElementById('cma-market').value;
+  const dom=document.getElementById('cma-dom').value;
+  const strengths=document.getElementById('cma-strengths').value;
+  const adj=document.getElementById('cma-adj').value;
+  const btn=document.getElementById('cma-bt');btn.textContent='Generating...';
+  document.getElementById('cma-placeholder').style.display='none';
+  document.getElementById('cma-out').style.display='block';
+  const r=document.getElementById('cma-result');r.textContent='Writing your CMA narrative...';r.className='output-body empty';
+  try{
+    const text=await callAPI([{role:'user',content:`You are an experienced real estate agent writing a CMA narrative for a seller. Your job is to take raw comparable sales data and turn it into a clear, professional narrative the seller will actually understand and trust. Zero dashes. Write like a confident human expert.
+
+Subject property: ${subject}
+${price?`Recommended list price: ${price}`:''}
+Market conditions: ${market}
+${dom?`Average days on market: ${dom}`:''}
+${comps?`Comparable sales:\n${comps}`:''}
+${strengths?`Subject property strengths vs comps: ${strengths}`:''}
+${adj?`Adjustments: ${adj}`:''}
+
+Write THREE versions. Return EXACTLY this format:
+
+[NARRATIVE]
+A full CMA narrative for the seller presentation. 4-5 paragraphs. Open by establishing the current market context in 1-2 sentences. Then walk through the comparable sales and what they tell us about value. Explain how the subject property compares to the comps and why. State the recommended price with confidence and the rationale behind it. Close with what the seller should expect in terms of timeline and process given current conditions. Professional, clear, zero jargon. No bullets. No dashes.
+
+[SUMMARY]
+A tight 2-paragraph executive summary version. First paragraph: what the comps show and the recommended price. Second paragraph: what to expect in the current market. Under 120 words. For agents who want to lead with the summary before diving into detail.
+
+[EMAIL]
+Subject: [subject line — your home's market analysis is ready]
+
+[Email version of the CMA narrative to send to the seller before the listing presentation. 4-5 sentences. Warm, professional, builds anticipation for the meeting. Positions the agent as thoroughly prepared. No dashes.]`}],1100);
+
+    cmaContent.narrative=text.match(/\[NARRATIVE\]([\s\S]*?)(?=\[SUMMARY\]|$)/)?.[1]?.trim()||'';
+    cmaContent.summary=text.match(/\[SUMMARY\]([\s\S]*?)(?=\[EMAIL\]|$)/)?.[1]?.trim()||'';
+    cmaContent.email=text.match(/\[EMAIL\]([\s\S]*?)$/)?.[1]?.trim()||'';
+    showCmaTab('narrative',document.querySelector('#cma-out .stab'));
+    showToast('CMA narrative ready in 3 formats!');
+  }catch(e){r.textContent='Error generating — try again.';}
+  btn.textContent='Generate CMA narrative →';
+}
+function showCmaTab(type,el){
+  document.querySelectorAll('#cma-out .stab').forEach(t=>t.classList.remove('active'));
+  if(el)el.classList.add('active');
+  const labels={narrative:'Full CMA narrative',summary:'Executive summary',email:'Email to seller'};
+  document.getElementById('cma-lbl').textContent=labels[type]||'';
+  const r=document.getElementById('cma-result');
+  r.textContent=cmaContent[type]||'Generate first.';
+  r.className=cmaContent[type]?'output-body':'output-body empty';
+}
 function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2500);}
 function saveH(item){S.hist.unshift(item);if(S.hist.length>50)S.hist.pop();try{localStorage.setItem('ll_h',JSON.stringify(S.hist));}catch(e){}}
 function renderHist(){
