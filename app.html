@@ -1082,8 +1082,8 @@ async function submitEmail(email,plan){
   try{
     // Save locally
     localStorage.setItem('ll_email',email);
-    // Submit to Formspree — replace YOUR_FORM_ID with your actual Formspree form ID
-    await fetch('https://formspree.io/f/YOUR_FORM_ID',{
+    // Submit to Formspree — replace meeplyge with your actual Formspree form ID
+    await fetch('https://formspree.io/f/meeplyge',{
       method:'POST',
       headers:{'Content-Type':'application/json','Accept':'application/json'},
       body:JSON.stringify({email,plan,name:OB.name||'',date:new Date().toISOString()})
