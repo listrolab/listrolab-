@@ -1246,7 +1246,23 @@ ${prc?`Price: ${prc}`:''}
 ${feat?`Standout features: ${feat}`:''}
 Writing for: ${buy}
 ${getToneInstructions(S.tone)}
-${hasP?`IMPORTANT: You have ${S.pd.length} actual property photo(s). Look carefully. Mention at least 3-4 specific things you can literally see — exact cabinet style, countertop material, flooring type, fixtures. Never say "modern finishes" — name the specific thing.`:''}
+${hasP?`PHOTO ANALYSIS REQUIRED — THIS IS YOUR PRIMARY JOB:
+You have ${photosToUse.length} property photo(s) attached. Before writing a single word of the listing, study every photo carefully.
+
+Your listing MUST include specific details from the photos. For each photo, identify:
+- FLOORING: exact material, color, pattern (white oak wide plank, herringbone tile, polished concrete, etc.)
+- CABINETRY: exact style, color, hardware (white shaker, navy blue flat front, natural wood, brass pulls, etc.)
+- COUNTERTOPS: exact material and edge (waterfall quartz, Carrara marble, butcher block, etc.)
+- FIXTURES: lighting style, faucet finish (brushed nickel, matte black, vintage brass, etc.)
+- CEILINGS: height, details (vaulted, coffered, exposed beams, recessed lighting, etc.)
+- WINDOWS: size, style, light quality (floor to ceiling, bay window, transoms, how light moves through the space)
+- OUTDOOR SPACES: condition, features, privacy, landscaping
+- ANY DISTINCTIVE ARCHITECTURAL DETAILS you can see
+
+FORBIDDEN: "modern finishes", "updated kitchen", "hardwood floors", "open concept", "natural light" — these are meaningless. Every detail must be something you can visually confirm in the photos.
+
+If a detail appears in multiple photos, mention it once with confidence. If you can see it, name it specifically.`
+:''}
 Write 3 tight paragraphs:
 1. Put buyer inside the feeling of living there. NEVER start: Welcome to / Nestled / This stunning / This beautiful / Discover.
 2. Name 3-4 hyper-specific details. ${hasP?'Must come from photos.':'Be visual and specific.'}
@@ -1260,10 +1276,11 @@ CRITICAL WRITING RULES — these are non-negotiable:
   try{
     let messages;
     if(hasP){
-      const photosToSend=photosToUse.slice(0,5);
+      // Send up to 8 photos for maximum accuracy
+      const photosToSend=photosToUse.slice(0,8);
       const imgs=photosToSend.map(d=>({type:'image',source:{type:'base64',media_type:'image/jpeg',data:d.split(',')[1]}}));
       messages=[{role:'user',content:[...imgs,{type:'text',text:prompt}]}];
-      console.log(`Sending ${photosToSend.length} photos to API`);
+      console.log(`Sending ${photosToSend.length} of ${photosToUse.length} photos to API`);
     }
     else{messages=[{role:'user',content:prompt}];}
     const text=await callAPI(messages,500);
@@ -1282,7 +1299,17 @@ CRITICAL WRITING RULES — these are non-negotiable:
 }
 
 async function spotted(){
-  try{const text=await callAPI([{role:'user',content:[{type:'image',source:{type:'base64',media_type:'image/jpeg',data:S.pd[0].split(',')[1]}},{type:'text',text:'List 6-8 specific visual details in this property photo. Precise materials, colors, finishes. Return ONLY a comma-separated list.'}]}],120);const tags=text.split(',').map(t=>t.trim()).filter(Boolean).slice(0,8);if(tags.length){const el=document.getElementById('pit');el.innerHTML='';tags.forEach(t=>{const s=document.createElement('span');s.className='pi-tag';s.textContent=t;el.appendChild(s);});document.getElementById('pis').style.display='block';}}catch(e){}
+  try{
+    const photosForSpotted=S.pd.slice(0,4);
+    const imgs=photosForSpotted.map(d=>({type:'image',source:{type:'base64',media_type:'image/jpeg',data:d.split(',')[1]}}));
+    const text=await callAPI([{role:'user',content:[...imgs,{type:'text',text:'Look at these property photos carefully. List every specific visual detail you can identify with certainty. Be precise: exact materials, exact colors, exact styles, exact finishes. Examples of good answers: "white shaker cabinets", "waterfall quartz island", "wide-plank white oak floors", "matte black fixtures", "coffered ceiling", "herringbone backsplash tile". Bad answers: "modern kitchen", "nice flooring", "updated bathroom". Return ONLY a comma-separated list of specific details, nothing else.'}]}],150);
+    const tags=text.split(',').map(t=>t.trim()).filter(Boolean).slice(0,10);
+    if(tags.length){
+      const el=document.getElementById('pit');el.innerHTML='';
+      tags.forEach(t=>{const s=document.createElement('span');s.className='pi-tag';s.textContent=t;el.appendChild(s);});
+      document.getElementById('pis').style.display='block';
+    }
+  }catch(e){}
 }
 
 // MLS
@@ -1347,8 +1374,8 @@ Property: ${p.address||'a great location'}
 ${p.bb||'3 bed / 2 bath'}${p.price?' · '+p.price:''}
 ${p.feat?'Standout features: '+p.feat:''}
 Tone: ${p.tone||S.tone}
-${hasPhotos?`IMPORTANT: Analyze the ${p.photoData.length} photo(s). Name EXACT specific details you can literally see — cabinet style, countertop material, flooring type, fixtures. Never say "modern finishes" — name the specific thing.`:''}
-3 tight paragraphs. Hook that puts buyer inside the feeling. Specific details. Urgency close tied to this location. Under 160 words. Return ONLY the listing text.`;
+${hasPhotos?`PHOTO ANALYSIS REQUIRED: You have ${p.photoData.length} photo(s). Study them carefully. Name exact specific details you can see: cabinet color and style, countertop material, flooring type and color, fixture finishes, ceiling details, window placement. Never use vague terms like "modern finishes" or "updated kitchen". Every visual detail you mention must be confirmed in the photos.`:''}
+3 tight paragraphs. Hook that puts buyer inside the feeling. Specific photo-based details in paragraph 2. Urgency close tied to this location. Under 160 words. Return ONLY the listing text.`;
       let messages;
       if(hasPhotos){
         const imgs=p.photoData.slice(0,3).map(d=>({type:'image',source:{type:'base64',media_type:'image/jpeg',data:d.split(',')[1]}}));
@@ -1398,10 +1425,14 @@ function handleStagPhoto(e){
   r.onload=e=>{
     const img=new Image();
     img.onload=()=>{
-      const c=document.createElement('canvas');const M=800;let w=img.width,h=img.height;
+      const c=document.createElement('canvas');
+      // Higher resolution for staging — needs more detail
+      const M=1200;
+      let w=img.width,h=img.height;
       if(w>M||h>M){if(w>h){h=Math.round(h*M/w);w=M;}else{w=Math.round(w*M/h);h=M;}}
       c.width=w;c.height=h;c.getContext('2d').drawImage(img,0,0,w,h);
-      stagPhotoData=c.toDataURL('image/jpeg',0.65);
+      // Higher quality for staging accuracy
+      stagPhotoData=c.toDataURL('image/jpeg',0.8);
       document.getElementById('stag-img').src=stagPhotoData;
       document.getElementById('stag-preview').style.display='block';
       document.getElementById('stag-ua').style.display='none';
@@ -1419,14 +1450,31 @@ async function genStaging(){
   document.getElementById('stag-placeholder').style.display='none';
   document.getElementById('stag-out').style.display='block';
   const r=document.getElementById('stag-result');r.textContent='Writing staging description...';r.className='output-body empty';
-  const prompt=`You are a professional interior designer and real estate copywriter. Write a vivid virtual staging description for a ${room.toLowerCase()}.
-Style: ${style}
+  const prompt=`You are a professional interior designer and real estate copywriter working with an actual photo of an empty room.
+Room type: ${room.toLowerCase()}
+Design style: ${style}
 Target buyer: ${buyer}
-${stagPhotoData?'IMPORTANT: Analyze the room photo carefully. Note the actual dimensions, natural light, architectural features, windows, flooring, ceiling height, and any existing permanent fixtures. Build the staging description around these specific real characteristics — the staging should feel believable for this actual space.':''}
-Write 2 paragraphs:
-1. Describe the staged room in specific detail — name exact furniture pieces, materials, colors, textures, and how they work together. Make the buyer see themselves in the space. Be specific: not "a sofa" but "a low-profile oatmeal linen sectional." Not "a rug" but "a hand-knotted wool rug in warm ivory and sage."
-2. Describe how the room feels and lives — morning light, evening ambiance, the lifestyle this room enables.
-No dashes anywhere. Under 120 words. Return ONLY the staging description.`;
+
+${stagPhotoData?`PHOTO ANALYSIS — DO THIS FIRST:
+Study the room photo carefully before writing anything. You must identify and work with:
+1. ROOM DIMENSIONS: How large does this room appear? Is it spacious, cozy, narrow, wide?
+2. NATURAL LIGHT: Where do the windows face? How much light comes in? What time of day does it feel best?
+3. FLOORING: What exact flooring is there right now? Color, material, condition?
+4. CEILING: Height, any beams, recessed lights, crown molding?
+5. WALLS: Color, texture, any architectural details like wainscoting or built-ins?
+6. EXISTING PERMANENT FIXTURES: Fireplace, built-in shelving, radiators, HVAC vents, door/window placement?
+7. ARCHITECTURAL CHARACTER: Is this a modern space, a period home, a loft? What style is the architecture?
+
+Your staging description MUST be built around these real characteristics. A staging suggestion that would look wrong or impossible in this actual room is a failure. For example: do not suggest floating shelves on windows, do not suggest a large sectional in a small room, do not suggest dark furniture in a dark room with limited light.`:
+'Imagine a typical empty room of this type.'}
+
+Now write the staging description in 2 paragraphs:
+
+Paragraph 1: Describe the staged room in vivid specific detail. Name exact furniture pieces (not "a sofa" but "a low-profile oatmeal linen sectional"), exact materials ("hand-knotted wool rug in warm ivory"), exact colors and textures. Every piece should feel specifically chosen for THIS room based on its actual characteristics.
+
+Paragraph 2: Describe how the room feels and lives once staged. Morning light, evening ambiance, the specific lifestyle this room enables for ${buyer}.
+
+Zero dashes of any kind. No ellipsis. Write like a thoughtful human. Under 130 words. Return ONLY the staging description.`;
   try{
     let messages;
     if(stagPhotoData){messages=[{role:'user',content:[{type:'image',source:{type:'base64',media_type:'image/jpeg',data:stagPhotoData.split(',')[1]}},{type:'text',text:prompt}]}];}
