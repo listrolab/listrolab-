@@ -111,7 +111,7 @@ textarea.input{resize:vertical;min-height:80px;line-height:1.55}
 .photo-drop-title{font-size:13px;font-weight:500;margin-bottom:2px}
 .photo-drop-sub{font-size:11px;color:var(--mid)}
 .photo-previews{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
-.photo-thumb{position:relative;width:72px;height:72px;border-radius:8px;overflow:hidden;border:1px solid var(--border2);flex-shrink:0}
+.photo-thumb{position:relative;width:64px;height:64px;border-radius:8px;overflow:hidden;border:1px solid var(--border2);flex-shrink:0}
 .photo-thumb img{width:100%;height:100%;object-fit:cover}
 .photo-rm{position:absolute;top:3px;right:3px;width:18px;height:18px;border-radius:50%;background:rgba(15,15,19,.88);border:none;cursor:pointer;color:var(--white);font-size:10px;display:flex;align-items:center;justify-content:center;z-index:2}
 .photo-add{width:72px;height:72px;border-radius:8px;border:1.5px dashed var(--border);display:flex;align-items:center;justify-content:center;font-size:20px;color:var(--mid);cursor:pointer;position:relative;background:var(--bg2);flex-shrink:0}
@@ -201,6 +201,12 @@ textarea.input{resize:vertical;min-height:80px;line-height:1.55}
 .auth-feat-text{font-size:12px;color:rgba(244,243,241,.7);line-height:1.5}
 .auth-feat-text b{color:var(--white);font-weight:500;display:block;margin-bottom:1px}
 .auth-body{padding:28px 36px}
+.ob-choice{display:flex;align-items:center;gap:14px;padding:14px 16px;background:var(--bg3);border:1px solid var(--border);border-radius:10px;cursor:pointer;transition:all .15s}
+.ob-choice:hover{border-color:var(--gold);background:var(--gold3)}
+.ob-choice.selected{border-color:var(--gold);background:var(--gold3)}
+.swipe-card{position:absolute;inset:0;background:var(--bg3);border:1px solid var(--border);border-radius:14px;padding:24px;display:flex;align-items:center;justify-content:center;text-align:center;font-size:16px;font-weight:500;line-height:1.5;color:var(--white);transition:transform .3s,opacity .3s;cursor:pointer}
+.swipe-card.behind{transform:scale(0.95);opacity:.5;z-index:1}
+.swipe-card.front{z-index:2}
 .pw-plans{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:18px}
 .pw-plan{background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:var(--rad);padding:16px;cursor:pointer;transition:all .2s;position:relative}
 .pw-plan.sel{border-color:var(--gold);background:var(--gold3)}
@@ -233,21 +239,63 @@ textarea.input{resize:vertical;min-height:80px;line-height:1.55}
 <!-- ONBOARDING -->
 <div class="screen active" id="screen-ob">
   <div class="auth-wrap">
-    <div class="auth-card">
-      <div class="auth-hero">
+    <div class="auth-card" style="max-width:480px">
+      <div class="auth-hero" style="padding:36px 36px 28px">
         <div class="auth-logo">Listro<span>lab</span></div>
         <div class="auth-tag">Listing copy. Refined.</div>
         <div class="auth-feats">
-          <div class="auth-feat"><div class="auth-feat-icon">📸</div><div class="auth-feat-text"><b>Upload property photos</b>Reads your photos and writes specific copy from what it actually sees.</div></div>
-          <div class="auth-feat"><div class="auth-feat-icon">⚡</div><div class="auth-feat-text"><b>Batch mode — 5 listings at once</b>A week of writing done in under 2 minutes.</div></div>
-          <div class="auth-feat"><div class="auth-feat-icon">🛠️</div><div class="auth-feat-text"><b>Full agent toolkit</b>Just sold, open house, price reduction, seller updates and more.</div></div>
+          <div class="auth-feat"><div class="auth-feat-icon">📸</div><div class="auth-feat-text"><b>Upload photos — Listrolab writes from what it sees</b>Specific finishes, exact materials, real details. Not a template.</div></div>
+          <div class="auth-feat"><div class="auth-feat-icon">🛠️</div><div class="auth-feat-text"><b>Full agent toolkit included</b>Just sold, open house, price reduction, seller update, fair housing check, Spanish translation and more.</div></div>
+          <div class="auth-feat"><div class="auth-feat-icon">⚡</div><div class="auth-feat-text"><b>Batch mode — 5 listings at once</b>A full week of writing in under 2 minutes.</div></div>
         </div>
       </div>
       <div class="auth-body">
         <div class="field"><div class="label">Your name</div><input class="input" type="text" id="ob-name" placeholder="e.g. Sarah Mitchell" autocomplete="name"></div>
         <div class="field"><div class="label">Brokerage (optional)</div><input class="input" type="text" id="ob-brokerage" placeholder="e.g. Keller Williams" autocomplete="organization"></div>
-        <button class="btn btn-gold btn-full" onclick="goPaywall()" style="margin-top:4px">Start free 7-day trial →</button>
+        <button class="btn btn-gold btn-full" onclick="obStep1()" style="margin-top:8px">See it in action →</button>
         <div style="font-size:11px;color:var(--mid);text-align:center;margin-top:10px">No credit card required · Cancel anytime</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- LIVE DEMO -->
+<div class="screen" id="screen-ob4">
+  <div class="auth-wrap">
+    <div class="auth-card" style="max-width:520px">
+      <div class="auth-hero" style="padding:28px 36px 20px">
+        <div style="font-family:'Cormorant Garamond',serif;font-size:24px;font-weight:600;margin-bottom:6px;line-height:1.3;position:relative">Watch it work — live.</div>
+        <div style="font-size:13px;color:var(--mid);line-height:1.6;position:relative">We pre-filled a sample property. Hit generate and see exactly what Listrolab writes.</div>
+      </div>
+      <div class="auth-body">
+        <div style="background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:14px;margin-bottom:14px">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px">
+            <div><div style="font-size:9px;color:var(--mid);text-transform:uppercase;letter-spacing:.5px;margin-bottom:3px">Property</div><div style="font-size:12px;color:var(--white)">Single family home</div></div>
+            <div><div style="font-size:9px;color:var(--mid);text-transform:uppercase;letter-spacing:.5px;margin-bottom:3px">Location</div><div style="font-size:12px;color:var(--white)">Oak Park, Chicago</div></div>
+            <div><div style="font-size:9px;color:var(--mid);text-transform:uppercase;letter-spacing:.5px;margin-bottom:3px">Beds / Baths</div><div style="font-size:12px;color:var(--white)">4 bed / 2.5 bath</div></div>
+            <div><div style="font-size:9px;color:var(--mid);text-transform:uppercase;letter-spacing:.5px;margin-bottom:3px">Price</div><div style="font-size:12px;color:var(--white)">$549,000</div></div>
+          </div>
+          <div><div style="font-size:9px;color:var(--mid);text-transform:uppercase;letter-spacing:.5px;margin-bottom:3px">Features</div><div style="font-size:12px;color:var(--white);line-height:1.5">White shaker cabinets, waterfall quartz island, wide-plank white oak floors, Lincoln Elementary 4 blocks away</div></div>
+        </div>
+
+        <button class="btn btn-gold btn-full" id="demo-btn" onclick="runDemo()" style="margin-bottom:14px">
+          <span id="demo-btn-text">Generate sample listing →</span>
+        </button>
+
+        <div id="demo-output" style="display:none">
+          <div style="background:var(--bg2);border:1px solid var(--green);border-radius:10px;padding:16px;margin-bottom:14px">
+            <div style="font-size:10px;color:var(--green);text-transform:uppercase;letter-spacing:.5px;font-weight:500;margin-bottom:10px;display:flex;align-items:center;gap:6px"><div style="width:6px;height:6px;border-radius:50%;background:var(--green)"></div>Generated in seconds</div>
+            <div style="font-size:13px;line-height:1.9;color:rgba(244,243,241,.88)" id="demo-text"></div>
+          </div>
+          <div style="background:var(--gold3);border:1px solid var(--border2);border-radius:8px;padding:12px 14px;margin-bottom:16px">
+            <div style="font-size:12px;color:var(--gold2);line-height:1.6">This is what every one of your listings could look like. Ready in 30 seconds, specific to the actual property.</div>
+          </div>
+          <button class="btn btn-gold btn-full" onclick="goPaywall()">Get started — see plans →</button>
+        </div>
+
+        <div id="demo-skip" style="text-align:center;margin-top:10px">
+          <button onclick="goPaywall()" style="font-size:12px;color:var(--mid);background:none;border:none;cursor:pointer">Skip and see plans →</button>
+        </div>
       </div>
     </div>
   </div>
@@ -256,25 +304,80 @@ textarea.input{resize:vertical;min-height:80px;line-height:1.55}
 <!-- PAYWALL -->
 <div class="screen" id="screen-pw">
   <div class="auth-wrap">
-    <div class="auth-card">
+    <div class="auth-card" style="max-width:520px">
       <div class="auth-hero" style="padding:28px 36px 24px">
         <div style="font-size:10px;color:var(--gold);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:8px;position:relative">✦ Founder Pricing — 31 spots left</div>
-        <div class="auth-logo" style="font-size:26px;margin-bottom:6px">Lock in your rate before prices go up.</div>
-        <div style="font-size:12px;color:var(--mid);line-height:1.6;position:relative">First 50 agents get founding member pricing — locked forever after your trial.</div>
+        <div style="font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:600;margin-bottom:6px;position:relative;line-height:1.2">Everything an agent needs to write.<br>In one place.</div>
+        <div style="font-size:12px;color:var(--mid);line-height:1.6;position:relative">Listings, social posts, open house promos, seller updates, fair housing checks, Spanish translation and more. First 50 agents lock in founding pricing forever.</div>
       </div>
       <div class="auth-body">
-        <div class="pw-plans">
-          <div class="pw-plan" id="pm" onclick="selPlan('monthly')"><div class="pw-pn">Monthly</div><div class="pw-pp">$49</div><div class="pw-ps">per month · no commitment</div></div>
-          <div class="pw-plan sel" id="pa" onclick="selPlan('annual')"><div class="pw-pb">BEST VALUE</div><div class="pw-pn">Annual Pro</div><div class="pw-pp">$29</div><div class="pw-ps">per month · billed $348/yr</div></div>
+
+        <!-- FREE VS PRO TOGGLE -->
+        <div style="display:flex;background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:3px;margin-bottom:20px;gap:3px">
+          <button id="pw-tab-free" onclick="pwTab('free')" style="flex:1;padding:8px;border-radius:8px;border:none;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;cursor:pointer;transition:all .2s;background:transparent;color:var(--mid)">Free trial</button>
+          <button id="pw-tab-pro" onclick="pwTab('pro')" style="flex:1;padding:8px;border-radius:8px;border:none;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;cursor:pointer;transition:all .2s;background:var(--gold);color:#0f0f13">Pro plan</button>
         </div>
-        <div style="margin-bottom:18px">
-          <div class="pw-feat"><div class="pw-chk">✓</div>Unlimited listing generation + photo writing</div>
-          <div class="pw-feat"><div class="pw-chk">✓</div>Full agent toolkit — just sold, open house, bio and more</div>
-          <div class="pw-feat"><div class="pw-chk" style="color:var(--gold)">✓</div><span>Batch mode — 5 listings at once <span class="pb">PRO</span></span></div>
-          <div class="pw-feat"><div class="pw-chk" style="color:var(--gold)">✓</div><span>Buyer framing — 3 versions per listing <span class="pb">PRO</span></span></div>
+
+        <!-- FREE PANEL -->
+        <div id="pw-panel-free" style="display:none">
+          <div style="background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:16px 18px;margin-bottom:16px">
+            <div style="font-size:13px;font-weight:500;margin-bottom:4px">Free trial — 7 days</div>
+            <div style="font-size:12px;color:var(--mid);margin-bottom:14px">Limited access to see what Listrolab can do. No card required.</div>
+            <div style="display:flex;flex-direction:column;gap:8px">
+              <div style="font-size:12px;color:rgba(244,243,241,.7);display:flex;align-items:center;gap:8px"><span style="color:var(--green)">✓</span>5 listing generations total</div>
+              <div style="font-size:12px;color:rgba(244,243,241,.7);display:flex;align-items:center;gap:8px"><span style="color:var(--green)">✓</span>Up to 3 photos per listing</div>
+              <div style="font-size:12px;color:rgba(244,243,241,.7);display:flex;align-items:center;gap:8px"><span style="color:var(--green)">✓</span>Warm tone only</div>
+              <div style="font-size:12px;color:rgba(244,243,241,.7);display:flex;align-items:center;gap:8px"><span style="color:var(--green)">✓</span>Basic listing history</div>
+              <div style="height:1px;background:var(--border);margin:4px 0"></div>
+              <div style="font-size:12px;color:var(--mid);display:flex;align-items:center;gap:8px"><span style="opacity:.4">✕</span><span style="text-decoration:line-through;opacity:.4">All 4 tones</span></div>
+              <div style="font-size:12px;color:var(--mid);display:flex;align-items:center;gap:8px"><span style="opacity:.4">✕</span><span style="text-decoration:line-through;opacity:.4">Up to 10 photos</span></div>
+              <div style="font-size:12px;color:var(--mid);display:flex;align-items:center;gap:8px"><span style="opacity:.4">✕</span><span style="text-decoration:line-through;opacity:.4">Just sold, open house, price reduction</span></div>
+              <div style="font-size:12px;color:var(--mid);display:flex;align-items:center;gap:8px"><span style="opacity:.4">✕</span><span style="text-decoration:line-through;opacity:.4">Seller updates, agent bio</span></div>
+              <div style="font-size:12px;color:var(--mid);display:flex;align-items:center;gap:8px"><span style="opacity:.4">✕</span><span style="text-decoration:line-through;opacity:.4">Virtual staging descriptions</span></div>
+              <div style="font-size:12px;color:var(--mid);display:flex;align-items:center;gap:8px"><span style="opacity:.4">✕</span><span style="text-decoration:line-through;opacity:.4">Fair housing compliance check</span></div>
+              <div style="font-size:12px;color:var(--mid);display:flex;align-items:center;gap:8px"><span style="opacity:.4">✕</span><span style="text-decoration:line-through;opacity:.4">Spanish translation</span></div>
+              <div style="font-size:12px;color:var(--mid);display:flex;align-items:center;gap:8px"><span style="opacity:.4">✕</span><span style="text-decoration:line-through;opacity:.4">Batch mode — 5 listings at once</span></div>
+              <div style="font-size:12px;color:var(--mid);display:flex;align-items:center;gap:8px"><span style="opacity:.4">✕</span><span style="text-decoration:line-through;opacity:.4">Buyer framing — 3 versions</span></div>
+              <div style="font-size:12px;color:var(--mid);display:flex;align-items:center;gap:8px"><span style="opacity:.4">✕</span><span style="text-decoration:line-through;opacity:.4">Social captions + buyer email</span></div>
+            </div>
+          </div>
+          <div style="background:var(--gold3);border:1px solid var(--border2);border-radius:8px;padding:11px 14px;margin-bottom:14px;font-size:12px;color:var(--gold2);line-height:1.5">
+            Most agents hit the 5-generation limit on day one and upgrade immediately.
+          </div>
+          <button class="btn btn-gold btn-full" onclick="startApp()">Start free trial — no card needed</button>
+          <button onclick="pwTab('pro')" style="width:100%;padding:11px;background:transparent;color:var(--gold);font-family:'DM Sans',sans-serif;font-size:12px;border:none;cursor:pointer;margin-top:6px">See what Pro includes →</button>
         </div>
-        <button class="btn btn-gold btn-full" onclick="startApp()">Start free trial — no card needed</button>
-        <button style="width:100%;padding:11px;background:transparent;color:var(--mid);font-family:'DM Sans',sans-serif;font-size:12px;border:none;cursor:pointer;margin-top:6px" onclick="startApp()">Maybe later</button>
+
+        <!-- PRO PANEL -->
+        <div id="pw-panel-pro" style="display:block">
+          <div class="pw-plans">
+            <div class="pw-plan" id="pm" onclick="selPlan('monthly')"><div class="pw-pn">Monthly</div><div class="pw-pp">$49</div><div class="pw-ps">per month · no commitment</div></div>
+            <div class="pw-plan sel" id="pa" onclick="selPlan('annual')"><div class="pw-pb">BEST VALUE — SAVE $252</div><div class="pw-pn">Annual Pro</div><div class="pw-pp">$29</div><div class="pw-ps">per month · billed $348/yr</div></div>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:16px">
+            <div style="font-size:11px;color:rgba(244,243,241,.7);display:flex;align-items:center;gap:7px"><span style="color:var(--green);font-size:12px">✓</span>Unlimited listing generation</div>
+            <div style="font-size:11px;color:rgba(244,243,241,.7);display:flex;align-items:center;gap:7px"><span style="color:var(--green);font-size:12px">✓</span>Up to 10 photos per listing</div>
+            <div style="font-size:11px;color:rgba(244,243,241,.7);display:flex;align-items:center;gap:7px"><span style="color:var(--green);font-size:12px">✓</span>All 4 tones + MLS counter</div>
+            <div style="font-size:11px;color:rgba(244,243,241,.7);display:flex;align-items:center;gap:7px"><span style="color:var(--green);font-size:12px">✓</span>Social captions + buyer email</div>
+            <div style="font-size:11px;color:rgba(244,243,241,.7);display:flex;align-items:center;gap:7px"><span style="color:var(--green);font-size:12px">✓</span>Just sold announcements</div>
+            <div style="font-size:11px;color:rgba(244,243,241,.7);display:flex;align-items:center;gap:7px"><span style="color:var(--green);font-size:12px">✓</span>Open house promo kit</div>
+            <div style="font-size:11px;color:rgba(244,243,241,.7);display:flex;align-items:center;gap:7px"><span style="color:var(--green);font-size:12px">✓</span>Price reduction announcements</div>
+            <div style="font-size:11px;color:rgba(244,243,241,.7);display:flex;align-items:center;gap:7px"><span style="color:var(--green);font-size:12px">✓</span>Seller update emails</div>
+            <div style="font-size:11px;color:rgba(244,243,241,.7);display:flex;align-items:center;gap:7px"><span style="color:var(--green);font-size:12px">✓</span>Agent bio generator</div>
+            <div style="font-size:11px;color:rgba(244,243,241,.7);display:flex;align-items:center;gap:7px"><span style="color:var(--green);font-size:12px">✓</span>Virtual staging descriptions</div>
+            <div style="font-size:11px;color:rgba(244,243,241,.7);display:flex;align-items:center;gap:7px"><span style="color:var(--green);font-size:12px">✓</span>Fair housing compliance check</div>
+            <div style="font-size:11px;color:rgba(244,243,241,.7);display:flex;align-items:center;gap:7px"><span style="color:var(--green);font-size:12px">✓</span>Spanish translation</div>
+            <div style="font-size:11px;color:rgba(244,243,241,.7);display:flex;align-items:center;gap:7px"><span style="color:var(--gold);font-size:12px">✓</span><span>Batch mode — 5 listings at once <span class="pb">PRO</span></span></div>
+            <div style="font-size:11px;color:rgba(244,243,241,.7);display:flex;align-items:center;gap:7px"><span style="color:var(--gold);font-size:12px">✓</span><span>Buyer framing — 3 versions <span class="pb">PRO</span></span></div>
+          </div>
+          <div style="background:var(--gold3);border:1px solid var(--border2);border-radius:8px;padding:11px 14px;margin-bottom:16px;display:flex;align-items:center;gap:10px">
+            <div style="font-size:16px">⏱️</div>
+            <div style="font-size:12px;color:var(--gold2);line-height:1.5">Agents save <strong>5 to 8 hours every week</strong>. At $29/month that's less than 15 minutes of your time.</div>
+          </div>
+          <button class="btn btn-gold btn-full" onclick="startApp()">Start free 7-day trial — no card needed</button>
+          <button onclick="pwTab('free')" style="width:100%;padding:11px;background:transparent;color:var(--mid);font-family:'DM Sans',sans-serif;font-size:12px;border:none;cursor:pointer;margin-top:6px">See free plan instead</button>
+        </div>
+
       </div>
     </div>
   </div>
@@ -302,6 +405,11 @@ textarea.input{resize:vertical;min-height:80px;line-height:1.55}
         <div class="sb-item" id="nav-pricereduction" onclick="showView('pricereduction',this)"><div class="sb-item-icon">📉</div>Price reduction</div>
         <div class="sb-item" id="nav-sellerupdate" onclick="showView('sellerupdate',this)"><div class="sb-item-icon">📊</div>Seller update</div>
         <div class="sb-item" id="nav-bio" onclick="showView('bio',this)"><div class="sb-item-icon">👤</div>Agent bio</div>
+        <div class="sb-item" id="nav-staging" onclick="showView('staging',this)"><div class="sb-item-icon">🛋️</div>Virtual staging copy</div>
+
+        <div class="sb-section">Compliance & Translation</div>
+        <div class="sb-item" id="nav-fairhousing" onclick="showView('fairhousing',this)"><div class="sb-item-icon">⚖️</div>Fair housing check</div>
+        <div class="sb-item" id="nav-translate" onclick="showView('translate',this)"><div class="sb-item-icon">🌎</div>Spanish translation</div>
 
         <div class="sb-section">Account</div>
         <div class="sb-item" id="nav-hist" onclick="showView('hist',this)"><div class="sb-item-icon">📋</div>History</div>
@@ -318,6 +426,7 @@ textarea.input{resize:vertical;min-height:80px;line-height:1.55}
       <div id="view-gen">
         <div class="topbar">
           <div><div class="topbar-title">New listing</div><div class="topbar-sub">Generate MLS-ready copy from property details and photos</div></div>
+          <div id="free-counter" style="font-size:12px;color:var(--mid);display:none"><span id="free-counter-text"></span> · <span style="color:var(--gold);cursor:pointer" onclick="showUpgradeModal('Upgrade to Pro for unlimited generations.')">Upgrade →</span></div>
         </div>
         <div class="content">
           <div class="content-2col">
@@ -331,7 +440,7 @@ textarea.input{resize:vertical;min-height:80px;line-height:1.55}
                     <input type="file" accept="image/jpeg,image/png,image/webp" multiple onchange="hph(event)">
                     <div class="photo-drop-icon">📸</div>
                     <div class="photo-drop-title">Drop photos here or click to upload</div>
-                    <div class="photo-drop-sub">Up to 3 photos · Listrolab writes from what it sees</div>
+                    <div class="photo-drop-sub">Up to 10 photos · Listrolab writes from what it sees</div>
                   </div>
                   <div class="photo-previews" id="pp" style="display:none"></div>
                   <div class="photo-hint" id="ph" style="display:none">📸 Photo writing active — listing will name specific finishes from your photos</div>
@@ -574,6 +683,132 @@ textarea.input{resize:vertical;min-height:80px;line-height:1.55}
         </div></div>
       </div>
 
+      <!-- VIRTUAL STAGING COPY -->
+      <div id="view-staging" style="display:none">
+        <div class="topbar"><div><div class="topbar-title">Virtual staging copy</div><div class="topbar-sub">Upload an empty room — Listrolab writes vivid staged descriptions buyers can picture</div></div></div>
+        <div class="content"><div class="content-2col">
+          <div>
+            <div class="card" style="margin-bottom:16px">
+              <div class="card-body">
+                <div class="section-label">Upload empty room photo</div>
+                <div class="photo-drop" id="stag-ua" style="position:relative">
+                  <input type="file" accept="image/jpeg,image/png,image/webp" id="stagPhoto" onchange="handleStagPhoto(event)" style="position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%">
+                  <div class="photo-drop-icon">🛋️</div>
+                  <div class="photo-drop-title">Upload an empty room photo</div>
+                  <div class="photo-drop-sub">Kitchen, living room, bedroom, backyard</div>
+                </div>
+                <div id="stag-preview" style="display:none;margin-top:10px">
+                  <img id="stag-img" style="width:100%;border-radius:8px;border:1px solid var(--border2)">
+                  <button onclick="clearStagPhoto()" style="font-size:11px;color:var(--mid);background:none;border:none;cursor:pointer;margin-top:6px;padding:0">✕ Remove photo</button>
+                </div>
+              </div>
+            </div>
+            <div class="card">
+              <div class="card-body">
+                <div class="field"><div class="label">Room type</div>
+                  <select class="input" id="stag-room"><option>Living room</option><option>Kitchen</option><option>Primary bedroom</option><option>Dining room</option><option>Home office</option><option>Backyard / outdoor space</option><option>Basement</option></select>
+                </div>
+                <div class="field"><div class="label">Design style</div>
+                  <select class="input" id="stag-style"><option>Modern farmhouse</option><option>Contemporary minimalist</option><option>Warm transitional</option><option>Luxury traditional</option><option>Scandinavian</option><option>Mid-century modern</option><option>Coastal / relaxed</option></select>
+                </div>
+                <div class="field"><div class="label">Target buyer</div>
+                  <select class="input" id="stag-buyer"><option>Young families</option><option>Move-up buyers</option><option>Luxury buyers</option><option>First-time buyers</option><option>Downsizers</option></select>
+                </div>
+              </div>
+              <div class="card-foot"><button class="gen-btn" onclick="genStaging()"><span id="stag-bt">Generate staging description →</span></button></div>
+            </div>
+          </div>
+          <div style="height:100%">
+            <div id="stag-placeholder" class="tool-placeholder"><div class="tool-placeholder-icon">🛋️</div><div class="tool-placeholder-title">Staging description</div><div class="tool-placeholder-sub">Upload a room photo and generate</div></div>
+            <div id="stag-out" style="display:none;height:100%">
+              <div class="output-card" style="height:100%;display:flex;flex-direction:column">
+                <div class="output-hdr"><div class="output-lbl"><div class="live-dot"></div>Virtual staging description</div><button class="copy-btn" onclick="cp('stag-result')">Copy</button></div>
+                <div class="output-body empty" id="stag-result" style="flex:1"></div>
+                <div id="stag-tips" style="display:none;padding:12px 16px;border-top:1px solid var(--border);background:rgba(201,168,76,.05)">
+                  <div style="font-size:10px;color:var(--gold);text-transform:uppercase;letter-spacing:.5px;font-weight:500;margin-bottom:6px">💡 How to use this</div>
+                  <div style="font-size:12px;color:var(--mid);line-height:1.6">Add this paragraph to your MLS description when rooms are empty. Buyers visualize the space. Photos don't have to be perfect.</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div></div>
+      </div>
+
+      <!-- FAIR HOUSING CHECK -->
+      <div id="view-fairhousing" style="display:none">
+        <div class="topbar"><div><div class="topbar-title">Fair housing compliance check</div><div class="topbar-sub">Scan any listing for language that could trigger Fair Housing violations</div></div></div>
+        <div class="content"><div class="content-2col">
+          <div class="card">
+            <div class="card-body">
+              <div style="background:rgba(201,168,76,.08);border:1px solid var(--border2);border-radius:8px;padding:12px 14px;margin-bottom:16px">
+                <div style="font-size:11px;color:var(--gold2);font-weight:500;margin-bottom:4px">⚖️ Why this matters</div>
+                <div style="font-size:12px;color:var(--mid);line-height:1.6">The Fair Housing Act prohibits language that implies preference or restriction based on race, color, religion, sex, national origin, disability, or familial status. Violations can result in fines and license suspension.</div>
+              </div>
+              <div class="field"><div class="label">Paste your listing copy</div><textarea class="input" id="fh-input" placeholder="Paste your listing description here to scan for potential Fair Housing violations..." style="min-height:200px"></textarea></div>
+            </div>
+            <div class="card-foot"><button class="gen-btn" onclick="checkFairHousing()"><span id="fh-bt">Scan for violations →</span></button></div>
+          </div>
+          <div style="height:100%">
+            <div id="fh-placeholder" class="tool-placeholder"><div class="tool-placeholder-icon">⚖️</div><div class="tool-placeholder-title">Compliance results</div><div class="tool-placeholder-sub">Paste a listing and scan</div></div>
+            <div id="fh-out" style="display:none;height:100%">
+              <div class="output-card" style="height:100%;display:flex;flex-direction:column">
+                <div class="output-hdr"><div class="output-lbl"><div class="live-dot"></div>Compliance report</div><button class="copy-btn" onclick="cp('fh-result')">Copy report</button></div>
+                <div id="fh-score-bar" style="padding:16px 18px;border-bottom:1px solid var(--border)">
+                  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+                    <div style="font-size:13px;font-weight:500" id="fh-score-label">Scanning...</div>
+                    <div style="font-size:20px;font-weight:700;font-family:'Cormorant Garamond',serif" id="fh-score-val"></div>
+                  </div>
+                  <div style="height:6px;background:rgba(255,255,255,.06);border-radius:3px;overflow:hidden">
+                    <div id="fh-score-fill" style="height:100%;border-radius:3px;transition:width .5s,background .3s;width:0%"></div>
+                  </div>
+                </div>
+                <div class="output-body empty" id="fh-result" style="flex:1"></div>
+              </div>
+            </div>
+          </div>
+        </div></div>
+      </div>
+
+      <!-- SPANISH TRANSLATION -->
+      <div id="view-translate" style="display:none">
+        <div class="topbar"><div><div class="topbar-title">Spanish translation</div><div class="topbar-sub">Translate any listing into professional Spanish — reach more buyers instantly</div></div></div>
+        <div class="content"><div class="content-2col">
+          <div class="card">
+            <div class="card-body">
+              <div style="background:rgba(201,168,76,.08);border:1px solid var(--border2);border-radius:8px;padding:12px 14px;margin-bottom:16px">
+                <div style="font-size:11px;color:var(--gold2);font-weight:500;margin-bottom:4px">🌎 Why this matters</div>
+                <div style="font-size:12px;color:var(--mid);line-height:1.6">Over 40 million Spanish speakers in the US. Listing in Spanish reaches buyers other agents ignore. Takes 10 seconds with Listrolab.</div>
+              </div>
+              <div class="field"><div class="label">Listing to translate</div><textarea class="input" id="tr-input" placeholder="Paste your English listing here or generate one first then come back to translate it..." style="min-height:160px"></textarea></div>
+              <div class="field"><div class="label">Translation style</div>
+                <select class="input" id="tr-style">
+                  <option>Professional MLS Spanish</option>
+                  <option>Warm and conversational</option>
+                  <option>Luxury elevated</option>
+                </select>
+              </div>
+              <div style="margin-top:0">
+                <button onclick="useLastListing()" style="font-size:12px;color:var(--gold);background:none;border:none;cursor:pointer;padding:0">← Use my last generated listing</button>
+              </div>
+            </div>
+            <div class="card-foot"><button class="gen-btn" onclick="genTranslation()"><span id="tr-bt">Translate to Spanish →</span></button></div>
+          </div>
+          <div style="height:100%">
+            <div id="tr-placeholder" class="tool-placeholder"><div class="tool-placeholder-icon">🌎</div><div class="tool-placeholder-title">Spanish translation</div><div class="tool-placeholder-sub">Paste a listing and translate</div></div>
+            <div id="tr-out" style="display:none;height:100%">
+              <div class="output-card" style="height:100%;display:flex;flex-direction:column">
+                <div class="output-hdr"><div class="output-lbl"><div class="live-dot"></div>Translated listing (Spanish)</div><button class="copy-btn" onclick="cp('tr-result')">Copy</button></div>
+                <div class="output-body empty" id="tr-result" style="flex:1"></div>
+                <div style="padding:10px 16px;border-top:1px solid var(--border);background:var(--bg3);display:flex;gap:8px">
+                  <button class="copy-btn" onclick="cp('tr-result')">Copy Spanish</button>
+                  <button class="copy-btn" onclick="showBoth()" id="tr-both-btn">Show both languages</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div></div>
+      </div>
+
       <!-- HISTORY VIEW -->
       <div id="view-hist" style="display:none">
         <div class="topbar"><div><div class="topbar-title">History</div><div class="topbar-sub">All your generated listings saved automatically</div></div></div>
@@ -587,9 +822,47 @@ textarea.input{resize:vertical;min-height:80px;line-height:1.55}
 <div class="toast" id="toast"></div>
 
 <script>
-const S={isPro:false,tone:'warm',photos:[],pd:[],last:'',bf:{f:'',i:'',d:''},hist:[],props:[]};
+const S={isPro:false,isDevMode:false,tone:'warm',photos:[],pd:[],last:'',bf:{f:'',i:'',d:''},hist:[],props:[],freeGens:0};
 try{const h=localStorage.getItem('ll_h');if(h)S.hist=JSON.parse(h);}catch(e){}
 try{S.isPro=localStorage.getItem('ll_pro')==='true';}catch(e){}
+try{S.freeGens=parseInt(localStorage.getItem('ll_freegens')||'0');}catch(e){}
+
+// DEV BYPASS — go to listrolab.com/app.html?dev=listrolab to skip all limits
+const urlParams=new URLSearchParams(window.location.search);
+if(urlParams.get('dev')==='listrolab'){S.isPro=true;S.isDevMode=true;console.log('Dev mode active — all limits bypassed');}
+
+const FREE_LIMIT=5;
+const PRO_TOOLS=['sold','openhouse','pricereduction','sellerupdate','bio','staging','fairhousing','translate','batch','buyer'];
+
+function checkFreeLimit(){
+  if(S.isPro||S.isDevMode)return true;
+  if(S.freeGens>=FREE_LIMIT){showUpgradeModal(`You've used all ${FREE_LIMIT} free generations.`);return false;}
+  return true;
+}
+function incrementFreeGen(){
+  if(S.isPro||S.isDevMode)return;
+  S.freeGens++;
+  try{localStorage.setItem('ll_freegens',S.freeGens);}catch(e){}
+  updateFreeCounter();
+  const remaining=FREE_LIMIT-S.freeGens;
+  if(remaining>0&&remaining<=2)showToast(`${remaining} free generation${remaining>1?'s':''} left — upgrade for unlimited`);
+}
+function showUpgradeModal(reason){
+  const existing=document.getElementById('upgrade-modal');
+  if(existing)existing.remove();
+  const modal=document.createElement('div');
+  modal.id='upgrade-modal';
+  modal.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:500;display:flex;align-items:center;justify-content:center;padding:24px;backdrop-filter:blur(4px)';
+  modal.innerHTML=`<div style="background:var(--bg2);border:1px solid var(--border2);border-radius:16px;padding:32px;max-width:400px;width:100%;text-align:center">
+    <div style="font-size:32px;margin-bottom:14px">⭐</div>
+    <div style="font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:600;margin-bottom:8px">Upgrade to Pro</div>
+    <div style="font-size:13px;color:var(--mid);margin-bottom:6px;line-height:1.6">${reason}</div>
+    <div style="font-size:12px;color:var(--mid);margin-bottom:20px;line-height:1.6">Get unlimited generations, all 4 tones, up to 10 photos, and the full agent toolkit for $29/month.</div>
+    <button onclick="unlockPro();document.getElementById('upgrade-modal').remove()" style="width:100%;padding:13px;background:var(--gold);color:#0f0f13;font-family:'Cormorant Garamond',serif;font-size:17px;font-weight:600;border:none;border-radius:10px;cursor:pointer;margin-bottom:10px">Upgrade to Pro — $29/mo</button>
+    <button onclick="document.getElementById('upgrade-modal').remove()" style="width:100%;padding:10px;background:transparent;color:var(--mid);font-family:'DM Sans',sans-serif;font-size:12px;border:none;cursor:pointer">Maybe later</button>
+  </div>`;
+  document.body.appendChild(modal);
+}
 
 function getToneInstructions(tone){
   const tones={
@@ -601,13 +874,85 @@ function getToneInstructions(tone){
   return tones[tone]||tones.warm;
 }
 
-function goTo(s){document.querySelectorAll('.screen').forEach(e=>e.classList.remove('active'));document.getElementById('screen-'+s).classList.add('active');}
+function goTo(s){
+  document.querySelectorAll('.screen').forEach(e=>e.classList.remove('active'));
+  const el=document.getElementById('screen-'+s);
+  if(el)el.classList.add('active');
+  window.scrollTo(0,0);
+}
 function goPaywall(){goTo('pw');}
+const OB={name:''};
+
+function obStep1(){
+  OB.name=document.getElementById('ob-name').value||'Agent';
+  goTo('ob4');
+}
+async function runDemo(){
+  const btn=document.getElementById('demo-btn');
+  const btnText=document.getElementById('demo-btn-text');
+  const skip=document.getElementById('demo-skip');
+  btn.disabled=true;
+  btnText.innerHTML='Writing your listing <span class="dots"><span></span><span></span><span></span></span>';
+  skip.style.display='none';
+  try{
+    const prompt=`You are the best real estate copywriter in America. Write for Listrolab.
+Property: Single family home in Oak Park, Chicago
+4 bed / 2.5 bath · 2,400 sq ft
+Price: $549,000
+Standout features: white shaker cabinets, waterfall quartz island, wide-plank white oak floors, top-rated Lincoln Elementary 4 blocks away, private backyard with mature trees
+Writing for: young families
+TONE: warm and inviting — conversational, human, emotionally warm.
+3 tight paragraphs. Put buyer inside the feeling of living there. NEVER start with Welcome to / Nestled / This stunning. Hyper-specific details in paragraph 2. Real urgency close in paragraph 3.
+CRITICAL: Zero dashes of any kind. No em dashes. No hyphens as punctuation. No ellipsis. Write like a thoughtful human. Under 160 words. Return ONLY the listing text.`;
+    const text=await callAPI([{role:'user',content:prompt}],400);
+    document.getElementById('demo-text').textContent=text;
+    document.getElementById('demo-output').style.display='block';
+    btn.style.display='none';
+  }catch(e){
+    document.getElementById('demo-text').textContent=`Oak Park rarely delivers a home like this. The white shaker kitchen anchors everything — waterfall quartz island, wide-plank white oak floors that run through every room, and light that moves with the day in a way that makes the space feel alive.\n\nFour bedrooms means room to grow. The backyard is mature and private. Lincoln Elementary is four blocks away.\n\nProperties like this at $549,000 in Oak Park don't sit. Schedule your showing this week.`;
+    document.getElementById('demo-output').style.display='block';
+    btn.style.display='none';
+  }
+  btnText.textContent='Generate sample listing →';
+  btn.disabled=false;
+}
 function startApp(){
   goTo('app');
-  if(S.isPro){applyPro();if(!S.props.length)addProp();}
+  if(S.isPro||S.isDevMode){
+    applyPro();
+    if(!S.props.length)addProp();
+  } else {
+    // Show free gen counter
+    updateFreeCounter();
+    // Grey out non-warm tones for free users
+    document.querySelectorAll('.tone-btn').forEach(btn=>{
+      if(!btn.classList.contains('active')){
+        btn.style.opacity='.35';
+        btn.title='Pro feature — upgrade to unlock';
+      }
+    });
+  }
+}
+function updateFreeCounter(){
+  if(S.isPro||S.isDevMode)return;
+  const remaining=Math.max(0,FREE_LIMIT-S.freeGens);
+  const el=document.getElementById('free-counter');
+  const txt=document.getElementById('free-counter-text');
+  if(el&&txt){el.style.display='block';txt.textContent=`${remaining} free generation${remaining!==1?'s':''} left`;}
 }
 function selPlan(p){document.getElementById('pm').classList.toggle('sel',p==='monthly');document.getElementById('pa').classList.toggle('sel',p==='annual');}
+function pwTab(tab){
+  const isFree=tab==='free';
+  document.getElementById('pw-panel-free').style.display=isFree?'block':'none';
+  document.getElementById('pw-panel-pro').style.display=isFree?'none':'block';
+  const freeBtn=document.getElementById('pw-tab-free');
+  const proBtn=document.getElementById('pw-tab-pro');
+  freeBtn.style.background=isFree?'var(--bg2)':'transparent';
+  freeBtn.style.color=isFree?'var(--white)':'var(--mid)';
+  freeBtn.style.border=isFree?'1px solid var(--border)':'none';
+  proBtn.style.background=isFree?'transparent':'var(--gold)';
+  proBtn.style.color=isFree?'var(--mid)':'#0f0f13';
+}
 function togglePro(){if(!S.isPro)unlockPro();}
 function applyPro(){
   const b=document.getElementById('proBtn');b.textContent='⭐ Pro active';b.classList.add('unlocked');
@@ -619,6 +964,10 @@ function unlockPro(){
   applyPro();if(!S.props.length)addProp();showToast('Pro unlocked! Batch + buyer framing active');
 }
 function showView(name,el){
+  if(!S.isPro&&!S.isDevMode&&PRO_TOOLS.includes(name)){
+    showUpgradeModal(`${name==='batch'?'Batch mode':name==='buyer'?'Buyer framing':name.charAt(0).toUpperCase()+name.slice(1)+' tool'} is a Pro feature.`);
+    return;
+  }
   document.querySelectorAll('.sb-item').forEach(i=>i.classList.remove('active'));
   if(el)el.classList.add('active');
   document.querySelectorAll('[id^="view-"]').forEach(v=>v.style.display='none');
@@ -626,34 +975,63 @@ function showView(name,el){
   if(v)v.style.display='block';
   if(name==='hist')renderHist();
 }
-function sTone(el,t){document.querySelectorAll('.tone-btn').forEach(b=>b.classList.remove('active'));el.classList.add('active');S.tone=t;}
+function sTone(el,t){
+  if(!S.isPro&&!S.isDevMode&&t!=='warm'){showUpgradeModal('All 4 tones are a Pro feature. Free plan includes warm tone only.');return;}
+  document.querySelectorAll('.tone-btn').forEach(b=>b.classList.remove('active'));
+  el.classList.add('active');S.tone=t;
+}
 
 // PHOTOS
 function ev(e){e.preventDefault();}
 function drop(e){e.preventDefault();pf(Array.from(e.dataTransfer.files).filter(f=>f.type.startsWith('image/')));}
 function hph(e){pf(Array.from(e.target.files));}
-function pf(files){files.slice(0,3-S.photos.length).forEach(f=>{const r=new FileReader();r.onload=e=>{const img=new Image();img.onload=()=>{const c=document.createElement('canvas');const M=800;let w=img.width,h=img.height;if(w>M||h>M){if(w>h){h=Math.round(h*M/w);w=M;}else{w=Math.round(w*M/h);h=M;}}c.width=w;c.height=h;c.getContext('2d').drawImage(img,0,0,w,h);const comp=c.toDataURL('image/jpeg',0.6);if(comp.length>500000){const c2=document.createElement('canvas');c2.width=Math.round(w*.6);c2.height=Math.round(h*.6);c2.getContext('2d').drawImage(img,0,0,c2.width,c2.height);S.photos.push(f);S.pd.push(c2.toDataURL('image/jpeg',.5));}else{S.photos.push(f);S.pd.push(comp);}rp();};img.src=e.target.result;};r.readAsDataURL(f);});}
+function pf(files){files.slice(0,10-S.photos.length).forEach(f=>{const r=new FileReader();r.onload=e=>{const img=new Image();img.onload=()=>{const c=document.createElement('canvas');const M=800;let w=img.width,h=img.height;if(w>M||h>M){if(w>h){h=Math.round(h*M/w);w=M;}else{w=Math.round(w*M/h);h=M;}}c.width=w;c.height=h;c.getContext('2d').drawImage(img,0,0,w,h);const comp=c.toDataURL('image/jpeg',0.6);if(comp.length>500000){const c2=document.createElement('canvas');c2.width=Math.round(w*.6);c2.height=Math.round(h*.6);c2.getContext('2d').drawImage(img,0,0,c2.width,c2.height);S.photos.push(f);S.pd.push(c2.toDataURL('image/jpeg',.5));}else{S.photos.push(f);S.pd.push(comp);}rp();};img.src=e.target.result;};r.readAsDataURL(f);});}
 function rp(){
   const a=document.getElementById('ua'),p=document.getElementById('pp'),h=document.getElementById('ph');
   if(!S.pd.length){a.style.display='block';p.style.display='none';h.style.display='none';return;}
-  a.style.display='none';p.style.display='flex';h.style.display='block';p.innerHTML='';
+  a.style.display='none';p.style.display='flex';p.style.flexWrap='wrap';h.style.display='block';
+  h.textContent=`📸 ${S.pd.length} photo${S.pd.length>1?'s':''} uploaded — listing will name specific finishes and details from your photos`;
+  p.innerHTML='';
   S.pd.forEach((src,i)=>{const w=document.createElement('div');w.className='photo-thumb';const img=document.createElement('img');img.src=src;const btn=document.createElement('button');btn.className='photo-rm';btn.textContent='✕';btn.onclick=()=>{S.photos.splice(i,1);S.pd.splice(i,1);rp();if(!S.pd.length)document.getElementById('ua').style.display='block';};w.appendChild(img);w.appendChild(btn);p.appendChild(w);});
-  if(S.pd.length<3){const a2=document.createElement('div');a2.className='photo-add';a2.innerHTML='+<input type="file" accept="image/jpeg,image/png,image/webp" multiple onchange="hph(event)">';p.appendChild(a2);}
+  if(S.pd.length<10){const a2=document.createElement('div');a2.className='photo-add';a2.innerHTML=`+<span style="font-size:9px;color:var(--mid);margin-top:2px">${10-S.pd.length} left</span><input type="file" accept="image/jpeg,image/png,image/webp" multiple onchange="hph(event)">`;p.appendChild(a2);}
 }
 
 // API
+// POST PROCESS — strip all dashes from any generated text
+function humanize(text){
+  if(!text)return text;
+  // Replace em dashes with natural alternatives
+  text=text.replace(/\s*—\s*/g,' ');
+  // Replace hyphens used as punctuation (surrounded by spaces) 
+  text=text.replace(/\s+-\s+/g,' ');
+  // Replace ellipsis with period
+  text=text.replace(/\.\.\./g,'.');
+  // Clean up any double spaces
+  text=text.replace(/  +/g,' ');
+  return text.trim();
+}
+
 async function callAPI(messages,max_tokens=500){
   const fp=fetch('/api/generate',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({max_tokens,messages})});
   const tp=new Promise((_,rej)=>setTimeout(()=>rej(new Error('timeout')),45000));
   const res=await Promise.race([fp,tp]);
   const data=await res.json();
   if(data.error)throw new Error(JSON.stringify(data.error));
-  return data.content?.map(b=>b.text||'').join('')||'';
+  const raw=data.content?.map(b=>b.text||'').join('')||'';
+  return humanize(raw);
 }
 
 // GENERATE
 async function gen(){
-  const pt=document.getElementById('pt').value,loc=document.getElementById('loc').value||'a desirable neighborhood',prc=document.getElementById('prc').value,bb=document.getElementById('bb').value||'3 bed / 2 bath',sq=document.getElementById('sqft').value,feat=document.getElementById('feat').value,buy=document.getElementById('buy').value,hasP=S.pd.length>0;
+  if(!checkFreeLimit())return;
+  const pt=document.getElementById('pt').value,loc=document.getElementById('loc').value||'a desirable neighborhood',prc=document.getElementById('prc').value,bb=document.getElementById('bb').value||'3 bed / 2 bath',sq=document.getElementById('sqft').value,feat=document.getElementById('feat').value,buy=document.getElementById('buy').value;
+  // Free plan: max 3 photos
+  let photosToUse=S.pd;
+  if(!S.isPro&&!S.isDevMode&&S.pd.length>3){
+    photosToUse=S.pd.slice(0,3);
+    showToast('Free plan: using first 3 photos — upgrade for up to 10');
+  }
+  const hasP=photosToUse.length>0;
   const btn=document.getElementById('gb'),btt=document.getElementById('gbt');
   btn.disabled=true;btt.innerHTML=`${hasP?'Reading photos':'Writing listing'} <span class="dots"><span></span><span></span><span></span></span>`;
   const sh=document.createElement('div');sh.className='shimmer';btn.appendChild(sh);
@@ -674,21 +1052,32 @@ Write 3 tight paragraphs:
 1. Put buyer inside the feeling of living there. NEVER start: Welcome to / Nestled / This stunning / This beautiful / Discover.
 2. Name 3-4 hyper-specific details. ${hasP?'Must come from photos.':'Be visual and specific.'}
 3. One sentence of real urgency tied to this location.
-CRITICAL: Absolutely NO dashes (- or —) or ellipsis anywhere. Flowing sentences only. Under 160 words. Return ONLY the listing text.`;
+CRITICAL WRITING RULES — these are non-negotiable:
+- Zero dashes of any kind. No em dashes. No hyphens used as punctuation. If you feel the urge to use a dash, rewrite the sentence so it flows naturally without one.
+- Zero ellipsis. No "..."
+- No bullet points or lists.
+- Write the way a thoughtful human writes. Varied sentence length. Natural rhythm. No AI-sounding patterns.
+- Under 160 words total. Return ONLY the listing text.`;
   try{
     let messages;
-    if(hasP){const imgs=S.pd.map(d=>({type:'image',source:{type:'base64',media_type:'image/jpeg',data:d.split(',')[1]}}));messages=[{role:'user',content:[...imgs,{type:'text',text:prompt}]}];}
+    if(hasP){
+      const photosToSend=photosToUse.slice(0,5);
+      const imgs=photosToSend.map(d=>({type:'image',source:{type:'base64',media_type:'image/jpeg',data:d.split(',')[1]}}));
+      messages=[{role:'user',content:[...imgs,{type:'text',text:prompt}]}];
+      console.log(`Sending ${photosToSend.length} photos to API`);
+    }
     else{messages=[{role:'user',content:prompt}];}
     const text=await callAPI(messages,500);
     o.textContent=text;o.className='output-body';
     document.getElementById('wc').textContent=`· ${text.split(/\s+/).filter(Boolean).length} words`;
     S.last=text;S.bf={f:'',i:'',d:''};
     updateMLS();
+    incrementFreeGen();
     if(hasP)await spotted();
     saveH({pt,loc,prc,bb,text,buy,date:new Date().toISOString()});
   }catch(e){
-    if(hasP&&e.message==='timeout'){showToast('Photos timed out — generating from text');const text=await callAPI([{role:'user',content:prompt.replace(/IMPORTANT.*$/s,'')}],500);o.textContent=text;o.className='output-body';S.last=text;updateMLS();saveH({pt,loc,prc,bb,text,buy,date:new Date().toISOString()});}
-    else{o.textContent=`${loc} rarely offers a property like this. Every detail of this ${bb} ${pt.toLowerCase()} signals genuine care${feat?' — '+feat.split(',').slice(0,2).join(' and '):''}, designed for the way people actually live.\n\n${prc?`Offered at ${prc}, this`:'This'} is the listing ${loc} buyers have been waiting for.`;o.className='output-body';S.last=o.textContent;updateMLS();}
+    if(hasP&&e.message==='timeout'){showToast('Photos timed out — generating from text');const text=await callAPI([{role:'user',content:prompt.replace(/IMPORTANT.*$/s,'')}],500);o.textContent=text;o.className='output-body';S.last=text;updateMLS();incrementFreeGen();saveH({pt,loc,prc,bb,text,buy,date:new Date().toISOString()});}
+    else{o.textContent=`${loc} rarely offers a property like this. Every detail of this ${bb} ${pt.toLowerCase()} signals genuine care${feat?' — '+feat.split(',').slice(0,2).join(' and '):''}, designed for the way people actually live.\n\n${prc?`Offered at ${prc}, this`:'This'} is the listing ${loc} buyers have been waiting for.`;o.className='output-body';S.last=o.textContent;updateMLS();incrementFreeGen();}
   }
   btn.disabled=false;btt.textContent='Generate listing →';if(sh.parentNode)sh.parentNode.removeChild(sh);
 }
@@ -712,7 +1101,7 @@ function toggleRW(){const a=document.getElementById('rewriteArea');a.style.displ
 async function doRewrite(){const input=document.getElementById('rewriteInput').value.trim();if(!input){showToast('Paste your listing first');return;}const btn=document.getElementById('rwbt');btn.textContent='Rewriting...';document.getElementById('rewriteOut').style.display='block';const el=document.getElementById('rwResult');el.textContent='Rewriting...';el.className='output-body empty';try{const text=await callAPI([{role:'user',content:`Rewrite this listing significantly better. No dashes. Stronger hook, specific details, better close. Under 160 words. Return ONLY the rewritten text.\n\n${input}`}],500);el.textContent=text;el.className='output-body';S.last=text;updateMLS();}catch(e){el.textContent='Error — try again.';}btn.textContent='Rewrite this listing →';}
 
 // BATCH
-function addProp(){if(S.props.length>=5){showToast('Max 5 properties');return;}S.props.push({id:Date.now(),address:'',price:'',bb:'',feat:'',tone:'',output:'',status:'pending'});document.getElementById('badd').disabled=S.props.length>=5;renderBatch();}
+function addProp(){if(S.props.length>=5){showToast('Max 5 properties');return;}S.props.push({id:Date.now(),address:'',price:'',bb:'',feat:'',tone:'',photos:[],photoData:[],output:'',status:'pending'});document.getElementById('badd').disabled=S.props.length>=5;renderBatch();}
 function rmProp(id){S.props=S.props.filter(p=>p.id!==id);document.getElementById('badd').disabled=S.props.length>=5;renderBatch();}
 function upd(id,f,v){const p=S.props.find(p=>p.id===id);if(p)p[f]=v;}
 function renderBatch(){
@@ -720,13 +1109,29 @@ function renderBatch(){
   el.innerHTML='';const sl={pending:'Ready',generating:'Writing...',done:'Done ✓'};
   S.props.forEach((p,i)=>{
     const d=document.createElement('div');d.className=`batch-prop ${p.status}`;
-    d.innerHTML=`<div class="batch-prop-hdr"><div><div style="font-size:13px;font-weight:500">Property ${i+1}${p.address?' — '+p.address:''}</div><div style="font-size:11px;color:var(--mid);margin-top:2px">${p.bb||'—'}${p.price?' · '+p.price:''}</div></div><div style="display:flex;align-items:center;gap:8px"><span class="batch-st ${p.status}">${sl[p.status]}</span><button class="batch-rm" onclick="rmProp(${p.id})">✕</button></div></div>
+    const photoCount=p.photoData?.length||0;
+    d.innerHTML=`<div class="batch-prop-hdr"><div><div style="font-size:13px;font-weight:500">Property ${i+1}${p.address?' — '+p.address:''}</div><div style="font-size:11px;color:var(--mid);margin-top:2px">${p.bb||'—'}${p.price?' · '+p.price:''}${photoCount?` · <span style="color:var(--gold2)">📸 ${photoCount} photo${photoCount>1?'s':''}</span>`:''}</div></div><div style="display:flex;align-items:center;gap:8px"><span class="batch-st ${p.status}">${sl[p.status]}</span><button class="batch-rm" onclick="rmProp(${p.id})">✕</button></div></div>
     <div class="batch-prop-grid"><div><div class="label">Address</div><input class="input" placeholder="e.g. 123 Oak St" value="${p.address}" oninput="upd(${p.id},'address',this.value)"></div><div><div class="label">Price</div><input class="input" placeholder="e.g. $549k" value="${p.price}" oninput="upd(${p.id},'price',this.value)"></div><div><div class="label">Beds/Baths</div><input class="input" placeholder="e.g. 4bd/2ba" value="${p.bb}" oninput="upd(${p.id},'bb',this.value)"></div><div><div class="label">Tone</div><input class="input" placeholder="Warm/Luxury/Pro" value="${p.tone}" oninput="upd(${p.id},'tone',this.value)"></div></div>
-    <div style="padding:0 16px 14px"><div class="label">Key features</div><input class="input" placeholder="white shaker cabinets, quartz island..." value="${p.feat}" oninput="upd(${p.id},'feat',this.value)"></div>
-    ${p.output?`<div class="batch-out"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px"><div style="font-size:11px;color:var(--green);font-weight:600">✓ Generated</div><button class="copy-btn" onclick="navigator.clipboard.writeText(document.querySelectorAll('.batch-out')[${i}].querySelector('div+div').textContent).then(()=>showToast('Copied!'))">Copy</button></div><div>${p.output}</div></div>`:''}`;
+    <div style="padding:0 16px 10px"><div class="label">Key features</div><input class="input" placeholder="white shaker cabinets, quartz island..." value="${p.feat}" oninput="upd(${p.id},'feat',this.value)"></div>
+    <div style="padding:0 16px 14px;display:flex;align-items:center;gap:10px">
+      <div style="position:relative;flex-shrink:0">
+        <button style="font-size:11px;padding:6px 12px;border-radius:6px;border:1px solid var(--border2);background:var(--gold3);color:var(--gold2);cursor:pointer;font-family:'DM Sans',sans-serif" onclick="document.getElementById('bp-photo-${p.id}').click()">📸 ${photoCount?`${photoCount} photo${photoCount>1?'s':''}  ✕`:'Add photos'}</button>
+        <input type="file" id="bp-photo-${p.id}" accept="image/jpeg,image/png,image/webp" multiple style="display:none" onchange="handleBatchPhoto(event,${p.id})">
+      </div>
+      ${photoCount?`<div style="display:flex;gap:4px;flex-wrap:wrap">${p.photoData.slice(0,4).map(src=>`<img src="${src}" style="width:36px;height:36px;border-radius:4px;object-fit:cover;border:1px solid var(--border2)">`).join('')}${photoCount>4?`<div style="width:36px;height:36px;border-radius:4px;background:var(--bg3);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:10px;color:var(--mid)">+${photoCount-4}</div>`:''}</div><button onclick="clearBatchPhotos(${p.id})" style="font-size:10px;color:var(--mid);background:none;border:none;cursor:pointer">Clear</button>`:'<div style="font-size:11px;color:var(--mid)">Photos help write more specific copy</div>'}
+    </div>
+    ${p.output?`<div class="batch-out"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px"><div style="font-size:11px;color:var(--green);font-weight:600">✓ Generated</div><button class="copy-btn" onclick="copyBatchOut(${p.id})">Copy</button></div><div id="batch-out-text-${p.id}">${p.output}</div></div>`:''}`;
     el.appendChild(d);
   });
 }
+
+function handleBatchPhoto(e,propId){
+  const p=S.props.find(x=>x.id===propId);if(!p)return;
+  const files=Array.from(e.target.files).slice(0,5-p.photoData.length);
+  files.forEach(f=>{const r=new FileReader();r.onload=ev=>{const img=new Image();img.onload=()=>{const c=document.createElement('canvas');const M=800;let w=img.width,h=img.height;if(w>M||h>M){if(w>h){h=Math.round(h*M/w);w=M;}else{w=Math.round(w*M/h);h=M;}}c.width=w;c.height=h;c.getContext('2d').drawImage(img,0,0,w,h);p.photos.push(f);p.photoData.push(c.toDataURL('image/jpeg',0.6));renderBatch();};img.src=ev.target.result;};r.readAsDataURL(f);});
+}
+function clearBatchPhotos(propId){const p=S.props.find(x=>x.id===propId);if(p){p.photos=[];p.photoData=[];}renderBatch();}
+function copyBatchOut(propId){const el=document.getElementById('batch-out-text-'+propId);if(el)navigator.clipboard.writeText(el.textContent).then(()=>showToast('Copied!'));}
 async function genAll(){
   if(!S.props.length){showToast('Add at least one property');return;}
   const btn=document.getElementById('bgb'),btt=document.getElementById('bgt');
@@ -737,9 +1142,25 @@ async function genAll(){
   let done=0;
   await Promise.all(S.props.map(async p=>{
     try{
-      const prompt=`Best real estate copywriter. Write a listing for Listrolab. No dashes anywhere.\nProperty at ${p.address||'a great location'}\n${p.bb||'3 bed / 2 bath'}${p.price?' · '+p.price:''}\n${p.feat?'Features: '+p.feat:''}\nTone: ${p.tone||S.tone}\n3 tight paragraphs. Hook, specific details, urgency close. Under 160 words. Return ONLY the listing.`;
-      p.output=await callAPI([{role:'user',content:prompt}],500);
-    }catch(e){p.output=`${p.address||'This property'} offers exceptional value at ${p.price||'this price point'}. Every detail has been considered for the way people actually live.`;}
+      const hasPhotos=p.photoData&&p.photoData.length>0;
+      const prompt=`You are the best real estate copywriter in America. Write for Listrolab. Zero dashes of any kind. No ellipsis. Write like a thoughtful human, not AI.
+Property: ${p.address||'a great location'}
+${p.bb||'3 bed / 2 bath'}${p.price?' · '+p.price:''}
+${p.feat?'Standout features: '+p.feat:''}
+Tone: ${p.tone||S.tone}
+${hasPhotos?`IMPORTANT: Analyze the ${p.photoData.length} photo(s). Name EXACT specific details you can literally see — cabinet style, countertop material, flooring type, fixtures. Never say "modern finishes" — name the specific thing.`:''}
+3 tight paragraphs. Hook that puts buyer inside the feeling. Specific details. Urgency close tied to this location. Under 160 words. Return ONLY the listing text.`;
+      let messages;
+      if(hasPhotos){
+        const imgs=p.photoData.slice(0,3).map(d=>({type:'image',source:{type:'base64',media_type:'image/jpeg',data:d.split(',')[1]}}));
+        messages=[{role:'user',content:[...imgs,{type:'text',text:prompt}]}];
+      } else {
+        messages=[{role:'user',content:prompt}];
+      }
+      p.output=await callAPI(messages,500);
+    }catch(e){
+      p.output=`${p.address||'This property'} offers exceptional value${p.price?' at '+p.price:''}. Every detail has been considered for the way people actually live.`;
+    }
     p.status='done';done++;fill.style.width=`${(done/S.props.length)*100}%`;renderBatch();
     saveH({pt:'Batch',loc:p.address,prc:p.price,bb:p.bb,text:p.output,buy:'',batch:true,date:new Date().toISOString()});
   }));
@@ -770,6 +1191,141 @@ async function genBio(){const name=document.getElementById('bio-name').value||'t
 function showBioTab(type,el){document.querySelectorAll('#bio-out .stab').forEach(t=>t.classList.remove('active'));if(el)el.classList.add('active');const labels={short:'Short bio',medium:'Medium bio',full:'Full bio'};document.getElementById('bio-lbl').textContent=labels[type]||'';const r=document.getElementById('bio-result');r.textContent=bioContent[type]||'Generate bio first.';r.className=bioContent[type]?'output-body':'output-body empty';}
 
 // UTILS
+// VIRTUAL STAGING
+let stagPhotoData=null;
+function handleStagPhoto(e){
+  const file=e.target.files[0];if(!file)return;
+  const r=new FileReader();
+  r.onload=e=>{
+    const img=new Image();
+    img.onload=()=>{
+      const c=document.createElement('canvas');const M=800;let w=img.width,h=img.height;
+      if(w>M||h>M){if(w>h){h=Math.round(h*M/w);w=M;}else{w=Math.round(w*M/h);h=M;}}
+      c.width=w;c.height=h;c.getContext('2d').drawImage(img,0,0,w,h);
+      stagPhotoData=c.toDataURL('image/jpeg',0.65);
+      document.getElementById('stag-img').src=stagPhotoData;
+      document.getElementById('stag-preview').style.display='block';
+      document.getElementById('stag-ua').style.display='none';
+    };
+    img.src=e.target.result;
+  };
+  r.readAsDataURL(file);
+}
+function clearStagPhoto(){stagPhotoData=null;document.getElementById('stag-preview').style.display='none';document.getElementById('stag-ua').style.display='block';document.getElementById('stagPhoto').value='';}
+async function genStaging(){
+  const room=document.getElementById('stag-room').value;
+  const style=document.getElementById('stag-style').value;
+  const buyer=document.getElementById('stag-buyer').value;
+  const btn=document.getElementById('stag-bt');btn.textContent='Generating...';
+  document.getElementById('stag-placeholder').style.display='none';
+  document.getElementById('stag-out').style.display='block';
+  const r=document.getElementById('stag-result');r.textContent='Writing staging description...';r.className='output-body empty';
+  const prompt=`You are a professional interior designer and real estate copywriter. Write a vivid virtual staging description for a ${room.toLowerCase()}.
+Style: ${style}
+Target buyer: ${buyer}
+${stagPhotoData?'IMPORTANT: Analyze the room photo carefully. Note the actual dimensions, natural light, architectural features, windows, flooring, ceiling height, and any existing permanent fixtures. Build the staging description around these specific real characteristics — the staging should feel believable for this actual space.':''}
+Write 2 paragraphs:
+1. Describe the staged room in specific detail — name exact furniture pieces, materials, colors, textures, and how they work together. Make the buyer see themselves in the space. Be specific: not "a sofa" but "a low-profile oatmeal linen sectional." Not "a rug" but "a hand-knotted wool rug in warm ivory and sage."
+2. Describe how the room feels and lives — morning light, evening ambiance, the lifestyle this room enables.
+No dashes anywhere. Under 120 words. Return ONLY the staging description.`;
+  try{
+    let messages;
+    if(stagPhotoData){messages=[{role:'user',content:[{type:'image',source:{type:'base64',media_type:'image/jpeg',data:stagPhotoData.split(',')[1]}},{type:'text',text:prompt}]}];}
+    else{messages=[{role:'user',content:prompt}];}
+    const text=await callAPI(messages,400);
+    r.textContent=text;r.className='output-body';
+    document.getElementById('stag-tips').style.display='block';
+    showToast('Staging description ready!');
+  }catch(e){r.textContent='Error generating — try again.';}
+  btn.textContent='Generate staging description →';
+}
+
+// FAIR HOUSING CHECK
+async function checkFairHousing(){
+  const input=document.getElementById('fh-input').value.trim();
+  if(!input){showToast('Paste a listing first');return;}
+  const btn=document.getElementById('fh-bt');btn.textContent='Scanning...';
+  document.getElementById('fh-placeholder').style.display='none';
+  document.getElementById('fh-out').style.display='block';
+  document.getElementById('fh-score-label').textContent='Scanning your listing...';
+  document.getElementById('fh-score-val').textContent='';
+  document.getElementById('fh-score-fill').style.width='0%';
+  const r=document.getElementById('fh-result');r.textContent='Analyzing for Fair Housing compliance...';r.className='output-body empty';
+  try{
+    const text=await callAPI([{role:'user',content:`You are a Fair Housing compliance expert. Analyze this real estate listing for potential Fair Housing Act violations.
+The Fair Housing Act prohibits discriminatory language based on: race, color, religion, sex, national origin, familial status, disability.
+Problematic language includes: references to schools or churches implying family/religion preference, "quiet neighborhood" implying racial composition, "walking distance to..." implying preference for non-disabled, "perfect for couples" implying familial status preference, "master bedroom" is now flagged by some MLSs.
+
+Listing to analyze:
+${input}
+
+Respond in this EXACT format:
+SCORE: [number 1-100 where 100 = fully compliant]
+STATUS: [COMPLIANT / MINOR CONCERNS / VIOLATIONS FOUND]
+SUMMARY: [1-2 sentences on overall compliance]
+ISSUES:
+[List each issue found. For each: quote the exact phrase, explain why it may be problematic, and provide a compliant alternative. If no issues found, write "No violations detected."]
+CLEAN VERSION:
+[The full listing rewritten to be fully compliant, preserving the original style and intent]`}],900);
+
+    const score=parseInt(text.match(/SCORE:\s*(\d+)/)?.[1]||'85');
+    const status=text.match(/STATUS:\s*(.+)/)?.[1]?.trim()||'';
+    const issuesMatch=text.match(/ISSUES:\n([\s\S]*?)(?=CLEAN VERSION:|$)/)?.[1]?.trim()||'';
+    const cleanMatch=text.match(/CLEAN VERSION:\n([\s\S]*?)$/)?.[1]?.trim()||'';
+    const summaryMatch=text.match(/SUMMARY:\s*(.+)/)?.[1]?.trim()||'';
+
+    const scoreEl=document.getElementById('fh-score-val');
+    const fillEl=document.getElementById('fh-score-fill');
+    const labelEl=document.getElementById('fh-score-label');
+    scoreEl.textContent=score+'/100';
+    fillEl.style.width=score+'%';
+    if(score>=90){fillEl.style.background='var(--green)';scoreEl.style.color='var(--green)';labelEl.textContent='Compliant';}
+    else if(score>=70){fillEl.style.background='#febc2e';scoreEl.style.color='#febc2e';labelEl.textContent='Minor concerns';}
+    else{fillEl.style.background='#ff5f57';scoreEl.style.color='#ff5f57';labelEl.textContent='Violations found';}
+
+    r.textContent=`${summaryMatch}\n\nISSUES FOUND\n${issuesMatch}\n\nCOMPLIANT VERSION\n${cleanMatch}`;
+    r.className='output-body';
+    showToast(score>=90?'Listing is compliant!':'Issues found — see report');
+  }catch(e){r.textContent='Error scanning — try again.';}
+  btn.textContent='Scan for violations →';
+}
+
+// SPANISH TRANSLATION
+let trBothMode=false;let trEnglish='';let trSpanish='';
+function useLastListing(){if(!S.last){showToast('Generate a listing first');return;}document.getElementById('tr-input').value=S.last;}
+async function genTranslation(){
+  const input=document.getElementById('tr-input').value.trim();
+  if(!input){showToast('Paste a listing first');return;}
+  const style=document.getElementById('tr-style').value;
+  trEnglish=input;trBothMode=false;
+  const btn=document.getElementById('tr-bt');btn.textContent='Translating...';
+  document.getElementById('tr-placeholder').style.display='none';
+  document.getElementById('tr-out').style.display='block';
+  const r=document.getElementById('tr-result');r.textContent='Translating to Spanish...';r.className='output-body empty';
+  try{
+    const text=await callAPI([{role:'user',content:`You are a professional real estate translator specializing in Spanish. Translate this listing into ${style} Spanish.
+Rules:
+- This is for the US real estate market — keep property terms recognizable (MLS, sq ft converted to metros cuadrados optionally in parentheses)
+- Preserve the emotional tone and energy of the original exactly
+- Do not translate proper nouns like street names or neighborhood names
+- No dashes anywhere in the Spanish output
+- Return ONLY the Spanish translation, no explanation
+
+English listing:
+${input}`}],600);
+    trSpanish=text;
+    r.textContent=text;r.className='output-body';
+    showToast('Translation ready!');
+  }catch(e){r.textContent='Error translating — try again.';}
+  btn.textContent='Translate to Spanish →';
+}
+function showBoth(){
+  if(!trSpanish||!trEnglish)return;
+  const r=document.getElementById('tr-result');
+  if(trBothMode){r.textContent=trSpanish;document.getElementById('tr-both-btn').textContent='Show both languages';trBothMode=false;}
+  else{r.textContent=`ENGLISH\n\n${trEnglish}\n\nSPANISH\n\n${trSpanish}`;document.getElementById('tr-both-btn').textContent='Show Spanish only';trBothMode=true;}
+}
+
 function cp(id){navigator.clipboard.writeText(document.getElementById(id).textContent).then(()=>showToast('Copied!'));}
 function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2500);}
 function saveH(item){S.hist.unshift(item);if(S.hist.length>50)S.hist.pop();try{localStorage.setItem('ll_h',JSON.stringify(S.hist));}catch(e){}}
