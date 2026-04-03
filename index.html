@@ -243,6 +243,34 @@ footer{padding:40px 5%;border-top:1px solid var(--border)}
 .price-note{font-size:11px;color:var(--mid);margin-top:10px;text-align:center}
 .after-pricing-note{background:rgba(255,255,255,0.03);border:1px solid var(--border);border-radius:10px;padding:12px 20px;font-size:12px;color:var(--mid);max-width:520px;margin:16px auto 0;line-height:1.6}
 .after-pricing-note span{color:var(--white);font-weight:500}
+
+/* BEFORE / AFTER */
+.compare-wrap{display:grid;grid-template-columns:1fr auto 1fr;gap:0;align-items:stretch;max-width:1000px;margin:0 auto}
+.compare-card{border-radius:16px;overflow:hidden;display:flex;flex-direction:column}
+.compare-before{border:1px solid rgba(255,80,80,0.2);background:rgba(255,50,50,0.04)}
+.compare-after{border:1px solid rgba(201,168,76,0.3);background:rgba(201,168,76,0.04)}
+.compare-header{padding:16px 20px;border-bottom:1px solid rgba(255,255,255,0.06);display:flex;justify-content:space-between;align-items:center}
+.compare-label-bad{font-size:12px;font-weight:600;color:#ff6b6b;text-transform:uppercase;letter-spacing:.5px}
+.compare-label-good{font-size:12px;font-weight:600;color:var(--gold);text-transform:uppercase;letter-spacing:.5px}
+.compare-meta{font-size:11px;color:var(--mid)}
+.compare-body{padding:20px;flex:1;display:flex;flex-direction:column;gap:14px}
+.compare-address{font-size:11px;color:var(--mid);padding:6px 10px;background:rgba(255,255,255,0.04);border-radius:6px;font-weight:500}
+.compare-text{font-size:13px;line-height:1.8;color:rgba(248,247,245,.75);flex:1}
+.compare-text p{margin-bottom:10px}
+.compare-text p:last-child{margin-bottom:0}
+.compare-flags{display:flex;flex-direction:column;gap:6px;margin-top:4px;padding-top:14px;border-top:1px solid rgba(255,255,255,0.06)}
+.compare-flag{font-size:11px;color:rgba(255,107,107,.7);line-height:1.4}
+.compare-flags-good{}
+.compare-flag-good{font-size:11px;color:rgba(61,158,110,.85);line-height:1.4}
+.compare-arrow{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:0 20px;gap:10px}
+.compare-arrow-line{width:1px;flex:1;background:linear-gradient(to bottom,transparent,var(--border2),transparent)}
+.compare-arrow-badge{background:var(--gold);color:#0c0c0f;font-size:11px;font-weight:700;padding:6px 12px;border-radius:20px;white-space:nowrap;letter-spacing:.3px;writing-mode:vertical-lr;text-orientation:mixed}
+@media(max-width:768px){
+  .compare-wrap{grid-template-columns:1fr;gap:16px}
+  .compare-arrow{flex-direction:row;padding:0;height:40px}
+  .compare-arrow-line{width:auto;height:1px;flex:1;background:linear-gradient(to right,transparent,var(--border2),transparent)}
+  .compare-arrow-badge{writing-mode:horizontal-tb}
+}
 .reveal{opacity:0;transform:translateY(24px);transition:opacity 0.6s ease,transform 0.6s ease}
 .reveal.visible{opacity:1;transform:translateY(0)}
 .reveal-delay-1{transition-delay:0.1s}
@@ -519,6 +547,75 @@ footer{padding:40px 5%;border-top:1px solid var(--border)}
 
 <div class="divider"></div>
 
+<!-- BEFORE / AFTER -->
+<section id="comparison">
+  <div class="section-inner">
+    <div class="section-label reveal" style="text-align:center;display:block">The difference</div>
+    <div class="section-title reveal reveal-delay-1" style="text-align:center">What agents write.<br><em style="color:var(--gold)">What Listrolab writes.</em></div>
+    <div class="section-sub reveal reveal-delay-2" style="text-align:center;margin:0 auto 56px">Same property. Completely different copy. One takes 45 minutes and still sounds generic. The other takes 30 seconds and sounds like a human expert wrote it.</div>
+
+    <div class="compare-wrap reveal">
+      <!-- BEFORE -->
+      <div class="compare-card compare-before">
+        <div class="compare-header">
+          <div class="compare-label-bad">Without Listrolab</div>
+          <div class="compare-meta">Written manually — 45+ minutes</div>
+        </div>
+        <div class="compare-body">
+          <div class="compare-address">4 bed / 2.5 bath · Oak Park, IL · $549,000</div>
+          <div class="compare-text">
+            <p>Welcome to this stunning 4-bedroom home in the heart of Oak Park! This beautiful property features an updated kitchen with modern finishes, spacious living areas, and hardwood floors throughout. The open concept layout is perfect for entertaining.</p>
+            <p>The master suite offers a peaceful retreat with an en suite bathroom. The backyard is great for outdoor activities. Located near top-rated schools and just minutes from the Metra.</p>
+            <p>This move-in ready home won't last long. Schedule your showing today!</p>
+          </div>
+          <div class="compare-flags">
+            <div class="compare-flag">❌ "Stunning" — meaningless</div>
+            <div class="compare-flag">❌ "Modern finishes" — vague</div>
+            <div class="compare-flag">❌ "Won't last long" — every listing says this</div>
+            <div class="compare-flag">❌ No specific details from photos</div>
+            <div class="compare-flag">❌ Sounds like every other listing</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="compare-arrow">
+        <div class="compare-arrow-line"></div>
+        <div class="compare-arrow-badge">Listrolab</div>
+        <div class="compare-arrow-line"></div>
+      </div>
+
+      <!-- AFTER -->
+      <div class="compare-card compare-after">
+        <div class="compare-header">
+          <div class="compare-label-good">With Listrolab</div>
+          <div class="compare-meta">Generated from photos — 30 seconds</div>
+        </div>
+        <div class="compare-body">
+          <div class="compare-address">4 bed / 2.5 bath · Oak Park, IL · $549,000</div>
+          <div class="compare-text">
+            <p>Oak Park mornings hit differently when your kitchen looks like this. White shaker cabinets run floor to ceiling, a waterfall quartz island anchors the space, and the wide-plank white oak floors carry through every room in a way that makes the whole house feel considered.</p>
+            <p>Four bedrooms gives everyone space to land. The backyard is mature and private — the kind you actually use. Lincoln Elementary is four blocks away, which is why families in this neighborhood tend to stay.</p>
+            <p>Inventory in Oak Park at this price point is tight right now. Homes with this kitchen do not sit.</p>
+          </div>
+          <div class="compare-flags compare-flags-good">
+            <div class="compare-flag-good">✓ Specific details from the actual photos</div>
+            <div class="compare-flag-good">✓ Named materials — white shaker, waterfall quartz, white oak</div>
+            <div class="compare-flag-good">✓ Emotional hook buyers actually feel</div>
+            <div class="compare-flag-good">✓ Specific local urgency — not a cliche</div>
+            <div class="compare-flag-good">✓ Sounds like a human expert wrote it</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div style="text-align:center;margin-top:48px">
+      <a href="/app.html" class="btn-gold reveal">Write your first listing like this →</a>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
 <!-- PRICING -->
 <section id="pricing">
   <div class="section-inner" style="text-align:center">
@@ -722,13 +819,25 @@ function submitEmail(){
   takenSpots = Math.min(takenSpots + 1, TOTAL_SPOTS);
   localStorage.setItem('ll_taken', takenSpots);
   updateSpots();
-  // Send email notification to hello@listrolab.com
-  const subject = encodeURIComponent('New Listrolab Founder Signup');
-  const body = encodeURIComponent('New founder signup from: ' + raw + '\n\nSend them their trial link and follow up within 24 hours.');
-  window.open('mailto:hello@listrolab.com?subject=' + subject + '&body=' + body);
+
+  // Save email locally so app can pick it up
+  localStorage.setItem('ll_email', raw);
+  localStorage.setItem('ll_email_date', new Date().toISOString());
+
+  // Submit to Formspree — replace YOUR_FORM_ID with your Formspree form ID
+  fetch('https://formspree.io/f/YOUR_FORM_ID', {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json', 'Accept': 'application/json'},
+    body: JSON.stringify({email: raw, source: 'landing-page-cta', plan: 'founder', date: new Date().toISOString()})
+  }).catch(()=>{}); // Fail silently
+
+  // Show success then redirect to app
   input.value = '';
   input.style.borderColor = 'var(--gold)';
   document.getElementById('successMsg').style.display = 'block';
+  document.getElementById('successMsg').textContent = '✓ Got it — taking you to the app now...';
+
+  setTimeout(()=>{ window.location.href = '/app.html'; }, 1500);
 }
 
 document.getElementById('emailInput').addEventListener('keydown', function(e){
